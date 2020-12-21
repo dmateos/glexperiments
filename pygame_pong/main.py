@@ -7,7 +7,7 @@ from typing import List
 SCREEN_SIZE = (1024, 1000)
 FIELD_SIZE = (1024, 768)
 USER_COLOR = (0, 0, 255)
-COMPUTER_COLOR = (0, 255, 0)
+COMPUTER_COLOR = (0, 0, 255)
 BACKGROUND_COLOR = (0, 0, 0)
 BALL_SPEED = 4
 
@@ -19,14 +19,14 @@ class Paddle(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
         if computer:
-            self.image.fill(USER_COLOR)
-            self.rect.x += FIELD_SIZE[0] - 40
-        else:
             self.image.fill(COMPUTER_COLOR)
-            self.rect.x = 0
+            self.rect.x += FIELD_SIZE[0] - 42
+        else:
+            self.image.fill(USER_COLOR)
+            self.rect.x = 2
 
     def computer_move(self, ball_location) -> None:
-        if ball_location.y > self.rect.y:
+        if ball_location.y > self.rect.y and self.rect.y + 100 <= FIELD_SIZE[1]:
             self.rect.y += 10
         else:
             self.rect.y -= 10
