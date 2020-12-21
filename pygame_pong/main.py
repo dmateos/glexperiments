@@ -89,7 +89,7 @@ class ScoreBoard:
             self.text.format(self.user_score, self.computer_score),
             True,
             (0, 255, 0),
-            None
+            None,
         )
 
 
@@ -113,7 +113,7 @@ class Screen:
         self.display.fill(BACKGROUND_COLOR)
         pygame.gfxdraw.rectangle(
             self.display,
-            pygame.Rect(1, 1, FIELD_SIZE[0]-1, FIELD_SIZE[1]),
+            pygame.Rect(1, 1, FIELD_SIZE[0] - 1, FIELD_SIZE[1]),
             (0, 255, 0),
         )
 
