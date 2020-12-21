@@ -1,34 +1,35 @@
 import pygame
 import sys
+from typing import List
 
 
 SCREEN_SIZE = (1024, 768)
 USER_COLOR = (0, 0, 255)
 COMPUTER_COLOR = (0, 255, 0)
+BACKGROUND_COLOR = (0, 0, 0)
 BALL_SPEED = 4
 
 
 class Paddle(pygame.sprite.Sprite):
-    def __init__(self, computer=False):
+    def __init__(self, computer: bool = False):
         super().__init__()
-        self.computer = computer
         self.image = pygame.Surface([40, 100])
         self.rect = self.image.get_rect()
 
         if computer:
-            self.image = pygame.Surface([40, 800])  # TEMP
-            self.rect = self.image.get_rect()
             self.image.fill(USER_COLOR)
             self.rect.x += SCREEN_SIZE[0] - 40
         else:
             self.image.fill(COMPUTER_COLOR)
             self.rect.x = 0
 
-    def update(self):
-        if not self.computer:
-            return
+    def computer_move(self, ball_location) -> None:
+        if ball_location.y > self.rect.y:
+            self.rect.y += 10
+        else:
+            self.rect.y -= 10
 
-    def move(self, offset):
+    def move(self, offset: int) -> None:
         self.rect.y += offset
 
 
@@ -38,10 +39,14 @@ class Ball(pygame.sprite.Sprite):
         self.image = pygame.Surface([40, 40])
         self.image.fill([255, 0, 0])
         self.rect = self.image.get_rect()
-        self.rect.x += 100
+        self.reset()
+
+    def reset(self) -> None:
+        self.rect.x = 100
+        self.rect.y = 100
         self.velocity = [BALL_SPEED, BALL_SPEED]
 
-    def update(self):
+    def update(self) -> None:
         self.rect.x += self.velocity[0]
         self.rect.y += self.velocity[1]
 
@@ -50,23 +55,18 @@ class Ball(pygame.sprite.Sprite):
         elif self.rect.y <= 0:
             self.velocity[1] *= -1
 
-    def check_collision(self, objs):
+    def check_collision(self, objs: List) -> None:
         for n in objs:
             if n.rect.colliderect(self.rect):
                 self.velocity[0] *= -1
 
-    def check_out_of_bounds(self):
+    def check_out_of_bounds(self) -> str:
         if self.rect.x <= 0:
             return "user"
         elif self.rect.x >= SCREEN_SIZE[0]:
             return "computer"
         else:
             return "none"
-
-    def reset(self):
-        self.rect.x = 100
-        self.rect.y = 100
-        self.velocity = [BALL_SPEED, BALL_SPEED]
 
 
 class Screen:
@@ -83,12 +83,14 @@ class Screen:
         self.sprite_list.add(self.computer_paddle)
         self.sprite_list.add(self.ball)
 
-    def update(self):
-        self.display.fill((0, 0, 0))
-        self.sprite_list.update()
-        self.ball.check_collision((self.user_paddle, self.computer_paddle))
+    def update(self) -> None:
+        self.display.fill(BACKGROUND_COLOR)
 
+        self.computer_paddle.computer_move(self.ball.rect)
+        self.ball.update()
+        self.ball.check_collision((self.user_paddle, self.computer_paddle))
         bounds = self.ball.check_out_of_bounds()
+
         if bounds == "user":
             print("computer point")
             self.ball.reset()
@@ -99,7 +101,7 @@ class Screen:
         self.sprite_list.draw(self.display)
         pygame.display.flip()
 
-    def handle_user_event(self, key):
+    def handle_user_event(self, key: int):
         if key == pygame.K_DOWN:
             self.user_paddle.move(100)
         elif key == pygame.K_UP:
@@ -108,13 +110,13 @@ class Screen:
 
 if __name__ == "__main__":
     pygame.init()
-    world = Screen()
+    screen = Screen()
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
             elif event.type == pygame.KEYDOWN:
-                world.handle_user_event(event.key)
+                screen.handle_user_event(event.key)
 
-        world.update()
+        screen.update()
