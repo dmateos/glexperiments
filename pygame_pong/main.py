@@ -9,7 +9,7 @@ FIELD_SIZE = (1024, 768)
 USER_COLOR = (0, 0, 255)
 COMPUTER_COLOR = (0, 0, 255)
 BACKGROUND_COLOR = (0, 0, 0)
-BALL_SPEED = 4
+BALL_SPEED = 10
 
 
 class Paddle(pygame.sprite.Sprite):
@@ -32,7 +32,8 @@ class Paddle(pygame.sprite.Sprite):
             self.rect.y -= 10
 
     def move(self, offset: int) -> None:
-        self.rect.y += offset
+        if self.rect.y + offset <= FIELD_SIZE[1] and self.rect.y + offset >= 0:
+            self.rect.y += offset
 
 
 class Ball(pygame.sprite.Sprite):
@@ -97,7 +98,7 @@ class Screen:
     def __init__(self):
         self.display = pygame.display.set_mode(SCREEN_SIZE)
         self.display_surface = pygame.display.get_surface()
-        self.display_rect = pygame.Rect(0, 0, 1024, 768)
+        self.display_rect = pygame.Rect(0, 0, FIELD_SIZE[0], FIELD_SIZE[1])
         self.sprite_list = pygame.sprite.RenderPlain()
 
         self.ball = Ball()
@@ -143,6 +144,7 @@ class Screen:
 if __name__ == "__main__":
     pygame.init()
     screen = Screen()
+    fps = pygame.time.Clock()
 
     while True:
         for event in pygame.event.get():
@@ -152,3 +154,5 @@ if __name__ == "__main__":
                 screen.handle_user_event(event.key)
 
         screen.update()
+        fps.tick(60)
+        print(fps.get_fps())
