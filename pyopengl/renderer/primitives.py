@@ -98,30 +98,6 @@ class Texture:
         pass
 
 
-class Triangle:
-    triangle_data = [-0.5, -0.5, 0.0, 0.5, -0.5, 0.0, 0.0, 0.5, 0.0]
-
-    def __init__(
-        self, program, translation=[0.0, 0.0, 0.0], color=[0.0, 0.0, 0.0]
-    ) -> None:
-        self.program = program
-        self.translation = translation
-        self.color = color
-        self.vao = VertexState()
-
-        with self.vao:
-            VertexBuffer(self.triangle_data, program, "vp")
-            VertexBuffer(self.color, program, "c")
-
-    def draw(self) -> None:
-        self.program.use()
-        mat = pyrr.Matrix44.from_translation(self.translation)
-        self.program.set_uniform("translation", mat)
-
-        with self.vao:
-            self.vao.draw_array(len(self.triangle_data))
-
-
 class Rectangle:
     triangle_data = [
         -0.5,
@@ -148,6 +124,7 @@ class Rectangle:
         self.program = program
         self.color = color
         self.vao = VertexState()
+        self.tlength = len(self.triangle_data)
 
         self.x = x
         self.y = y
@@ -168,7 +145,7 @@ class Rectangle:
         self.program.set_uniform("scale", self.scale_matrix)
 
         with self.vao:
-            self.vao.draw_array(len(self.triangle_data))
+            self.vao.draw_array(self.tlength)
 
     def check_collision(self, rect2) -> None:
         if (

@@ -41,8 +41,8 @@ class Ball:
         self.rect.y = 500
 
     def update(self):
-        self.rect.x += BALL_SPEED * math.cos(self.direction * math.pi/180)
-        self.rect.y += BALL_SPEED * math.sin(self.direction * math.pi/180)
+        self.rect.x += BALL_SPEED * math.cos(self.direction * math.pi / 180)
+        self.rect.y += BALL_SPEED * math.sin(self.direction * math.pi / 180)
 
         if self.rect.y + 40 >= SCREEN_SIZE[1]:
             self.direction -= 90
