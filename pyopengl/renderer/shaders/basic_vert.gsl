@@ -1,0 +1,15 @@
+#version 330 core
+
+in vec3 vp;
+in vec3 c;
+
+uniform mat4 perspective;
+uniform mat4 translation;
+uniform mat4 scale;
+
+out vec3 color_out;
+
+void main(){
+  color_out = c;
+  gl_Position = translation * scale * vec4(vp, 1.0);
+}
