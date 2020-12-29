@@ -8,45 +8,45 @@ import math
 SCREEN_SIZE = (1024, 1000)
 USER_COLOR = (0, 0, 1)
 COMPUTER_COLOR = (0, 0, 1)
-BALL_SPEED = 0.025
+BALL_SPEED = 10
 
 
 class Paddle:
     def __init__(self, program, computer: bool = False):
         if computer:
-            self.rect = primitives.Rectangle(program, 0, 0, 0.1, 0.4, COMPUTER_COLOR)
-            self.rect.x += 0.95
+            self.rect = primitives.Rectangle(program, 0, 0, 40, 100, COMPUTER_COLOR)
+            self.rect.x += SCREEN_SIZE[0] - 40
         else:
-            self.rect = primitives.Rectangle(program, 0, 0, 0.1, 0.4, USER_COLOR)
-            self.rect.x -= 0.95
+            self.rect = primitives.Rectangle(program, 0, 0, 40, 100, USER_COLOR)
+            self.rect.x += 2
 
     def draw(self):
         self.rect.draw()
 
     def computer_move(self, ball_location):
-        if ball_location.y > self.rect.y:
-            self.rect.y += 0.01
+        if ball_location.y > self.rect.y and self.rect.y + 100 <= SCREEN_SIZE[1]:
+            self.rect.y += 10
         else:
-            self.rect.y -= 0.01
+            self.rect.y -= 10
 
 
 class Ball:
     def __init__(self, program):
-        self.rect = primitives.Rectangle(program, 0, 0, 0.05, 0.05, (1, 0, 0))
+        self.rect = primitives.Rectangle(program, 0, 0, 40, 40, (1, 0, 0))
         self.reset()
 
     def reset(self):
         self.direction = 0
-        self.rect.x = 0
-        self.rect.y = 0
+        self.rect.x = 500
+        self.rect.y = 500
 
     def update(self):
         self.rect.x += BALL_SPEED * math.cos(self.direction * math.pi/180)
         self.rect.y += BALL_SPEED * math.sin(self.direction * math.pi/180)
 
-        if self.rect.y >= 1:
+        if self.rect.y + 40 >= SCREEN_SIZE[1]:
             self.direction -= 90
-        elif self.rect.y <= -1:
+        elif self.rect.y <= 0:
             self.direction += 90
 
     def check_collision(self, objs):
@@ -55,9 +55,9 @@ class Ball:
                 self.direction += 65
 
     def check_out_of_bounds(self):
-        if self.rect.x <= -1:
+        if self.rect.x <= 0:
             return "user"
-        elif self.rect.x >= 1:
+        elif self.rect.x >= SCREEN_SIZE[0]:
             return "computer"
         else:
             return "none"
@@ -91,12 +91,8 @@ class Screen:
         self.program.compile()
         self.program.use()
 
-        #  TODO: Orthographic view? 
-        # projection = pyrr.Matrix44.perspective_projection(
-        #     75.0, 1280 / 1024, 0.1, 1000.0
-        # )
         projection = pyrr.Matrix44.orthogonal_projection(
-            -1, 1, -1, 1, 1.0, 0.1
+            0.0, SCREEN_SIZE[0], SCREEN_SIZE[1], 0.0, -1.0, 1.0
         )
         self.program.set_uniform("projection", projection)
 
@@ -133,9 +129,9 @@ class Screen:
 
     def key_handler(self, key, code, action, mods):
         if key == glfw.KEY_DOWN:
-            self.user_paddle.rect.y -= 0.1
+            self.user_paddle.rect.y += 50
         elif key == glfw.KEY_UP:
-            self.user_paddle.rect.y += 0.1
+            self.user_paddle.rect.y -= 50
 
     def mouse_handler(self, xpos, ypos):
         pass
