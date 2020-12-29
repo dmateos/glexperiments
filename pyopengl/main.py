@@ -46,6 +46,9 @@ class Screen:
 
         self.window.swap()
 
+    def ok(self):
+        return self.window.ok()
+
     def key_handler(self, key, code, action, mods):
         if key == glfw.KEY_DOWN:
             pass
@@ -59,5 +62,5 @@ class Screen:
 if __name__ == "__main__":
     screen = Screen()
 
-    while True:
+    while screen.ok():
         screen.update()
