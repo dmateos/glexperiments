@@ -37,6 +37,8 @@ class Ball:
 
     def reset(self):
         self.direction = 0
+        self.rect.x = 0
+        self.rect.y = 0
 
     def update(self):
         self.rect.x += BALL_SPEED * math.cos(self.direction * math.pi/180)
@@ -51,6 +53,14 @@ class Ball:
         for n in objs:
             if n.rect.check_collision(self.rect):
                 self.direction += 65
+
+    def check_out_of_bounds(self):
+        if self.rect.x <= -1:
+            return "user"
+        elif self.rect.x >= 1:
+            return "computer"
+        else:
+            return "none"
 
     def draw(self):
         self.rect.draw()
@@ -102,6 +112,12 @@ class Screen:
         self.computer_paddle.computer_move(self.ball.rect)
         self.ball.update()
         self.ball.check_collision([self.user_paddle, self.computer_paddle])
+        bounds = self.ball.check_out_of_bounds()
+
+        if bounds == "user":
+            self.ball.reset()
+        elif bounds == "computer":
+            self.ball.reset()
 
         for sprite in self.sprites:
             sprite.draw()
