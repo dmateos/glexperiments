@@ -2,36 +2,55 @@
 from renderer import window, primitives, shader
 import glfw
 import pyrr
+import math
 
 
 SCREEN_SIZE = (1024, 1000)
 USER_COLOR = (0, 0, 1)
 COMPUTER_COLOR = (0, 0, 1)
+BALL_SPEED = 0.025
 
 
 class Paddle:
     def __init__(self, program, computer: bool = False):
         if computer:
             self.rect = primitives.Rectangle(program, 0, 0, 0.1, 0.4, COMPUTER_COLOR)
-            self.rect.x += 0.50
+            self.rect.x += 0.95
         else:
             self.rect = primitives.Rectangle(program, 0, 0, 0.1, 0.4, USER_COLOR)
-            self.rect.x -= 0.50
-
-    def update(self):
-        pass
+            self.rect.x -= 0.95
 
     def draw(self):
         self.rect.draw()
+
+    def computer_move(self, ball_location):
+        if ball_location.y > self.rect.y:
+            self.rect.y += 0.01
+        else:
+            self.rect.y -= 0.01
 
 
 class Ball:
     def __init__(self, program):
         self.rect = primitives.Rectangle(program, 0, 0, 0.05, 0.05, (1, 0, 0))
-        self.rect.x += 0.25
+        self.reset()
+
+    def reset(self):
+        self.direction = 0
 
     def update(self):
-        pass
+        self.rect.x += BALL_SPEED * math.cos(self.direction * math.pi/180)
+        self.rect.y += BALL_SPEED * math.sin(self.direction * math.pi/180)
+
+        if self.rect.y >= 1:
+            self.direction -= 90
+        elif self.rect.y <= -1:
+            self.direction += 90
+
+    def check_collision(self, objs):
+        for n in objs:
+            if n.rect.check_collision(self.rect):
+                self.direction += 65
 
     def draw(self):
         self.rect.draw()
@@ -80,8 +99,11 @@ class Screen:
     def update(self):
         self.window.clear()
 
+        self.computer_paddle.computer_move(self.ball.rect)
+        self.ball.update()
+        self.ball.check_collision([self.user_paddle, self.computer_paddle])
+
         for sprite in self.sprites:
-            sprite.update()
             sprite.draw()
 
         self.window.swap()
