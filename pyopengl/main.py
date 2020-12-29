@@ -91,10 +91,14 @@ class Screen:
         self.program.compile()
         self.program.use()
 
-        perspective = pyrr.Matrix44.perspective_projection(
-            75.0, 1280 / 1024, 0.1, 1000.0
+        #  TODO: Orthographic view? 
+        # projection = pyrr.Matrix44.perspective_projection(
+        #     75.0, 1280 / 1024, 0.1, 1000.0
+        # )
+        projection = pyrr.Matrix44.orthogonal_projection(
+            -1, 1, -1, 1, 1.0, 0.1
         )
-        self.program.set_uniform("perspective", perspective)
+        self.program.set_uniform("projection", projection)
 
         self.user_paddle = Paddle(self.program)
         self.computer_paddle = Paddle(self.program, True)

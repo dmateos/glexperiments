@@ -93,6 +93,11 @@ class IndexBuffer:
         self.unbind()
 
 
+class Texture:
+    def __init__(self, texture_path):
+        pass
+
+
 class Triangle:
     triangle_data = [-0.5, -0.5, 0.0, 0.5, -0.5, 0.0, 0.0, 0.5, 0.0]
 
