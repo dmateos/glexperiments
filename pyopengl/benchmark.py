@@ -1,5 +1,5 @@
 # import sys
-from renderer import window, primitives, shader
+from renderer import window, shader, sprites
 import glfw
 import pyrr
 import math
@@ -12,7 +12,7 @@ SCREEN_SIZE = (1024, 1000)
 class TestDirectioner:
     def __init__(self, program, direction):
         super().__init__()
-        self.rect = primitives.Rectangle(program, 0, 0, 4, 4, [0, 0, 1])
+        self.rect = sprites.Rectangle(program, 0, 0, 4, 4, [0, 0, 1])
         self.direction = direction
 
         self.rect.x = random.randint(0, SCREEN_SIZE[0])

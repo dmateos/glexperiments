@@ -1,5 +1,5 @@
 # import sys
-from renderer import window, primitives, shader
+from renderer import window, shader, sprites
 import glfw
 import pyrr
 import math
@@ -14,10 +14,10 @@ BALL_SPEED = 10
 class Paddle:
     def __init__(self, program, computer: bool = False):
         if computer:
-            self.rect = primitives.Rectangle(program, 0, 0, 40, 100, COMPUTER_COLOR)
+            self.rect = sprites.Rectangle(program, 0, 0, 40, 100, COMPUTER_COLOR)
             self.rect.x += SCREEN_SIZE[0] - 40
         else:
-            self.rect = primitives.Rectangle(program, 0, 0, 40, 100, USER_COLOR)
+            self.rect = sprites.Rectangle(program, 0, 0, 40, 100, USER_COLOR)
             self.rect.x += 2
 
     def draw(self):
@@ -32,7 +32,7 @@ class Paddle:
 
 class Ball:
     def __init__(self, program):
-        self.rect = primitives.Rectangle(program, 0, 0, 40, 40, (1, 0, 0))
+        self.rect = sprites.Rectangle(program, 0, 0, 40, 40, (1, 0, 0))
         self.reset()
 
     def reset(self):
