@@ -10,9 +10,14 @@ class Window:
         self._key_callbacks = []
         self._mouse_callbacks = []
 
+        self.framecount = 0
+        self.previous_time = 0
+
     def run(self) -> None:
         if not glfw.init():
             return
+
+        self.previous_time = glfw.get_time()
 
         glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 3)
         glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 2)
@@ -45,6 +50,7 @@ class Window:
     def ok(self, poll=True) -> bool:
         if poll:
             self.poll()
+            self.get_fps()
         return not glfw.window_should_close(self.window)
 
     def add_key_callback(self, callback) -> None:
@@ -63,3 +69,12 @@ class Window:
 
     def reset_mouse_position(self) -> None:
         glfw.set_cursor_pos(self.window, 0, 0)
+
+    def get_fps(self) -> None:
+        cur_time = glfw.get_time()
+        self.framecount += 1
+
+        if cur_time - self.previous_time >= 1.0:
+            glfw.set_window_title(self.window, str(self.framecount))
+            self.framecount = 0
+            self.previous_time = cur_time
