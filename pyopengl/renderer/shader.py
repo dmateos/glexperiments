@@ -12,6 +12,30 @@ class ShaderException(Exception):
     pass
 
 
+BASIC_VERT_SHADER = "renderer/shaders/basic_vert.gsl"
+BASIC_FRAG_SHADER = "renderer/shaders/basic_frag.gsl"
+
+
+def create_program(vertex_shader_path, fragment_shader_path):
+    with open(fragment_shader_path) as f:
+        frag_data = f.read()
+    with open(vertex_shader_path) as f:
+        vert_data = f.read()
+
+    basic_frag = Shader("fragment", frag_data)
+    basic_vert = Shader("vertex", vert_data)
+
+    program = Program()
+
+    program.add_shader(basic_frag)
+    program.add_shader(basic_vert)
+    program.validate()
+    program.compile()
+    program.use()
+
+    return program
+
+
 class Shader:
     def __init__(self, shader_type: str, shader_code: str) -> None:
         self.shader_type = shader_type

@@ -41,21 +41,9 @@ class Screen:
         self.window.reset_mouse_position()
         self.window.add_mouse_callback(self.mouse_handler)
 
-        with open("renderer/shaders/basic_frag.gsl") as f:
-            frag_data = f.read()
-        with open("renderer/shaders/basic_vert.gsl") as f:
-            vert_data = f.read()
-
-        basic_frag = shader.Shader("fragment", frag_data)
-        basic_vert = shader.Shader("vertex", vert_data)
-
-        self.program = shader.Program()
-
-        self.program.add_shader(basic_frag)
-        self.program.add_shader(basic_vert)
-        self.program.validate()
-        self.program.compile()
-        self.program.use()
+        self.program = shader.create_program(
+            shader.BASIC_VERT_SHADER, shader.BASIC_FRAG_SHADER
+        )
 
         projection = pyrr.Matrix44.orthogonal_projection(
             0.0, SCREEN_SIZE[0], SCREEN_SIZE[1], 0.0, -1.0, 1.0
