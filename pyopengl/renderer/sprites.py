@@ -22,8 +22,6 @@ TRIANGLE_DATA = (
     -0.5,
     0,
 )
-
-
 TRIANGLE_DATA_LENGTH = len(TRIANGLE_DATA)
 
 
