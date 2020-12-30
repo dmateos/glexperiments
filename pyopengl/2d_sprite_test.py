@@ -81,10 +81,7 @@ class Screen:
         return self.window.ok()
 
     def key_handler(self, key, code, action, mods):
-        if key == glfw.KEY_DOWN:
-            self.user_paddle.rect.y += 50
-        elif key == glfw.KEY_UP:
-            self.user_paddle.rect.y -= 50
+        pass
 
     def mouse_handler(self, xpos, ypos):
         pass
@@ -95,6 +92,7 @@ def run():
     while screen.ok():
         screen.update()
 
+
 if __name__ == "__main__":
-    #cProfile.run("run()")
+    # cProfile.run("run()")
     run()

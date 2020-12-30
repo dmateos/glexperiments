@@ -1,6 +1,6 @@
 import OpenGL.GL as ogl
 import pyrr
-from . import primitives
+from . import primitives, shader
 
 TRIANGLE_DATA = (
     -0.5,
