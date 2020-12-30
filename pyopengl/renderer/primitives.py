@@ -139,9 +139,11 @@ class RectangleGroup:
         self.program.set_uniform("scale", self.scale_matrix)
 
         with self.vao:
-            # TODO Update rather than new buffer each time? 
+            # TODO Update rather than new buffer each time?
             VertexBuffer(self.rectangles, self.program, "os", True)
-            self.vao.draw_instanced(len(self.triangle_data), int(len(self.rectangles)/3))
+            self.vao.draw_instanced(
+                len(self.triangle_data), int(len(self.rectangles) / 3)
+            )
 
     def update_rects(self, rectangles):
         self.rectangles = rectangles
