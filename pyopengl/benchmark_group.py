@@ -63,17 +63,13 @@ class Screen:
         self.program.set_uniform("projection", projection)
 
         self.sprites = []
+        self.sprite_group = primitives.RectangleGroup(self.program, self.sprites)
 
         for n in range(20000):
             sprite = TestDirectioner(self.program, random.randint(0, 360))
             self.sprites.append(sprite)
+            self.sprite_group.append(sprite)
 
-        rects = []
-        for n in self.sprites:
-            rects.append(n.rect.x)
-            rects.append(n.rect.y)
-            rects.append(0.0)
-        self.sprite_group = primitives.RectangleGroup(self.program, rects)
 
     def update(self):
         self.window.clear()
@@ -81,13 +77,6 @@ class Screen:
         for sprite in self.sprites:
             sprite.update()
 
-        rects = []
-        for n in self.sprites:
-            rects.append(n.rect.x)
-            rects.append(n.rect.y)
-            rects.append(0.0)
-
-        self.sprite_group.update_rects(rects)
         self.sprite_group.draw()
         self.window.swap()
 

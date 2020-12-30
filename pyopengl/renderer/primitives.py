@@ -123,30 +123,40 @@ class RectangleGroup:
         0,
     ]
 
-    def __init__(self, program, rectangles=[]):
+    def __init__(self, program, sprites=[]):
         self.vao = VertexState()
         self.program = program
-        self.rectangles = numpy.array(rectangles, dtype="float32")
         self.scale_matrix = pyrr.Matrix44.from_scale([4, 4, 0])
+
+        self.sprites = sprites
 
         with self.vao:
             VertexBuffer(self.triangle_data, program, "vp")
             VertexBuffer((0, 0, 1), program, "c")
-            VertexBuffer(self.rectangles, program, "os", True)
+
+    def append(self, sprite):
+        self.sprites.append(sprite)
 
     def draw(self):
         self.program.use()
         self.program.set_uniform("scale", self.scale_matrix)
 
+        rects = self.update_rects()
+
         with self.vao:
             # TODO Update rather than new buffer each time?
-            VertexBuffer(self.rectangles, self.program, "os", True)
-            self.vao.draw_instanced(
-                len(self.triangle_data), int(len(self.rectangles) / 3)
-            )
+            VertexBuffer(rects, self.program, "os", True)
+            self.vao.draw_instanced(len(self.triangle_data), int(len(rects) / 3))
 
-    def update_rects(self, rectangles):
-        self.rectangles = rectangles
+    def update_rects(self):
+        rectangles = []
+
+        for s in self.sprites:
+            rectangles.append(s.rect.x)
+            rectangles.append(s.rect.y)
+            rectangles.append(0.0)
+
+        return rectangles
 
 
 class Rectangle:
