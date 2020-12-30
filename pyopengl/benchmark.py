@@ -4,6 +4,7 @@ import glfw
 import pyrr
 import math
 import random
+import cProfile
 
 SCREEN_SIZE = (1024, 1000)
 
@@ -89,8 +90,11 @@ class Screen:
         pass
 
 
-if __name__ == "__main__":
+def run():
     screen = Screen()
-
     while screen.ok():
         screen.update()
+
+if __name__ == "__main__":
+    #cProfile.run("run()")
+    run()

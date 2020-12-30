@@ -29,9 +29,9 @@ class Window:
         glfw.make_context_current(self.window)
 
         ogl.glClearColor(0.0, 1.0, 0.0, 1.0)
-        ogl.glEnable(ogl.GL_DEPTH_TEST)
+        # ogl.glEnable(ogl.GL_DEPTH_TEST)
         # ogl.glEnable(ogl.GL_CULL_FACE)
-        ogl.glDepthFunc(ogl.GL_LESS)
+        # ogl.glDepthFunc(ogl.GL_LESS)
 
     def swap(self) -> None:
         glfw.swap_buffers(self.window)

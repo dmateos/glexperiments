@@ -34,6 +34,9 @@ class VertexState:
     def draw_indexed_elements(self, length: int) -> None:
         ogl.glDrawElements(ogl.GL_TRIANGLES, length, ogl.GL_UNSIGNED_INT, None)
 
+    def draw_instanced(self, length, instances):
+        ogl.glDrawArraysInstanced(ogl.GL_TRIANGLES, 0, length, instances)
+
 
 class VertexBuffer:
     """
@@ -41,11 +44,12 @@ class VertexBuffer:
     Probably should be run within a VertexState with block
     """
 
-    def __init__(self, data: list, program, name: str) -> None:
+    def __init__(self, data: list, program, name: str, instanced=False) -> None:
         self.vbo = ogl.glGenBuffers(1)
         self.data = numpy.array(data, dtype="float32")
         self.name = name
         self.program = program
+        self.instanced = instanced
         self._buffer_data()
 
     def bind(self) -> None:
@@ -62,6 +66,10 @@ class VertexBuffer:
 
         self.program.use()
         self.program.set_attribute(self.name)
+
+        # If instanced this attribute is split between verticie instances.
+        if self.instanced:
+            ogl.glVertexAttribDivisor(self.program.get_attribute(self.name), 1)
         self.unbind()
 
 
@@ -93,9 +101,50 @@ class IndexBuffer:
         self.unbind()
 
 
-class Texture:
-    def __init__(self, texture_path):
-        pass
+class RectangleGroup:
+    triangle_data = [
+        -0.5,
+        -0.5,
+        0,
+        0.5,
+        -0.5,
+        0,
+        -0.5,
+        0.5,
+        0,
+        0.5,
+        0.5,
+        0,
+        -0.5,
+        0.5,
+        0,
+        0.5,
+        -0.5,
+        0,
+    ]
+
+    def __init__(self, program, rectangles=[]):
+        self.vao = VertexState()
+        self.program = program
+        self.rectangles = numpy.array(rectangles, dtype="float32")
+        self.scale_matrix = pyrr.Matrix44.from_scale([4, 4, 0])
+
+        with self.vao:
+            VertexBuffer(self.triangle_data, program, "vp")
+            VertexBuffer((0, 0, 1), program, "c")
+            VertexBuffer(self.rectangles, program, "os", True)
+
+    def draw(self):
+        self.program.use()
+        self.program.set_uniform("scale", self.scale_matrix)
+
+        with self.vao:
+            # TODO Update rather than new buffer each time? 
+            VertexBuffer(self.rectangles, self.program, "os", True)
+            self.vao.draw_instanced(len(self.triangle_data), int(len(self.rectangles)/3))
+
+    def update_rects(self, rectangles):
+        self.rectangles = rectangles
 
 
 class Rectangle:
