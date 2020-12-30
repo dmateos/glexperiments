@@ -1,0 +1,17 @@
+#version 330 core
+
+layout (location = 0) in vec3 vp;
+layout (location = 1) in vec3 c;
+layout (location = 2) in vec3 os;
+
+uniform mat4 projection;
+uniform mat4 scale;
+
+out vec3 color_out;
+
+void main(){
+  color_out = c;
+  vec4 vpn = vec4(vp, 1.0) * scale;
+  vec4 osn = vec4(os, 0.0);
+  gl_Position = projection * (vpn + osn);
+}
