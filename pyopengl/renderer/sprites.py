@@ -26,9 +26,19 @@ TRIANGLE_DATA_LENGTH = len(TRIANGLE_DATA)
 
 
 class RectangleGroup:
+    """
+    Used to render a group of Rectangle objects. 
+
+    This is much more effcient for rendering large amounts of rectangles
+    at the same time. 
+
+    This uses OGL instanced arrays to push one set of VP's while batch sending every
+    rectangles transformations witin the one draw call.
+    """
+
     def __init__(self, program, sprites=[]):
-        self.vao = primitives.VertexState()
         self.program = program
+        self.vao = primitives.VertexState()
         self.scale_matrix = pyrr.Matrix44.from_scale([4, 4, 0])
 
         self.sprites = sprites
@@ -63,17 +73,22 @@ class RectangleGroup:
 
 
 class Rectangle:
+    """
+    Renderable rectangle
+
+    Uses a VAO and some VBO's and draws as an array.
+    """
+
     def __init__(self, program, x, y, w, h, color=[0.0, 0.0, 0.0]) -> None:
         self.program = program
         self.color = color
         self.vao = primitives.VertexState()
+        self.scale_matrix = pyrr.Matrix44.from_scale([w, h, 0])
 
         self.x = x
         self.y = y
         self.w = w
         self.h = h
-
-        self.scale_matrix = pyrr.Matrix44.from_scale([self.w, self.h, 0])
 
         with self.vao:
             primitives.VertexBuffer(TRIANGLE_DATA, program, "vp")

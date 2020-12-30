@@ -11,7 +11,10 @@ out vec3 color_out;
 
 void main(){
   color_out = c;
+  // We have to scale the original vp
+  // before we do anything else.
   vec4 vpn = vec4(vp, 1.0) * scale;
+
   vec4 osn = vec4(os, 0.0);
   gl_Position = projection * (vpn + osn);
 }

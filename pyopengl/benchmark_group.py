@@ -65,18 +65,17 @@ class Screen:
         self.sprites = []
         self.sprite_group = sprites.RectangleGroup(self.program, self.sprites)
 
-        for n in range(20000):
+        for n in range(2000):
             sprite = TestDirectioner(self.program, random.randint(0, 360))
             self.sprites.append(sprite)
             self.sprite_group.append(sprite)
 
 
     def update(self):
-        self.window.clear()
-
         for sprite in self.sprites:
             sprite.update()
 
+        self.window.clear()
         self.sprite_group.draw()
         self.window.swap()
 
