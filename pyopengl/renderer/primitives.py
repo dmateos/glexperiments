@@ -101,28 +101,32 @@ class IndexBuffer:
         self.unbind()
 
 
-class RectangleGroup:
-    triangle_data = [
-        -0.5,
-        -0.5,
-        0,
-        0.5,
-        -0.5,
-        0,
-        -0.5,
-        0.5,
-        0,
-        0.5,
-        0.5,
-        0,
-        -0.5,
-        0.5,
-        0,
-        0.5,
-        -0.5,
-        0,
-    ]
+TRIANGLE_DATA = (
+    -0.5,
+    -0.5,
+    0,
+    0.5,
+    -0.5,
+    0,
+    -0.5,
+    0.5,
+    0,
+    0.5,
+    0.5,
+    0,
+    -0.5,
+    0.5,
+    0,
+    0.5,
+    -0.5,
+    0,
+)
 
+
+TRIANGLE_DATA_LENGTH = len(TRIANGLE_DATA)
+
+
+class RectangleGroup:
     def __init__(self, program, sprites=[]):
         self.vao = VertexState()
         self.program = program
@@ -131,7 +135,7 @@ class RectangleGroup:
         self.sprites = sprites
 
         with self.vao:
-            VertexBuffer(self.triangle_data, program, "vp")
+            VertexBuffer(TRIANGLE_DATA, program, "vp")
             VertexBuffer((0, 0, 1), program, "c")
 
     def append(self, sprite):
@@ -146,7 +150,7 @@ class RectangleGroup:
         with self.vao:
             # TODO Update rather than new buffer each time?
             VertexBuffer(rects, self.program, "os", True)
-            self.vao.draw_instanced(len(self.triangle_data), int(len(rects) / 3))
+            self.vao.draw_instanced(TRIANGLE_DATA_LENGTH, int(len(rects) / 3))
 
     def update_rects(self):
         rectangles = []
@@ -160,32 +164,10 @@ class RectangleGroup:
 
 
 class Rectangle:
-    triangle_data = [
-        -0.5,
-        -0.5,
-        0,
-        0.5,
-        -0.5,
-        0,
-        -0.5,
-        0.5,
-        0,
-        0.5,
-        0.5,
-        0,
-        -0.5,
-        0.5,
-        0,
-        0.5,
-        -0.5,
-        0,
-    ]
-
     def __init__(self, program, x, y, w, h, color=[0.0, 0.0, 0.0]) -> None:
         self.program = program
         self.color = color
         self.vao = VertexState()
-        self.tlength = len(self.triangle_data)
 
         self.x = x
         self.y = y
@@ -195,7 +177,7 @@ class Rectangle:
         self.scale_matrix = pyrr.Matrix44.from_scale([self.w, self.h, 0])
 
         with self.vao:
-            VertexBuffer(self.triangle_data, program, "vp")
+            VertexBuffer(TRIANGLE_DATA, program, "vp")
             VertexBuffer(self.color, program, "c")
 
     def draw(self) -> None:
@@ -206,7 +188,7 @@ class Rectangle:
         self.program.set_uniform("scale", self.scale_matrix)
 
         with self.vao:
-            self.vao.draw_array(self.tlength)
+            self.vao.draw_array(TRIANGLE_DATA_LENGTH)
 
     def check_collision(self, rect2) -> None:
         if (
