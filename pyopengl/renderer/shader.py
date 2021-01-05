@@ -107,9 +107,9 @@ class Program:
     def set_uniform(self, name: str, value) -> None:
         ogl.glUniformMatrix4fv(self.get_uniform(name), 1, False, value)
 
-    def set_attribute(self, name: str) -> None:
+    def set_attribute(self, name: str, stepping=3) -> None:
         # This call relies on the buffer being bound
         ogl.glEnableVertexAttribArray(self.get_attribute(name))
         ogl.glVertexAttribPointer(
-            self.get_attribute(name), 3, ogl.GL_FLOAT, ogl.GL_FLOAT, 0, None
+            self.get_attribute(name), stepping, ogl.GL_FLOAT, ogl.GL_FLOAT, 0, None
         )

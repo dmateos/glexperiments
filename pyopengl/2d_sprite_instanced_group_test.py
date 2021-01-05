@@ -1,5 +1,5 @@
 # import sys
-from renderer import window, shader, sprites
+from renderer import window, shader, sprites, primitives
 import glfw
 import pyrr
 import math
@@ -11,7 +11,7 @@ SCREEN_SIZE = (1024, 1000)
 class TestDirectioner:
     def __init__(self, program, direction):
         super().__init__()
-        self.rect = sprites.Rectangle(program, 0, 0, 4, 4, [0, 0, 1])
+        self.rect = sprites.Rectangle(program, 0, 0, 250, 250, [0, 0, 1])
         self.direction = direction
 
         self.rect.x = random.randint(0, SCREEN_SIZE[0])
@@ -49,10 +49,13 @@ class Screen:
         )
         self.program.set_uniform("projection", projection)
 
+        texture = primitives.Texture.image_from_file("assets/grid.jpg")
+        texture.bind()
+
         self.sprites = []
         self.sprite_group = sprites.RectangleGroup(self.program, self.sprites)
 
-        for n in range(2000):
+        for n in range(200):
             sprite = TestDirectioner(self.program, random.randint(0, 360))
             self.sprites.append(sprite)
             self.sprite_group.append(sprite)

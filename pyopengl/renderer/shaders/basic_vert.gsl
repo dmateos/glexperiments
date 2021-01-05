@@ -2,14 +2,17 @@
 
 layout (location = 0) in vec3 vp;
 layout (location = 1) in vec3 c;
+layout (location = 2) in vec2 tx;
 
 uniform mat4 projection;
 uniform mat4 translation;
 uniform mat4 scale;
 
 out vec3 color_out;
+out vec2 tx_out;
 
 void main(){
   color_out = c;
+  tx_out = tx;
   gl_Position = projection * translation * scale * vec4(vp, 1.0);
 }

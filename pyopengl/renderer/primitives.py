@@ -1,5 +1,6 @@
 import OpenGL.GL as ogl
 import numpy
+from PIL import Image
 
 
 class RenderException(Exception):
@@ -43,12 +44,15 @@ class VertexBuffer:
     Probably should be run within a VertexState with block
     """
 
-    def __init__(self, data: list, program, name: str, instanced=False) -> None:
+    def __init__(
+        self, data: list, program, name: str, stepping=3, instanced=False
+    ) -> None:
         self.vbo = ogl.glGenBuffers(1)
         self.data = numpy.array(data, dtype="float32")
         self.name = name
         self.program = program
         self.instanced = instanced
+        self.stepping = stepping
         self._buffer_data()
 
     def bind(self) -> None:
@@ -64,7 +68,7 @@ class VertexBuffer:
         )
 
         self.program.use()
-        self.program.set_attribute(self.name)
+        self.program.set_attribute(self.name, self.stepping)
 
         # If instanced this attribute is split between verticie instances.
         if self.instanced:
@@ -73,11 +77,12 @@ class VertexBuffer:
 
 
 class IndexBuffer:
-    def __init__(self, data: list, program, name: str) -> None:
+    def __init__(self, data: list, program, name: str, stepping=3) -> None:
         self.vbo = ogl.glGenBuffers(1)
         self.data = numpy.array(data, dtype="float32")
         self.name = name
         self.program = program
+        self.stepping = stepping
         self._buffer_data()
 
     def bind(self) -> None:
@@ -96,5 +101,63 @@ class IndexBuffer:
         )
 
         self.program.use()
-        self.program.set_attribute(self.name)
+        self.program.set_attribute(self.name, self.stepping)
+        self.unbind()
+
+
+class FrameBuffer:
+    def __init__(self) -> None:
+        self.fbo = ogl.glGenFramebuffers(1)
+
+    def bind(self) -> None:
+        ogl.glBindFramebuffer(ogl.GL_FRAMEBUFFER, self.fbo)
+
+    def unbind(self) -> None:
+        ogl.glBindFramebuffer(ogl.GL_FRAMEBUFFER, 0)
+
+    def delete(self) -> None:
+        ogl.glDeleteFramebuffers(1, self.fbo)
+
+
+class Texture:
+    def __init__(self, width, height, data):
+        self.tbo = ogl.glGenTextures(1)
+        self.width = width
+        self.height = height
+        self.data = data
+
+        self._create_texture()
+
+    @staticmethod
+    def image_from_file(file_path):
+        image = Image.open(file_path)
+        data = numpy.array(list(image.getdata()), numpy.uint8)
+        return Texture(image.size[0], image.size[1], data)
+
+    def bind(self) -> None:
+        ogl.glBindTexture(ogl.GL_TEXTURE_2D, self.tbo)
+
+    def unbind(self) -> None:
+        ogl.glBindTexture(ogl.GL_TEXTURE_2D, 0)
+
+    def _create_texture(self) -> None:
+        self.bind()
+        ogl.glPixelStorei(ogl.GL_UNPACK_ALIGNMENT, 4)
+        ogl.glTexImage2D(
+            ogl.GL_TEXTURE_2D,
+            0,
+            ogl.GL_RGB,
+            self.width,
+            self.height,
+            0,
+            ogl.GL_RGB,
+            ogl.GL_UNSIGNED_BYTE,
+            self.data,
+        )
+        ogl.glTexParameteri(ogl.GL_TEXTURE_2D, ogl.GL_TEXTURE_WRAP_S, ogl.GL_REPEAT)
+        ogl.glTexParameteri(ogl.GL_TEXTURE_2D, ogl.GL_TEXTURE_WRAP_T, ogl.GL_REPEAT)
+        ogl.glTexParameteri(ogl.GL_TEXTURE_2D, ogl.GL_TEXTURE_MIN_FILTER, ogl.GL_LINEAR)
+        ogl.glTexParameteri(ogl.GL_TEXTURE_2D, ogl.GL_TEXTURE_MAG_FILTER, ogl.GL_LINEAR)
+        ogl.glGenerateMipmap(ogl.GL_TEXTURE_2D)
+
         self.unbind()

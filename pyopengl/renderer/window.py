@@ -2,6 +2,11 @@ import glfw
 import OpenGL.GL as ogl
 
 
+def cb_dbg_msg(source, msg_type, msg_id, severity, length, raw, user):
+    msg = raw[0:length]
+    print("debug", source, msg_type, msg_id, severity, msg)
+
+
 class Window:
     def __init__(self, x: int, y: int) -> None:
         self.x = x

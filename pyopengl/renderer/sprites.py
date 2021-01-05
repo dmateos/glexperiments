@@ -5,24 +5,26 @@ from . import primitives, shader
 TRIANGLE_DATA = (
     -0.5,
     -0.5,
-    0,
+    0.0,
     0.5,
     -0.5,
-    0,
+    0.0,
     -0.5,
     0.5,
-    0,
+    0.0,
     0.5,
     0.5,
-    0,
+    0.0,
     -0.5,
     0.5,
-    0,
+    0.0,
     0.5,
     -0.5,
-    0,
+    0.0,
 )
 TRIANGLE_DATA_LENGTH = len(TRIANGLE_DATA)
+
+TEXTURE_COORDINATES = (0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0)
 
 
 class RectangleGroup:
@@ -39,13 +41,14 @@ class RectangleGroup:
     def __init__(self, program, sprites=[]):
         self.program = program
         self.vao = primitives.VertexState()
-        self.scale_matrix = pyrr.Matrix44.from_scale([4, 4, 0])
+        self.scale_matrix = pyrr.Matrix44.from_scale([50, 50, 0])
 
         self.sprites = sprites
 
         with self.vao:
-            primitives.VertexBuffer(TRIANGLE_DATA, program, "vp")
-            primitives.VertexBuffer((0, 0, 1), program, "c")
+            primitives.VertexBuffer(TRIANGLE_DATA, program, "vp", 3)
+            primitives.VertexBuffer((0, 0, 1), program, "c", 3)
+            primitives.VertexBuffer(TEXTURE_COORDINATES, program, "tx", 2)
 
     def append(self, sprite):
         self.sprites.append(sprite)
@@ -58,7 +61,7 @@ class RectangleGroup:
 
         with self.vao:
             # TODO Update rather than new buffer each time?
-            primitives.VertexBuffer(rects, self.program, "os", True)
+            primitives.VertexBuffer(rects, self.program, "os", 3, True)
             self.vao.draw_instanced(TRIANGLE_DATA_LENGTH, int(len(rects) / 3))
 
     def update_rects(self):
@@ -91,8 +94,9 @@ class Rectangle:
         self.h = h
 
         with self.vao:
-            primitives.VertexBuffer(TRIANGLE_DATA, program, "vp")
+            primitives.VertexBuffer(TRIANGLE_DATA, program, "vp", 3)
             primitives.VertexBuffer(self.color, program, "c")
+            primitives.VertexBuffer(TEXTURE_COORDINATES, program, "tx", 2)
 
     def draw(self) -> None:
         self.program.use()
