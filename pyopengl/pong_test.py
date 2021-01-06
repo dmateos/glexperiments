@@ -1,5 +1,5 @@
 # import sys
-from renderer import window, shader, sprites
+from renderer import window, shader, sprites, primitives
 import glfw
 import pyrr
 import math
@@ -85,6 +85,9 @@ class Screen:
             0.0, SCREEN_SIZE[0], SCREEN_SIZE[1], 0.0, -1.0, 1.0
         )
         self.program.set_uniform("projection", projection)
+
+        texture = primitives.Texture.image_from_file("assets/container.jpg")
+        texture.bind()
 
         self.user_paddle = Paddle(self.program)
         self.computer_paddle = Paddle(self.program, True)
