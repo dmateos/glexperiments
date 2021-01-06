@@ -2,29 +2,20 @@ import OpenGL.GL as ogl
 import pyrr
 from . import primitives, shader
 
-TRIANGLE_DATA = (
-    -0.5,
-    -0.5,
-    0.0,
-    0.5,
-    -0.5,
-    0.0,
-    -0.5,
-    0.5,
-    0.0,
-    0.5,
-    0.5,
-    0.0,
-    -0.5,
-    0.5,
-    0.0,
-    0.5,
-    -0.5,
-    0.0,
-)
-TRIANGLE_DATA_LENGTH = len(TRIANGLE_DATA)
-
+TRIANGLE_DATA = (0.5, 0.5, 0.0, 0.5, -0.5, 0.0, -0.5, -0.5, 0.0, -0.5, 0.5, 0.0)
 TEXTURE_COORDINATES = (0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0)
+TRIANGLE_INDEXES = (0, 1, 3, 1, 2, 3)
+TRIANGLE_DATA_LENGTH = len(TRIANGLE_DATA)
+TRIANGLE_INDEX_LENGTH = len(TRIANGLE_INDEXES)
+
+class Rectangle:
+    def __init__(self, x, y, w, h, c):
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+
+        self.color = c
 
 
 class RectangleGroup:
@@ -41,12 +32,13 @@ class RectangleGroup:
     def __init__(self, program, sprites=[]):
         self.program = program
         self.vao = primitives.VertexState()
-        self.scale_matrix = pyrr.Matrix44.from_scale([50, 50, 0])
+        self.scale_matrix = pyrr.Matrix44.from_scale([100, 100, 0])
 
         self.sprites = sprites
 
         with self.vao:
             primitives.VertexBuffer(TRIANGLE_DATA, program, "vp", 3)
+            primitives.IndexBuffer(TRIANGLE_INDEXES, program, "vp", 3)
             primitives.VertexBuffer((0, 0, 1), program, "c", 3)
             primitives.VertexBuffer(TEXTURE_COORDINATES, program, "tx", 2)
 
@@ -62,7 +54,9 @@ class RectangleGroup:
         with self.vao:
             # TODO Update rather than new buffer each time?
             primitives.VertexBuffer(rects, self.program, "os", 3, True)
-            self.vao.draw_instanced(TRIANGLE_DATA_LENGTH, int(len(rects) / 3))
+            self.vao.draw_instanced_indexed_elements(
+                TRIANGLE_INDEX_LENGTH, int(len(rects) / 3)
+            )
 
     def update_rects(self):
         rectangles = []
@@ -75,7 +69,7 @@ class RectangleGroup:
         return rectangles
 
 
-class Rectangle:
+class DrawableRectangle(Rectangle):
     """
     Renderable rectangle
 
@@ -83,18 +77,15 @@ class Rectangle:
     """
 
     def __init__(self, program, x, y, w, h, color=[0.0, 0.0, 0.0]) -> None:
+        super().__init__(x, y, w, h, color)
         self.program = program
         self.color = color
         self.vao = primitives.VertexState()
         self.scale_matrix = pyrr.Matrix44.from_scale([w, h, 0])
 
-        self.x = x
-        self.y = y
-        self.w = w
-        self.h = h
-
         with self.vao:
             primitives.VertexBuffer(TRIANGLE_DATA, program, "vp", 3)
+            primitives.IndexBuffer(TRIANGLE_INDEXES, program, "vp", 3)
             primitives.VertexBuffer(self.color, program, "c")
             primitives.VertexBuffer(TEXTURE_COORDINATES, program, "tx", 2)
 
@@ -106,7 +97,7 @@ class Rectangle:
         self.program.set_uniform("scale", self.scale_matrix)
 
         with self.vao:
-            self.vao.draw_array(TRIANGLE_DATA_LENGTH)
+            self.vao.draw_indexed_elements(TRIANGLE_INDEX_LENGTH)
 
     def check_collision(self, rect2) -> None:
         if (

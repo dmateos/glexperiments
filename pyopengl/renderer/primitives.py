@@ -1,5 +1,6 @@
 import OpenGL.GL as ogl
 import numpy
+import ctypes
 from PIL import Image
 
 
@@ -10,7 +11,7 @@ class RenderException(Exception):
 class VertexState:
     """
     Maintains a draw state.
-    Will track any VertexBuffers created while bound
+    VertexArray in opengl. 
     """
 
     def __init__(self) -> None:
@@ -34,14 +35,20 @@ class VertexState:
     def draw_indexed_elements(self, length: int) -> None:
         ogl.glDrawElements(ogl.GL_TRIANGLES, length, ogl.GL_UNSIGNED_INT, None)
 
-    def draw_instanced(self, length, instances):
+    def draw_instanced(self, length: int, instances: int) -> None:
         ogl.glDrawArraysInstanced(ogl.GL_TRIANGLES, 0, length, instances)
+
+    def draw_instanced_indexed_elements(self, length: int, instances: int) -> None:
+        ogl.glDrawElementsInstanced(
+            ogl.GL_TRIANGLES, length, ogl.GL_UNSIGNED_INT, None, instances
+        )
 
 
 class VertexBuffer:
     """
     Respresents a buffer of data
     Probably should be run within a VertexState with block
+    Using this class may fuck with openGL state not leaving it how it found it. 
     """
 
     def __init__(
@@ -73,13 +80,13 @@ class VertexBuffer:
         # If instanced this attribute is split between verticie instances.
         if self.instanced:
             ogl.glVertexAttribDivisor(self.program.get_attribute(self.name), 1)
-        self.unbind()
+        # self.unbind()
 
 
 class IndexBuffer:
     def __init__(self, data: list, program, name: str, stepping=3) -> None:
         self.vbo = ogl.glGenBuffers(1)
-        self.data = numpy.array(data, dtype="float32")
+        self.data = numpy.array(data, dtype="uint32")
         self.name = name
         self.program = program
         self.stepping = stepping
@@ -102,7 +109,8 @@ class IndexBuffer:
 
         self.program.use()
         self.program.set_attribute(self.name, self.stepping)
-        self.unbind()
+        # We dont unbind a GL_ELEMENT_ARRAY_BUFFER within the context of a vao
+        # self.unbind()
 
 
 class FrameBuffer:

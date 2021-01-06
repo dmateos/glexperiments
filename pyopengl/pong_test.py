@@ -14,11 +14,13 @@ BALL_SPEED = 10
 class Paddle:
     def __init__(self, program, computer: bool = False):
         if computer:
-            self.rect = sprites.Rectangle(program, 0, 0, 40, 100, COMPUTER_COLOR)
+            self.rect = sprites.DrawableRectangle(
+                program, 0, 0, 40, 100, COMPUTER_COLOR
+            )
             self.rect.x += SCREEN_SIZE[0] - 40
         else:
-            self.rect = sprites.Rectangle(program, 0, 0, 40, 100, USER_COLOR)
-            self.rect.x += 2
+            self.rect = sprites.DrawableRectangle(program, 0, 0, 40, 100, USER_COLOR)
+            self.rect.x += 40
 
     def draw(self):
         self.rect.draw()
@@ -32,7 +34,7 @@ class Paddle:
 
 class Ball:
     def __init__(self, program):
-        self.rect = sprites.Rectangle(program, 0, 0, 40, 40, (1, 0, 0))
+        self.rect = sprites.DrawableRectangle(program, 0, 0, 40, 40, (1, 0, 0))
         self.reset()
 
     def reset(self):
