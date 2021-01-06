@@ -3,10 +3,11 @@ import pyrr
 from . import primitives, shader
 
 TRIANGLE_DATA = (0.5, 0.5, 0.0, 0.5, -0.5, 0.0, -0.5, -0.5, 0.0, -0.5, 0.5, 0.0)
-TEXTURE_COORDINATES = (0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0)
+TEXTURE_COORDINATES = (1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)
 TRIANGLE_INDEXES = (0, 1, 3, 1, 2, 3)
 TRIANGLE_DATA_LENGTH = len(TRIANGLE_DATA)
 TRIANGLE_INDEX_LENGTH = len(TRIANGLE_INDEXES)
+
 
 class Rectangle:
     def __init__(self, x, y, w, h, c):
@@ -39,7 +40,7 @@ class RectangleGroup:
         with self.vao:
             primitives.VertexBuffer(TRIANGLE_DATA, program, "vp", 3)
             primitives.IndexBuffer(TRIANGLE_INDEXES, program, "vp", 3)
-            primitives.VertexBuffer((0, 0, 1), program, "c", 3)
+            primitives.VertexBuffer((1, 0, 0) * 4, program, "c", 3)
             primitives.VertexBuffer(TEXTURE_COORDINATES, program, "tx", 2)
 
     def append(self, sprite):
@@ -79,14 +80,14 @@ class DrawableRectangle(Rectangle):
     def __init__(self, program, x, y, w, h, color=[0.0, 0.0, 0.0]) -> None:
         super().__init__(x, y, w, h, color)
         self.program = program
-        self.color = color
+        self.color = color * 4
         self.vao = primitives.VertexState()
         self.scale_matrix = pyrr.Matrix44.from_scale([w, h, 0])
 
         with self.vao:
             primitives.VertexBuffer(TRIANGLE_DATA, program, "vp", 3)
             primitives.IndexBuffer(TRIANGLE_INDEXES, program, "vp", 3)
-            primitives.VertexBuffer(self.color, program, "c")
+            primitives.VertexBuffer(self.color, program, "c", 3)
             primitives.VertexBuffer(TEXTURE_COORDINATES, program, "tx", 2)
 
     def draw(self) -> None:

@@ -133,7 +133,6 @@ class Texture:
         self.width = width
         self.height = height
         self.data = data
-
         self._create_texture()
 
     @staticmethod
@@ -151,6 +150,10 @@ class Texture:
     def _create_texture(self) -> None:
         self.bind()
         ogl.glPixelStorei(ogl.GL_UNPACK_ALIGNMENT, 4)
+        ogl.glTexParameteri(ogl.GL_TEXTURE_2D, ogl.GL_TEXTURE_WRAP_S, ogl.GL_REPEAT)
+        ogl.glTexParameteri(ogl.GL_TEXTURE_2D, ogl.GL_TEXTURE_WRAP_T, ogl.GL_REPEAT)
+        ogl.glTexParameteri(ogl.GL_TEXTURE_2D, ogl.GL_TEXTURE_MIN_FILTER, ogl.GL_LINEAR)
+        ogl.glTexParameteri(ogl.GL_TEXTURE_2D, ogl.GL_TEXTURE_MAG_FILTER, ogl.GL_LINEAR)
         ogl.glTexImage2D(
             ogl.GL_TEXTURE_2D,
             0,
@@ -162,10 +165,5 @@ class Texture:
             ogl.GL_UNSIGNED_BYTE,
             self.data,
         )
-        ogl.glTexParameteri(ogl.GL_TEXTURE_2D, ogl.GL_TEXTURE_WRAP_S, ogl.GL_REPEAT)
-        ogl.glTexParameteri(ogl.GL_TEXTURE_2D, ogl.GL_TEXTURE_WRAP_T, ogl.GL_REPEAT)
-        ogl.glTexParameteri(ogl.GL_TEXTURE_2D, ogl.GL_TEXTURE_MIN_FILTER, ogl.GL_LINEAR)
-        ogl.glTexParameteri(ogl.GL_TEXTURE_2D, ogl.GL_TEXTURE_MAG_FILTER, ogl.GL_LINEAR)
         ogl.glGenerateMipmap(ogl.GL_TEXTURE_2D)
-
         self.unbind()

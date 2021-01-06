@@ -11,7 +11,7 @@ SCREEN_SIZE = (1024, 1000)
 
 class TestDirectioner:
     def __init__(self, program, direction):
-        self.rect = sprites.DrawableRectangle(program, 0, 0, 100, 100, [1, 0, 1])
+        self.rect = sprites.DrawableRectangle(program, 0, 0, 100, 100, [1.0, 0.0, 0.0])
         self.direction = direction
 
         self.rect.x = random.randint(0, SCREEN_SIZE[0])
@@ -49,7 +49,7 @@ class Screen:
         )
         self.program.set_uniform("projection", projection)
 
-        texture = primitives.Texture.image_from_file("assets/grid.jpg")
+        texture = primitives.Texture.image_from_file("assets/container.jpg")
         texture.bind()
 
         self.sprites = []

@@ -48,7 +48,7 @@ class Screen:
         )
         self.program.set_uniform("projection", projection)
 
-        texture = primitives.Texture.image_from_file("assets/grid.jpg")
+        texture = primitives.Texture.image_from_file("assets/container.jpg")
         texture.bind()
 
         self.sprites = []
