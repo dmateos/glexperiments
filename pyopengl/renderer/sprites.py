@@ -1,6 +1,5 @@
-import OpenGL.GL as ogl
 import pyrr
-from . import primitives, shader
+from . import primitives
 
 TRIANGLE_DATA = (0.5, 0.5, 0.0, 0.5, -0.5, 0.0, -0.5, -0.5, 0.0, -0.5, 0.5, 0.0)
 TEXTURE_COORDINATES = (1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)
@@ -15,7 +14,6 @@ class Rectangle:
         self.y = y
         self.w = w
         self.h = h
-
         self.color = c
 
 
@@ -34,7 +32,6 @@ class RectangleGroup:
         self.program = program
         self.vao = primitives.VertexState()
         self.scale_matrix = pyrr.Matrix44.from_scale([100, 100, 0])
-
         self.sprites = sprites
 
         with self.vao:

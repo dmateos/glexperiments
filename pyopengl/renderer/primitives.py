@@ -1,6 +1,5 @@
 import OpenGL.GL as ogl
 import numpy
-import ctypes
 from PIL import Image
 
 
@@ -84,9 +83,14 @@ class VertexBuffer:
 
 
 class IndexBuffer:
+    """
+    Index into a VBO. 
+    You generally have to create this straight after a VBO while it is still bound(). 
+    """
+
     def __init__(self, data: list, program, name: str, stepping=3) -> None:
         self.vbo = ogl.glGenBuffers(1)
-        self.data = numpy.array(data, dtype="uint32")
+        self.data = numpy.array(data, dtype="uint32")  # This type matters
         self.name = name
         self.program = program
         self.stepping = stepping
@@ -128,6 +132,10 @@ class FrameBuffer:
 
 
 class Texture:
+    """
+    Images should be a power of 2.
+    """
+
     def __init__(self, width, height, data):
         self.tbo = ogl.glGenTextures(1)
         self.width = width
