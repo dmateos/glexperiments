@@ -118,8 +118,22 @@ class IndexBuffer:
 
 
 class FrameBuffer:
-    def __init__(self) -> None:
+    def __init__(self, width, height) -> None:
         self.fbo = ogl.glGenFramebuffers(1)
+        self.bind()
+
+        self.texture = Texture(width, height, None)
+        self.texture.bind()
+
+        ogl.glFramebufferTexture(
+            ogl.GL_FRAMEBUFFER,
+            ogl.GL_COLOR_ATTACHMENT0,
+            ogl.GL_TEXTURE_2D,
+            self.texture.tbo,
+            0,
+        )
+
+        self.unbind()
 
     def bind(self) -> None:
         ogl.glBindFramebuffer(ogl.GL_FRAMEBUFFER, self.fbo)

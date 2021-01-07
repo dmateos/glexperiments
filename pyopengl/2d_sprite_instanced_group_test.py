@@ -56,11 +56,11 @@ class Screen:
 
         self.sprites = []
 
-        for n in range(2):
+        for n in range(4000):
             sprite = TestDirectioner(random.randint(0, 360))
             self.sprites.append(sprite)
 
-        self.sprite_group = sprites.RectangleGroup(self.program, self.sprites)
+        self.sprite_group = sprites.RectangleGroup(self.program, self.sprites, 40, 40)
 
     def update(self):
         for sprite in self.sprites:

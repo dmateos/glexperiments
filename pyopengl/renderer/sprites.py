@@ -28,23 +28,23 @@ class RectangleGroup:
     rectangles transformations witin the one draw call.
     """
 
-    def __init__(self, program, sprites=[]):
+    def __init__(self, program, sprites=[], height=20, width=20):
         self.program = program
         self.vao = primitives.VertexState()
-        self.scale_matrix = pyrr.Matrix44.from_scale([100, 100, 0])
+        self.scale_matrix = pyrr.Matrix44.from_scale([height, width, 0])
         self.sprites = sprites
         self.colors = []
 
         for s in sprites:
-            self.colors.append(s.rect.color[0])
-            self.colors.append(s.rect.color[1])
-            self.colors.append(s.rect.color[2])
+            self.colors.extend([s.rect.color[0], s.rect.color[1], s.rect.color[2]])
 
         with self.vao:
             primitives.VertexBuffer(TRIANGLE_DATA, program, "vp", 3)
             primitives.IndexBuffer(TRIANGLE_INDEXES, program, "vp", 3)
             primitives.VertexBuffer(self.colors, program, "c", 3, True)
             primitives.VertexBuffer(TEXTURE_COORDINATES, program, "tx", 2)
+
+            # buffer = primitives.FrameBuffer(1024, 768)
 
     def draw(self):
         self.program.use()
@@ -63,9 +63,7 @@ class RectangleGroup:
         rectangles = []
 
         for s in self.sprites:
-            rectangles.append(s.rect.x)
-            rectangles.append(s.rect.y)
-            rectangles.append(0.0)
+            rectangles.extend([s.rect.x, s.rect.y, 0.0])
 
         return rectangles
 

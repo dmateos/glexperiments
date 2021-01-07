@@ -57,7 +57,7 @@ class Screen:
 
         self.sprites = []
 
-        for n in range(2):
+        for n in range(20):
             sprite = TestDirectioner(self.program, random.randint(0, 360))
             self.sprites.append(sprite)
 
