@@ -10,7 +10,10 @@ SCREEN_SIZE = (1024, 1000)
 
 class TestDirectioner:
     def __init__(self, direction):
-        self.rect = sprites.Rectangle(0, 0, 250, 250, [0, 0, 1])
+        perms = [1, 0, 0]
+        random.shuffle(perms)
+
+        self.rect = sprites.Rectangle(0, 0, 250, 250, perms)
         self.direction = direction
 
         self.rect.x = random.randint(0, SCREEN_SIZE[0])
@@ -52,12 +55,12 @@ class Screen:
         texture.bind()
 
         self.sprites = []
-        self.sprite_group = sprites.RectangleGroup(self.program, self.sprites)
 
-        for n in range(200):
+        for n in range(2):
             sprite = TestDirectioner(random.randint(0, 360))
             self.sprites.append(sprite)
-            self.sprite_group.append(sprite)
+
+        self.sprite_group = sprites.RectangleGroup(self.program, self.sprites)
 
     def update(self):
         for sprite in self.sprites:

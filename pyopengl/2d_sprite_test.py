@@ -11,7 +11,10 @@ SCREEN_SIZE = (1024, 1000)
 
 class TestDirectioner:
     def __init__(self, program, direction):
-        self.rect = sprites.DrawableRectangle(program, 0, 0, 100, 100, [1.0, 0.0, 0.0])
+        perms = [1, 0, 0]
+        random.shuffle(perms)
+
+        self.rect = sprites.DrawableRectangle(program, 0, 0, 100, 100, perms)
         self.direction = direction
 
         self.rect.x = random.randint(0, SCREEN_SIZE[0])

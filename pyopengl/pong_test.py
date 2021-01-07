@@ -8,6 +8,7 @@ import math
 SCREEN_SIZE = (1024, 1000)
 USER_COLOR = (0, 0, 1)
 COMPUTER_COLOR = (0, 0, 1)
+BALL_COLOR = (1, 0, 0)
 BALL_SPEED = 10
 
 
@@ -34,7 +35,7 @@ class Paddle:
 
 class Ball:
     def __init__(self, program):
-        self.rect = sprites.DrawableRectangle(program, 0, 0, 40, 40, (1, 0, 0))
+        self.rect = sprites.DrawableRectangle(program, 0, 0, 40, 40, BALL_COLOR)
         self.reset()
 
     def reset(self):
