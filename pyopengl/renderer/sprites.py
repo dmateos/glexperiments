@@ -39,7 +39,6 @@ class RectangleGroup:
             self.colors.append(s.rect.color[0])
             self.colors.append(s.rect.color[1])
             self.colors.append(s.rect.color[2])
-        print(self.colors)
 
         with self.vao:
             primitives.VertexBuffer(TRIANGLE_DATA, program, "vp", 3)
@@ -89,7 +88,6 @@ class DrawableRectangle(Rectangle):
             primitives.IndexBuffer(TRIANGLE_INDEXES, program, "vp", 3)
             primitives.VertexBuffer(self.color * 4, program, "c", 3)
             primitives.VertexBuffer(TEXTURE_COORDINATES, program, "tx", 2)
-        print(self.color)
 
     def draw(self) -> None:
         self.program.use()
