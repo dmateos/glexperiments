@@ -11,6 +11,8 @@ class VertexState:
     """
     Maintains a draw state.
     VertexArray in opengl. 
+    Some assumptions are made about rendering here.
+    Such as triangle use, uint for index element type. 
     """
 
     def __init__(self) -> None:
@@ -118,6 +120,11 @@ class IndexBuffer:
 
 
 class FrameBuffer:
+    """
+    Creates a framebuffer which when in context draw calls will render too.
+    Stores the results in a texture which can be used.. as a texture. 
+    """
+
     def __init__(self, width, height) -> None:
         self.fbo = ogl.glGenFramebuffers(1)
         self.bind()

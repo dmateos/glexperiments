@@ -17,6 +17,46 @@ class Rectangle:
         self.color = c
 
 
+class DrawableRectangle(Rectangle):
+    """
+    Renderable rectangle
+
+    Uses a VAO and some VBO's and draws as an array.
+    """
+
+    def __init__(self, program, x, y, w, h, color=[0.0, 0.0, 0.0]) -> None:
+        super().__init__(x, y, w, h, color)
+        self.program = program
+        self.vao = primitives.VertexState()
+        self.scale_matrix = pyrr.Matrix44.from_scale([w, h, 0])
+
+        with self.vao:
+            primitives.VertexBuffer(TRIANGLE_DATA, program, "vp", 3)
+            primitives.IndexBuffer(TRIANGLE_INDEXES, program, "vp", 3)
+            primitives.VertexBuffer(self.color * 4, program, "c", 3)
+            primitives.VertexBuffer(TEXTURE_COORDINATES, program, "tx", 2)
+
+    def draw(self) -> None:
+        self.program.use()
+        mat = pyrr.Matrix44.from_translation([self.x, self.y, 0])
+
+        self.program.set_uniform("translation", mat)
+        self.program.set_uniform("scale", self.scale_matrix)
+
+        with self.vao:
+            self.vao.draw_indexed_elements(TRIANGLE_INDEX_LENGTH)
+
+    def check_collision(self, rect2) -> None:
+        if (
+            self.x < rect2.x + rect2.w
+            and self.x + self.w > rect2.x
+            and self.y < rect2.y + rect2.h
+            and self.y + self.h > rect2.y
+        ):
+            return True
+        return False
+
+
 class RectangleGroup:
     """
     Used to render a group of Rectangle objects. 
@@ -64,43 +104,3 @@ class RectangleGroup:
             rectangles.extend([s.rect.x, s.rect.y, 0.0])
 
         return rectangles
-
-
-class DrawableRectangle(Rectangle):
-    """
-    Renderable rectangle
-
-    Uses a VAO and some VBO's and draws as an array.
-    """
-
-    def __init__(self, program, x, y, w, h, color=[0.0, 0.0, 0.0]) -> None:
-        super().__init__(x, y, w, h, color)
-        self.program = program
-        self.vao = primitives.VertexState()
-        self.scale_matrix = pyrr.Matrix44.from_scale([w, h, 0])
-
-        with self.vao:
-            primitives.VertexBuffer(TRIANGLE_DATA, program, "vp", 3)
-            primitives.IndexBuffer(TRIANGLE_INDEXES, program, "vp", 3)
-            primitives.VertexBuffer(self.color * 4, program, "c", 3)
-            primitives.VertexBuffer(TEXTURE_COORDINATES, program, "tx", 2)
-
-    def draw(self) -> None:
-        self.program.use()
-        mat = pyrr.Matrix44.from_translation([self.x, self.y, 0])
-
-        self.program.set_uniform("translation", mat)
-        self.program.set_uniform("scale", self.scale_matrix)
-
-        with self.vao:
-            self.vao.draw_indexed_elements(TRIANGLE_INDEX_LENGTH)
-
-    def check_collision(self, rect2) -> None:
-        if (
-            self.x < rect2.x + rect2.w
-            and self.x + self.w > rect2.x
-            and self.y < rect2.y + rect2.h
-            and self.y + self.h > rect2.y
-        ):
-            return True
-        return False
