@@ -14,7 +14,6 @@ class Window:
         self.window = None
         self._key_callbacks = []
         self._mouse_callbacks = []
-
         self.framecount = 0
         self.previous_time = 0
 
@@ -38,10 +37,13 @@ class Window:
 
         glfw.make_context_current(self.window)
 
-        ogl.glClearColor(0.0, 1.0, 0.0, 1.0)
+        ogl.glClearColor(0, 1, 0, 0)
         # ogl.glEnable(ogl.GL_DEPTH_TEST)
         # ogl.glEnable(ogl.GL_CULL_FACE)
         # ogl.glDepthFunc(ogl.GL_LESS)
+
+    def set_clear_color(self, r, g, b):
+        ogl.glClearColor(r, g, b, 0)
 
     def swap(self) -> None:
         glfw.swap_buffers(self.window)

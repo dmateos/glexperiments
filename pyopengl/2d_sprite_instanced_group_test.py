@@ -1,6 +1,5 @@
 # import sys
 from renderer import window, shader, sprites, primitives
-import glfw
 import pyrr
 import math
 import random

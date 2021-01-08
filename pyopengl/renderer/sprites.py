@@ -44,8 +44,6 @@ class RectangleGroup:
             primitives.VertexBuffer(self.colors, program, "c", 3, True)
             primitives.VertexBuffer(TEXTURE_COORDINATES, program, "tx", 2)
 
-            # buffer = primitives.FrameBuffer(1024, 768)
-
     def draw(self):
         self.program.use()
         self.program.set_uniform("scale", self.scale_matrix)

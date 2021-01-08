@@ -123,9 +123,8 @@ class FrameBuffer:
         self.bind()
 
         self.texture = Texture(width, height, None)
-        self.texture.bind()
 
-        ogl.glFramebufferTexture(
+        ogl.glFramebufferTexture2D(
             ogl.GL_FRAMEBUFFER,
             ogl.GL_COLOR_ATTACHMENT0,
             ogl.GL_TEXTURE_2D,
@@ -143,6 +142,9 @@ class FrameBuffer:
 
     def delete(self) -> None:
         ogl.glDeleteFramebuffers(1, self.fbo)
+
+    def clear(self) -> None:
+        pass
 
 
 class Texture:

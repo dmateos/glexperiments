@@ -1,10 +1,8 @@
 # import sys
 from renderer import window, shader, sprites, primitives
-import glfw
 import pyrr
 import math
 import random
-import cProfile
 
 SCREEN_SIZE = (1024, 1000)
 
