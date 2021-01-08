@@ -47,7 +47,7 @@ class Screen:
         )
 
         buffer_projection = pyrr.Matrix44.orthogonal_projection(
-            0.0, SCREEN_SIZE[0], SCREEN_SIZE[1], 0.0, -1.0, 1.0
+            0.0, FRAME_SIZE[0], FRAME_SIZE[1], 0.0, -1.0, 1.0
         )
 
         self.instanced_program = shader.create_program(
@@ -83,21 +83,32 @@ class Screen:
             [1, 1, 1],
         )
 
+        self.render_quad2 = sprites.DrawableRectangle(
+            self.normal_program,
+            FRAME_SIZE[0] / 2 + FRAME_SIZE[0],
+            FRAME_SIZE[1] / 2 + FRAME_SIZE[1],
+            FRAME_SIZE[0],
+            FRAME_SIZE[1],
+            [1, 1, 1],
+        )
+
     def update(self):
         self.sprite_texture.bind()
         for sprite in self.sprites:
             sprite.update()
 
-        self.framebuffer.bind()
+        with self.framebuffer:
+            self.window.set_clear_color(0, 1, 0)
+            self.window.clear()
+            self.sprite_group.draw()
+
         self.window.set_clear_color(1, 0, 0)
         self.window.clear()
-        self.sprite_group.draw()
-        self.framebuffer.unbind()
+        self.framebuffer.bind_texture()
 
-        self.window.set_clear_color(0, 1, 0)
-        self.window.clear()
-        self.framebuffer.texture.bind()
         self.render_quad.draw()
+        self.render_quad2.draw()
+
         self.window.swap()
 
     def ok(self):

@@ -122,6 +122,7 @@ class FrameBuffer:
         self.fbo = ogl.glGenFramebuffers(1)
         self.bind()
 
+        #  TODO: Depth buffer for 3d support.
         self.texture = Texture(width, height, None)
 
         ogl.glFramebufferTexture2D(
@@ -134,6 +135,15 @@ class FrameBuffer:
 
         self.unbind()
 
+    def __enter__(self) -> None:
+        self.bind()
+
+    def __exit__(self, type, value, traceback) -> None:
+        self.unbind()
+
+    def bind_texture(self) -> None:
+        self.texture.bind()
+
     def bind(self) -> None:
         ogl.glBindFramebuffer(ogl.GL_FRAMEBUFFER, self.fbo)
 
@@ -142,9 +152,6 @@ class FrameBuffer:
 
     def delete(self) -> None:
         ogl.glDeleteFramebuffers(1, self.fbo)
-
-    def clear(self) -> None:
-        pass
 
 
 class Texture:
