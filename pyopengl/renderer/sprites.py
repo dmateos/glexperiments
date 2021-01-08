@@ -16,6 +16,16 @@ class Rectangle:
         self.h = h
         self.color = c
 
+    def check_collision(self, rect2) -> None:
+        if (
+            self.x < rect2.x + rect2.w
+            and self.x + self.w > rect2.x
+            and self.y < rect2.y + rect2.h
+            and self.y + self.h > rect2.y
+        ):
+            return True
+        return False
+
 
 class DrawableRectangle(Rectangle):
     """
@@ -45,16 +55,6 @@ class DrawableRectangle(Rectangle):
 
         with self.vao:
             self.vao.draw_indexed_elements(TRIANGLE_INDEX_LENGTH)
-
-    def check_collision(self, rect2) -> None:
-        if (
-            self.x < rect2.x + rect2.w
-            and self.x + self.w > rect2.x
-            and self.y < rect2.y + rect2.h
-            and self.y + self.h > rect2.y
-        ):
-            return True
-        return False
 
 
 class RectangleGroup:
