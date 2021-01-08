@@ -14,7 +14,7 @@ class TestDirectioner:
         perms = [1, 0, 0]
         random.shuffle(perms)
 
-        self.rect = sprites.DrawableRectangle(program, 0, 0, 250, 250, perms)
+        self.rect = sprites.Rectangle(0, 0, 250, 250, perms)
         self.direction = direction
 
         self.rect.x = random.randint(0, FRAME_SIZE[0])
