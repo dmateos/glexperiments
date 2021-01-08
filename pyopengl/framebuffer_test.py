@@ -122,6 +122,12 @@ class Screen:
         elif key == glfw.KEY_UP:
             self.render_quad.y -= 10
             self.render_quad2.y += 10
+        elif key == glfw.KEY_LEFT:
+            self.render_quad.x += 10
+            self.render_quad2.x -= 10
+        elif key == glfw.KEY_RIGHT:
+            self.render_quad.x -= 10
+            self.render_quad2.x += 10
 
     def mouse_handler(self, xpos, ypos):
         pass
