@@ -1,6 +1,7 @@
 # import sys
 from renderer import window, shader, sprites, primitives
 import pyrr
+import glfw
 import math
 import random
 
@@ -67,7 +68,7 @@ class Screen:
 
         self.sprites = []
 
-        for n in range(10):
+        for n in range(1000):
             sprite = TestDirectioner(self.instanced_program, random.randint(0, 360))
             self.sprites.append(sprite)
 
@@ -115,7 +116,12 @@ class Screen:
         return self.window.ok()
 
     def key_handler(self, key, code, action, mods):
-        pass
+        if key == glfw.KEY_DOWN:
+            self.render_quad.y += 10
+            self.render_quad2.y -= 10
+        elif key == glfw.KEY_UP:
+            self.render_quad.y -= 10
+            self.render_quad2.y += 10
 
     def mouse_handler(self, xpos, ypos):
         pass
