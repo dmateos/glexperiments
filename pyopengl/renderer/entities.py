@@ -83,7 +83,7 @@ class ModelGroup:
         self.program = program
         self.vao = primitives.VertexState()
         self.models = models
-        self.scale_matrix = pyrr.Matrix44.from_scale([width, height, 0])
+        self.scale_matrix = pyrr.Matrix44.from_scale([width, height, 1])
         model_object = ObjectFile(path)
         self.geometry = model_object.get_geometry()
 
@@ -100,6 +100,7 @@ class ModelGroup:
         with self.vao:
             # TODO Update rather than new buffer each time?
             primitives.VertexBuffer(self.models, self.program, "os", 3, True)
+            self.program.set_uniform("scale", self.scale_matrix)
             self.vao.draw_instanced_indexed_elements(
                 len(self.geometry[1]), int(len(self.models) / 3)
             )

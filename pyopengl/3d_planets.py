@@ -29,12 +29,14 @@ class Screen:
         self.instanced_program.set_uniform("projection", self.camera.mat_projection)
 
         self.cube0 = entities.Model(self.program, "assets/cube.obj", -5, 0, -5)
-        self.cube1 = entities.Model(self.program, "assets/monkey.obj", 5, 0, -5)
+        self.cube1 = entities.Model(self.program, "assets/monkey.obj", 5, 0, -10)
 
         self.cubes = []
 
-        for n in range(0, 10):
-            self.cubes.extend([0.2 * n, 0.0, 0.2 * n])
+        for n in range(0, 50):
+            for nn in range(0, 50):
+                for nnn in range(0, 50):
+                    self.cubes.extend([2.0 * n, 2.0 * nn, -2.0 * nnn])
 
         self.cube_group = entities.ModelGroup(
             self.instanced_program, "assets/cube.obj", self.cubes, 1, 1
@@ -48,12 +50,11 @@ class Screen:
         self.program.use()
         self.program.set_uniform("camera", self.camera.mat_lookat)
 
-        self.cube0.draw()
-        self.cube1.draw()
-
         self.instanced_program.use()
         self.instanced_program.set_uniform("camera", self.camera.mat_lookat)
 
+        self.cube0.draw()
+        self.cube1.draw()
         self.cube_group.draw()
 
         self.window.swap()
@@ -62,13 +63,13 @@ class Screen:
         return self.window.ok()
 
     def key_handler(self, key, code, action, mods):
-        if key == glfw.KEY_DOWN:
+        if key == glfw.KEY_S:
             self.camera.move_backwards()
-        elif key == glfw.KEY_UP:
+        elif key == glfw.KEY_W:
             self.camera.move_forward()
-        elif key == glfw.KEY_LEFT:
+        elif key == glfw.KEY_A:
             self.camera.rotate_left()
-        elif key == glfw.KEY_RIGHT:
+        elif key == glfw.KEY_D:
             self.camera.rotate_right()
 
     def mouse_handler(self, xpos, ypos):
