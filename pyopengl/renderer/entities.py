@@ -83,7 +83,7 @@ class ModelGroup:
         self.program = program
         self.vao = primitives.VertexState()
         self.models = models
-        self.scale_matrix = pyrr.Matrix44.from_scale([height, width, 0])
+        self.scale_matrix = pyrr.Matrix44.from_scale([width, height, 0])
         model_object = ObjectFile(path)
         self.geometry = model_object.get_geometry()
 
@@ -97,7 +97,6 @@ class ModelGroup:
 
     def draw(self):
         self.program.use()
-
         with self.vao:
             # TODO Update rather than new buffer each time?
             primitives.VertexBuffer(self.models, self.program, "os", 3, True)

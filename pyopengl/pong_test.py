@@ -85,6 +85,7 @@ class Screen:
         projection = pyrr.Matrix44.orthogonal_projection(
             0.0, SCREEN_SIZE[0], SCREEN_SIZE[1], 0.0, -1.0, 1.0
         )
+        self.program.use()
         self.program.set_uniform("projection", projection)
 
         texture = primitives.Texture.image_from_file("assets/container.jpg")

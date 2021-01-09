@@ -18,25 +18,44 @@ class Screen:
         self.program = shader.create_program(
             "renderer/shaders/camera_vert.gsl", "renderer/shaders/norm_frag.gsl"
         )
+        self.program.use()
         self.program.set_uniform("projection", self.camera.mat_projection)
 
         self.instanced_program = shader.create_program(
             "renderer/shaders/instanced_camera_vert.gsl",
             "renderer/shaders/norm_frag.gsl",
         )
+        self.instanced_program.use()
         self.instanced_program.set_uniform("projection", self.camera.mat_projection)
 
         self.cube0 = entities.Model(self.program, "assets/cube.obj", -5, 0, -5)
         self.cube1 = entities.Model(self.program, "assets/monkey.obj", 5, 0, -5)
+
+        self.cubes = []
+
+        for n in range(0, 10):
+            self.cubes.extend([0.2 * n, 0.0, 0.2 * n])
+
+        self.cube_group = entities.ModelGroup(
+            self.instanced_program, "assets/cube.obj", self.cubes, 1, 1
+        )
 
         texture = primitives.Texture.image_from_file("assets/container.jpg")
         texture.bind()
 
     def update(self):
         self.window.clear()
+        self.program.use()
         self.program.set_uniform("camera", self.camera.mat_lookat)
+
         self.cube0.draw()
         self.cube1.draw()
+
+        self.instanced_program.use()
+        self.instanced_program.set_uniform("camera", self.camera.mat_lookat)
+
+        self.cube_group.draw()
+
         self.window.swap()
 
     def ok(self):

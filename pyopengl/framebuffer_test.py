@@ -54,11 +54,13 @@ class Screen:
         self.instanced_program = shader.create_program(
             "renderer/shaders/instanced_vert.gsl", shader.BASIC_FRAG_SHADER
         )
+        self.instanced_program.use()
         self.instanced_program.set_uniform("projection", buffer_projection)
 
         self.normal_program = shader.create_program(
             shader.BASIC_VERT_SHADER, shader.BASIC_FRAG_SHADER
         )
+        self.normal_program.use()
         self.normal_program.set_uniform("projection", screen_projection)
 
         self.framebuffer = primitives.FrameBuffer(FRAME_SIZE[0], FRAME_SIZE[1])
