@@ -16,6 +16,7 @@ class Window:
         self._mouse_callbacks = []
         self.framecount = 0
         self.previous_time = 0
+        self._poly_off = False
 
     def run(self, depth=False) -> None:
         if not glfw.init():
@@ -38,7 +39,6 @@ class Window:
         glfw.make_context_current(self.window)
 
         ogl.glClearColor(0, 1, 0, 0)
-        ogl.glPolygonMode(ogl.GL_FRONT_AND_BACK, ogl.GL_LINE)
 
         if depth:
             ogl.glEnable(ogl.GL_DEPTH_TEST)
@@ -47,6 +47,14 @@ class Window:
 
     def set_clear_color(self, r, g, b):
         ogl.glClearColor(r, g, b, 0)
+
+    def toggle_wireframe(self):
+        if self._poly_off:
+            ogl.glPolygonMode(ogl.GL_FRONT_AND_BACK, ogl.GL_FILL)
+            self._poly_off = False
+        else:
+            ogl.glPolygonMode(ogl.GL_FRONT_AND_BACK, ogl.GL_LINE)
+            self._poly_off = True
 
     def swap(self) -> None:
         glfw.swap_buffers(self.window)

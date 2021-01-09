@@ -11,9 +11,9 @@ class Camera:
         self._rotate_horizontally = 1.0
         self._rotate_vertically = 1.0
 
-        self._field_of_view_degrees = 60.0
+        self._field_of_view_degrees = 70.0
         self._z_near = 0.1
-        self._z_far = 100
+        self._z_far = 1000
         self._ratio = ratio
         self.build_projection()
 

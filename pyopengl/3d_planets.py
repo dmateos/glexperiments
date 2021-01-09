@@ -28,8 +28,7 @@ class Screen:
         self.instanced_program.use()
         self.instanced_program.set_uniform("projection", self.camera.mat_projection)
 
-        self.cube0 = entities.Model(self.program, "assets/cube.obj", -5, 0, -5)
-        self.cube1 = entities.Model(self.program, "assets/monkey.obj", 5, 0, -10)
+        self.monkey = entities.Model(self.program, "assets/monkey.obj", -3.0, 0, 10)
 
         self.cubes = []
 
@@ -38,8 +37,18 @@ class Screen:
                 for nnn in range(0, 50):
                     self.cubes.extend([2.0 * n, 2.0 * nn, -2.0 * nnn])
 
+        self.monkeys = []
+        for n in range(0, 10):
+            for nn in range(0, 10):
+                for nnn in range(0, 10):
+                    self.monkeys.extend([-2.0 * n + -8.0, 2.0 * nn, -2.0 * nnn])
+
         self.cube_group = entities.ModelGroup(
             self.instanced_program, "assets/cube.obj", self.cubes, 1, 1
+        )
+
+        self.monkey_group = entities.ModelGroup(
+            self.instanced_program, "assets/monkey.obj", self.monkeys, 1, 1
         )
 
         texture = primitives.Texture.image_from_file("assets/container.jpg")
@@ -53,9 +62,10 @@ class Screen:
         self.instanced_program.use()
         self.instanced_program.set_uniform("camera", self.camera.mat_lookat)
 
-        self.cube0.draw()
-        self.cube1.draw()
+        self.monkey.draw()
+
         self.cube_group.draw()
+        self.monkey_group.draw()
 
         self.window.swap()
 
@@ -71,6 +81,8 @@ class Screen:
             self.camera.rotate_left()
         elif key == glfw.KEY_D:
             self.camera.rotate_right()
+        elif key == glfw.KEY_E:
+            self.window.toggle_wireframe()
 
     def mouse_handler(self, xpos, ypos):
         pass

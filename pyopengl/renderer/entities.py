@@ -92,7 +92,7 @@ class ModelGroup:
             primitives.IndexBuffer(self.geometry[1], self.program, "vp")
             primitives.VertexBuffer(TEXTURE_COORDINATES, self.program, "tx", 2)
             # TODO Fix this
-            primitives.VertexBuffer(self.geometry[0], self.program, "nm", 3)
+            primitives.VertexBuffer(self.geometry[2], self.program, "nm", 3)
             primitives.IndexBuffer(self.geometry[1], self.program, "nm")
 
     def draw(self):
