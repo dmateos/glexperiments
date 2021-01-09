@@ -15,17 +15,17 @@ class TestDirectioner:
         self.rect = sprites.DrawableRectangle(program, 0, 0, 100, 100, perms)
         self.direction = direction
 
-        self.rect.x = random.randint(0, SCREEN_SIZE[0])
-        self.rect.y = random.randint(0, SCREEN_SIZE[1])
+        self.rect.x = random.randint(100, SCREEN_SIZE[0] - 100)
+        self.rect.y = random.randint(100, SCREEN_SIZE[1] - 100)
 
     def update(self):
         self.rect.x += math.cos(self.direction * math.pi / 180) * 2
         self.rect.y += math.sin(self.direction * math.pi / 180) * 2
 
-        if self.rect.x <= 0 or self.rect.x >= SCREEN_SIZE[0]:
+        if self.rect.x <= 0 or self.rect.x + self.rect.w >= SCREEN_SIZE[0]:
             self.direction = random.randint(0, 360)
 
-        if self.rect.y <= 0 or self.rect.y >= SCREEN_SIZE[1]:
+        if self.rect.y <= 0 or self.rect.y + self.rect.h >= SCREEN_SIZE[1]:
             self.direction = random.randint(0, 360)
 
     def draw(self):

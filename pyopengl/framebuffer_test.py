@@ -14,20 +14,20 @@ class TestDirectioner:
         perms = [1, 0, 0]
         random.shuffle(perms)
 
-        self.rect = sprites.Rectangle(0, 0, 250, 250, perms)
+        self.rect = sprites.Rectangle(0, 0, 40, 40, perms)
         self.direction = direction
 
-        self.rect.x = random.randint(0, FRAME_SIZE[0])
-        self.rect.y = random.randint(0, FRAME_SIZE[1])
+        self.rect.x = random.randint(40, FRAME_SIZE[0] - 40)
+        self.rect.y = random.randint(40, FRAME_SIZE[1] - 40)
 
     def update(self):
         self.rect.x += math.cos(self.direction * math.pi / 180) * 2
         self.rect.y += math.sin(self.direction * math.pi / 180) * 2
 
-        if self.rect.x <= 0 or self.rect.x >= FRAME_SIZE[0]:
+        if self.rect.x <= 0 or self.rect.x + self.rect.w >= FRAME_SIZE[0]:
             self.direction = random.randint(0, 360)
 
-        if self.rect.y <= 0 or self.rect.y >= FRAME_SIZE[1]:
+        if self.rect.y <= 0 or self.rect.y + self.rect.h >= FRAME_SIZE[1]:
             self.direction = random.randint(0, 360)
 
     def draw(self):

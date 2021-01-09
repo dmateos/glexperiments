@@ -38,6 +38,7 @@ class Window:
         glfw.make_context_current(self.window)
 
         ogl.glClearColor(0, 1, 0, 0)
+        # ogl.glPolygonMode(ogl.GL_FRONT_AND_BACK, ogl.GL_LINE)
         # ogl.glEnable(ogl.GL_DEPTH_TEST)
         # ogl.glEnable(ogl.GL_CULL_FACE)
         # ogl.glDepthFunc(ogl.GL_LESS)
