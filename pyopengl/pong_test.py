@@ -18,7 +18,7 @@ class Paddle:
             self.rect = sprites.DrawableRectangle(
                 program, 0, 0, 40, 100, COMPUTER_COLOR
             )
-            self.rect.x += SCREEN_SIZE[0] - 40
+            self.rect.x += SCREEN_SIZE[0] - 80
         else:
             self.rect = sprites.DrawableRectangle(program, 0, 0, 40, 100, USER_COLOR)
             self.rect.x += 40
@@ -104,6 +104,7 @@ class Screen:
         self.window.clear()
 
         self.computer_paddle.computer_move(self.ball.rect)
+        self.user_paddle.computer_move(self.ball.rect)
         self.ball.update()
         self.ball.check_collision([self.user_paddle, self.computer_paddle])
         bounds = self.ball.check_out_of_bounds()

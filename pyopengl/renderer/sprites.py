@@ -1,7 +1,7 @@
 import pyrr
 from . import primitives
 
-TRIANGLE_DATA = (0.5, 0.5, 0.0, 0.5, -0.5, 0.0, -0.5, -0.5, 0.0, -0.5, 0.5, 0.0)
+TRIANGLE_DATA = (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0)
 TEXTURE_COORDINATES = (1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)
 TRIANGLE_INDEXES = (0, 1, 3, 1, 2, 3)
 TRIANGLE_DATA_LENGTH = len(TRIANGLE_DATA)

@@ -75,19 +75,15 @@ class Screen:
         self.sprite_group = sprites.RectangleGroup(
             self.instanced_program, self.sprites, 40, 40
         )
+
         self.render_quad = sprites.DrawableRectangle(
-            self.normal_program,
-            FRAME_SIZE[0] / 2,
-            FRAME_SIZE[1] / 2,
-            FRAME_SIZE[0],
-            FRAME_SIZE[1],
-            [1, 1, 1],
+            self.normal_program, 0, 0, FRAME_SIZE[0], FRAME_SIZE[1], [1, 1, 1],
         )
 
         self.render_quad2 = sprites.DrawableRectangle(
             self.normal_program,
-            FRAME_SIZE[0] / 2 + FRAME_SIZE[0],
-            FRAME_SIZE[1] / 2 + FRAME_SIZE[1],
+            SCREEN_SIZE[0] / 2,
+            SCREEN_SIZE[1] / 2,
             FRAME_SIZE[0],
             FRAME_SIZE[1],
             [1, 1, 1],
@@ -103,7 +99,7 @@ class Screen:
             self.window.clear()
             self.sprite_group.draw()
 
-        self.window.set_clear_color(1, 0, 0)
+        self.window.set_clear_color(0, 1, 0)
         self.window.clear()
         self.framebuffer.bind_texture()
 
