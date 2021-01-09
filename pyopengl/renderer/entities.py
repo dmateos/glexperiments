@@ -46,11 +46,16 @@ class ObjectFile(object):
         ]
 
 
-class Model:
-    def __init__(self, program, path, x, y, z):
+class ModelInstance:
+    def __init__(self, x, y, z):
         self.x = x
         self.y = y
         self.z = z
+
+
+class Model(ModelInstance):
+    def __init__(self, program, path, x, y, z):
+        super().__init__(x, y, z)
 
         self.program = program
         self.vao = primitives.VertexState()
@@ -76,13 +81,6 @@ class Model:
 
         with self.vao:
             self.vao.draw_indexed_elements(len(self.geometry[1]))
-
-
-class ModelInstance:
-    def __init__(self, x, y, z):
-        self.x = x
-        self.y = y
-        self.z = z
 
 
 class ModelGroup:
