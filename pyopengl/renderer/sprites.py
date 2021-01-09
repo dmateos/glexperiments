@@ -70,10 +70,10 @@ class RectangleGroup:
     rectangles transformations witin the one draw call.
     """
 
-    def __init__(self, program, sprites=[], height=20, width=20):
+    def __init__(self, program, sprites=[], width=20, height=20):
         self.program = program
         self.vao = primitives.VertexState()
-        self.scale_matrix = pyrr.Matrix44.from_scale([height, width, 0])
+        self.scale_matrix = pyrr.Matrix44.from_scale([width, height, 0])
         self.sprites = sprites
         self.colors = []
 

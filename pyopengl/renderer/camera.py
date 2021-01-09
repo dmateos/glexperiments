@@ -17,8 +17,8 @@ class Camera:
         self._ratio = ratio
         self.build_projection()
 
-        self._camera_position = Vector3([0.0, 0.0, -40.0])
-        self._camera_front = Vector3([0.0, 0.0, 1.0])
+        self._camera_position = Vector3([0.0, 0.0, 10.0])
+        self._camera_front = Vector3([0.0, 0.0, -1.0])
         self._camera_up = Vector3([0.0, 1.0, 0.0])
         self._cameras_target = self._camera_position + self._camera_front
         self.build_look_at()

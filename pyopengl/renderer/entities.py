@@ -4,7 +4,7 @@ from . import primitives
 TEXTURE_COORDINATES = (1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)
 
 
-class ObjReader(object):
+class ObjectFile(object):
     def __init__(self, path, debug=False):
         self.path = path
         self.verts = []
@@ -37,25 +37,35 @@ class ObjReader(object):
             print(self.vert_index)
             print(self.norm_index)
 
+    def get_geometry(self):
+        return [
+            self.verts,
+            self.vert_index,
+            self.normals,
+            self.norm_index,
+        ]
 
-class SingularEntity:
-    def __init__(self, program, x, y, z, color=[0, 0, 0]):
+
+class Model:
+    def __init__(self, program, path, x, y, z):
         self.x = x
         self.y = y
         self.z = z
-        self.color = color
-        self.geometry = []
 
         self.program = program
         self.vao = primitives.VertexState()
         self.scale_matrix = pyrr.Matrix44.from_scale([1, 1, 1])
 
-    def setup_buffer(self):
+        model_object = ObjectFile(path)
+        self.geometry = model_object.get_geometry()
+
         with self.vao:
             primitives.VertexBuffer(self.geometry[0], self.program, "vp", 3)
             primitives.IndexBuffer(self.geometry[1], self.program, "vp")
-            primitives.VertexBuffer(self.color, self.program, "c", 3, 3)
             primitives.VertexBuffer(TEXTURE_COORDINATES, self.program, "tx", 2)
+            # TODO Fix this
+            primitives.VertexBuffer(self.geometry[0], self.program, "nm", 3)
+            primitives.IndexBuffer(self.geometry[1], self.program, "nm")
 
     def draw(self):
         self.program.use()
@@ -68,26 +78,29 @@ class SingularEntity:
             self.vao.draw_indexed_elements(len(self.geometry[1]))
 
 
-class Cube(SingularEntity):
-    def __init__(self, program, x, y, z, color=[1, 1, 1]):
-        super().__init__(program, x, y, z, color)
+class ModelGroup:
+    def __init__(self, program, path, models, width, height):
+        self.program = program
+        self.vao = primitives.VertexState()
+        self.models = models
+        self.scale_matrix = pyrr.Matrix44.from_scale([height, width, 0])
+        model_object = ObjectFile(path)
+        self.geometry = model_object.get_geometry()
 
-        self.geometry = pyrr.geometry.create_cube(
-            scale=[1.0, 1.0, 1.0],
-            st=False,
-            rgba=False,
-            dtype="float32",
-            type="triangles",
-        )
+        with self.vao:
+            primitives.VertexBuffer(self.geometry[0], self.program, "vp", 3)
+            primitives.IndexBuffer(self.geometry[1], self.program, "vp")
+            primitives.VertexBuffer(TEXTURE_COORDINATES, self.program, "tx", 2)
+            # TODO Fix this
+            primitives.VertexBuffer(self.geometry[0], self.program, "nm", 3)
+            primitives.IndexBuffer(self.geometry[1], self.program, "nm")
 
-        self.setup_buffer()
+    def draw(self):
+        self.program.use()
 
-
-class Model(SingularEntity):
-    def __init__(self, program, path, x, y, z, color=[1, 1, 1]):
-        super().__init__(program, x, y, z, color)
-
-        model_object = ObjReader(path)
-        self.geometry = [model_object.verts, model_object.vert_index]
-
-        self.setup_buffer()
+        with self.vao:
+            # TODO Update rather than new buffer each time?
+            primitives.VertexBuffer(self.models, self.program, "os", 3, True)
+            self.vao.draw_instanced_indexed_elements(
+                len(self.geometry[1]), int(len(self.models) / 3)
+            )

@@ -1,0 +1,26 @@
+#version 330 core
+
+layout (location = 0) in vec3 vp;
+layout (location = 1) in vec3 os;
+layout (location = 2) in vec2 tx;
+layout (location = 3) in vec3 nm;
+
+uniform mat4 projection;
+uniform mat4 camera;
+uniform mat4 translation;
+uniform mat4 scale;
+
+out vec2 tx_out;
+out vec3 nm_out;
+
+void main(){
+  tx_out = tx;
+  nm_out = nm;
+
+  // We have to scale the original vp
+  // before we do anything else.
+  vec4 vpn = vec4(vp, 1.0) * scale;
+  vec4 osn = vec4(os, 0.0);
+
+  gl_Position = projection * (vpn + osn);
+}

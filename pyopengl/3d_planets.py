@@ -13,17 +13,21 @@ class Screen:
         self.window.add_key_callback(self.key_handler)
         self.window.reset_mouse_position()
         self.window.add_mouse_callback(self.mouse_handler)
+        self.camera = camera.Camera(1280 / 768)
 
         self.program = shader.create_program(
-            "renderer/shaders/camera_vert.gsl", shader.BASIC_FRAG_SHADER
+            "renderer/shaders/camera_vert.gsl", "renderer/shaders/norm_frag.gsl"
         )
-
-        self.camera = camera.Camera(1280 / 768)
         self.program.set_uniform("projection", self.camera.mat_projection)
 
-        self.cube = entities.Cube(self.program, 1, 0, -5)
-        self.cube2 = entities.Model(self.program, "assets/cube.obj", -5, 0, -5)
-        self.cube3 = entities.Model(self.program, "assets/monkey.obj", 5, 0, -5)
+        self.instanced_program = shader.create_program(
+            "renderer/shaders/instanced_camera_vert.gsl",
+            "renderer/shaders/norm_frag.gsl",
+        )
+        self.instanced_program.set_uniform("projection", self.camera.mat_projection)
+
+        self.cube0 = entities.Model(self.program, "assets/cube.obj", -5, 0, -5)
+        self.cube1 = entities.Model(self.program, "assets/monkey.obj", 5, 0, -5)
 
         texture = primitives.Texture.image_from_file("assets/container.jpg")
         texture.bind()
@@ -31,9 +35,8 @@ class Screen:
     def update(self):
         self.window.clear()
         self.program.set_uniform("camera", self.camera.mat_lookat)
-        self.cube.draw()
-        self.cube2.draw()
-        self.cube3.draw()
+        self.cube0.draw()
+        self.cube1.draw()
         self.window.swap()
 
     def ok(self):
