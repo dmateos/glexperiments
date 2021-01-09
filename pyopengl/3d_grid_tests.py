@@ -31,17 +31,20 @@ class Screen:
         self.monkey = entities.Model(self.program, "assets/monkey.obj", -3.0, 0, 10)
 
         self.cubes = []
-
         for n in range(0, 50):
             for nn in range(0, 50):
                 for nnn in range(0, 50):
-                    self.cubes.extend([2.0 * n, 2.0 * nn, -2.0 * nnn])
+                    self.cubes.append(
+                        entities.ModelInstance(2.0 * n, 2.0 * nn, -2.0 * nnn)
+                    )
 
         self.monkeys = []
         for n in range(0, 10):
             for nn in range(0, 10):
                 for nnn in range(0, 10):
-                    self.monkeys.extend([-2.0 * n + -8.0, 2.0 * nn, -2.0 * nnn])
+                    self.monkeys.append(
+                        entities.ModelInstance(-2.0 * n + -8.0, 2.0 * nn, -2.0 * nnn)
+                    )
 
         self.cube_group = entities.ModelGroup(
             self.instanced_program, "assets/cube.obj", self.cubes, 1, 1

@@ -78,6 +78,13 @@ class Model:
             self.vao.draw_indexed_elements(len(self.geometry[1]))
 
 
+class ModelInstance:
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+
+
 class ModelGroup:
     def __init__(self, program, path, models, width, height):
         self.program = program
@@ -97,10 +104,18 @@ class ModelGroup:
 
     def draw(self):
         self.program.use()
+        verts = self.update_verticies()
+
         with self.vao:
             # TODO Update rather than new buffer each time?
-            primitives.VertexBuffer(self.models, self.program, "os", 3, True)
+            primitives.VertexBuffer(verts, self.program, "os", 3, True)
             self.program.set_uniform("scale", self.scale_matrix)
             self.vao.draw_instanced_indexed_elements(
-                len(self.geometry[1]), int(len(self.models) / 3)
+                len(self.geometry[1]), int(len(verts) / 3)
             )
+
+    def update_verticies(self):
+        verts = []
+        for n in self.models:
+            verts.extend([n.x, n.y, n.z])
+        return verts
