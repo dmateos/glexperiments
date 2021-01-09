@@ -31,9 +31,9 @@ class Screen:
         self.monkey = entities.Model(self.program, "assets/monkey.obj", -3.0, 0, 10)
 
         self.cubes = []
-        for n in range(0, 100):
+        for n in range(0, 200):
             for nn in range(0, 1):
-                for nnn in range(0, 100):
+                for nnn in range(0, 200):
                     self.cubes.append(
                         entities.ModelInstance(2.0 * n, 2.0 * nn, -2.0 * nnn)
                     )
