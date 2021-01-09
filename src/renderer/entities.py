@@ -85,6 +85,9 @@ class ModelGroup:
         model_object = ObjectFile(path)
         self.geometry = model_object.get_geometry()
 
+        self.verts = []
+        self.dirty = True
+
         with self.vao:
             primitives.VertexBuffer(self.geometry[0], self.program, "vp", 3)
             primitives.IndexBuffer(self.geometry[1], self.program, "vp")
@@ -95,18 +98,19 @@ class ModelGroup:
 
     def draw(self):
         self.program.use()
-        verts = self.update_verticies()
+        self.update_verticies()
 
         with self.vao:
             # TODO Update rather than new buffer each time?
-            primitives.VertexBuffer(verts, self.program, "os", 3, True)
+            primitives.VertexBuffer(self.verts, self.program, "os", 3, True)
             self.program.set_uniform("scale", self.scale_matrix)
             self.vao.draw_instanced_indexed_elements(
-                len(self.geometry[1]), int(len(verts) / 3)
+                len(self.geometry[1]), int(len(self.verts) / 3)
             )
 
     def update_verticies(self):
-        verts = []
-        for n in self.models:
-            verts.extend([n.x, n.y, n.z])
-        return verts
+        if self.dirty:
+            self.verts = []
+            for n in self.models:
+                self.verts.extend([n.x, n.y, n.z])
+            self.dirty = False
