@@ -31,9 +31,9 @@ class Screen:
         self.monkey = entities.Model(self.program, "assets/monkey.obj", -3.0, 0, 10)
 
         self.cubes = []
-        for n in range(0, 50):
-            for nn in range(0, 50):
-                for nnn in range(0, 50):
+        for n in range(0, 100):
+            for nn in range(0, 1):
+                for nnn in range(0, 100):
                     self.cubes.append(
                         entities.ModelInstance(2.0 * n, 2.0 * nn, -2.0 * nnn)
                     )
@@ -85,6 +85,10 @@ class Screen:
         elif key == glfw.KEY_D:
             self.camera.rotate_right()
         elif key == glfw.KEY_E:
+            self.camera.strafe_up()
+        elif key == glfw.KEY_Q:
+            self.camera.strafe_down()
+        elif key == glfw.KEY_R:
             self.window.toggle_wireframe()
 
     def mouse_handler(self, xpos, ypos):
