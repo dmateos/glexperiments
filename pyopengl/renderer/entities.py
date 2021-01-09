@@ -4,29 +4,58 @@ from . import primitives
 TEXTURE_COORDINATES = (1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)
 
 
-class Cube:
-    def __init__(self, program, x, y, z, color=[1, 1, 1]):
+class ObjReader(object):
+    def __init__(self, path, debug=False):
+        self.path = path
+        self.verts = []
+        self.normals = []
+        self.vert_index = []
+        self.norm_index = []
+        self.debug = debug
+        self.read()
+
+    def read(self):
+        data = ""
+        with open(self.path, "r") as f:
+            data = f.read()
+
+        for line in data.split("\n"):
+            if line.startswith("vn"):
+                for vert in line.split(" ")[1:]:
+                    self.normals.append(float(vert))
+            elif line.startswith("v"):
+                for vert in line.split(" ")[1:]:
+                    self.verts.append(float(vert))
+            elif line.startswith("f"):
+                for vert in line.split(" ")[1:]:
+                    self.vert_index.append(int(vert.split("//")[0]) - 1)
+                    self.norm_index.append(int(vert.split("//")[1]) - 1)
+
+        if self.debug:
+            print("ObjReader")
+            print(self.verts)
+            print(self.vert_index)
+            print(self.norm_index)
+
+
+class SingularEntity:
+    def __init__(self, program, x, y, z, color=[0, 0, 0]):
         self.x = x
         self.y = y
         self.z = z
         self.color = color
+        self.geometry = []
 
         self.program = program
         self.vao = primitives.VertexState()
         self.scale_matrix = pyrr.Matrix44.from_scale([1, 1, 1])
-        self.geometry = pyrr.geometry.create_cube(
-            scale=[1.0, 1.0, 1.0],
-            st=False,
-            rgba=False,
-            dtype="float32",
-            type="triangles",
-        )
 
+    def setup_buffer(self):
         with self.vao:
-            primitives.VertexBuffer(self.geometry[0], program, "vp", 3)
-            primitives.IndexBuffer(self.geometry[1], program, "vp")
-            primitives.VertexBuffer(self.color, program, "c", 3)
-            primitives.VertexBuffer(TEXTURE_COORDINATES, program, "tx", 2)
+            primitives.VertexBuffer(self.geometry[0], self.program, "vp", 3)
+            primitives.IndexBuffer(self.geometry[1], self.program, "vp")
+            primitives.VertexBuffer(self.color, self.program, "c", 3, 3)
+            primitives.VertexBuffer(TEXTURE_COORDINATES, self.program, "tx", 2)
 
     def draw(self):
         self.program.use()
@@ -37,3 +66,28 @@ class Cube:
 
         with self.vao:
             self.vao.draw_indexed_elements(len(self.geometry[1]))
+
+
+class Cube(SingularEntity):
+    def __init__(self, program, x, y, z, color=[1, 1, 1]):
+        super().__init__(program, x, y, z, color)
+
+        self.geometry = pyrr.geometry.create_cube(
+            scale=[1.0, 1.0, 1.0],
+            st=False,
+            rgba=False,
+            dtype="float32",
+            type="triangles",
+        )
+
+        self.setup_buffer()
+
+
+class Model(SingularEntity):
+    def __init__(self, program, path, x, y, z, color=[1, 1, 1]):
+        super().__init__(program, x, y, z, color)
+
+        model_object = ObjReader(path)
+        self.geometry = [model_object.verts, model_object.vert_index]
+
+        self.setup_buffer()

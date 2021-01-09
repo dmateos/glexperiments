@@ -22,7 +22,8 @@ class Screen:
         self.program.set_uniform("projection", self.camera.mat_projection)
 
         self.cube = entities.Cube(self.program, 1, 0, -5)
-        self.cube2 = entities.Cube(self.program, -5, 0, -5)
+        self.cube2 = entities.Model(self.program, "assets/cube.obj", -5, 0, -5)
+        self.cube3 = entities.Model(self.program, "assets/monkey.obj", 5, 0, -5)
 
         texture = primitives.Texture.image_from_file("assets/container.jpg")
         texture.bind()
@@ -32,6 +33,7 @@ class Screen:
         self.program.set_uniform("camera", self.camera.mat_lookat)
         self.cube.draw()
         self.cube2.draw()
+        self.cube3.draw()
         self.window.swap()
 
     def ok(self):
