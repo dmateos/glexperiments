@@ -17,7 +17,7 @@ class Window:
         self.framecount = 0
         self.previous_time = 0
 
-    def run(self) -> None:
+    def run(self, depth=False) -> None:
         if not glfw.init():
             return
 
@@ -39,9 +39,11 @@ class Window:
 
         ogl.glClearColor(0, 1, 0, 0)
         # ogl.glPolygonMode(ogl.GL_FRONT_AND_BACK, ogl.GL_LINE)
-        # ogl.glEnable(ogl.GL_DEPTH_TEST)
-        # ogl.glEnable(ogl.GL_CULL_FACE)
-        # ogl.glDepthFunc(ogl.GL_LESS)
+
+        if depth:
+            ogl.glEnable(ogl.GL_DEPTH_TEST)
+            ogl.glEnable(ogl.GL_CULL_FACE)
+            ogl.glDepthFunc(ogl.GL_LESS)
 
     def set_clear_color(self, r, g, b):
         ogl.glClearColor(r, g, b, 0)
