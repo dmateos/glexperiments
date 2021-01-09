@@ -1,11 +1,13 @@
 import pyrr
 from . import primitives
 
+# These are normalised at 0,0 as the origin point to make it easier to do a pixel->pixel
+# display with an orthagonal projection. x = 0, y = 0 = top and left
 TRIANGLE_DATA = (0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0)
-TEXTURE_COORDINATES = (1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)
 TRIANGLE_INDEXES = (0, 1, 3, 1, 2, 3)
 TRIANGLE_DATA_LENGTH = len(TRIANGLE_DATA)
 TRIANGLE_INDEX_LENGTH = len(TRIANGLE_INDEXES)
+TEXTURE_COORDINATES = (1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)
 
 
 class Rectangle:
