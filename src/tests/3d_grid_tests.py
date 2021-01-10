@@ -14,7 +14,7 @@ class Screen:
         self.window.add_key_callback(self.key_handler)
         self.window.reset_mouse_position()
         self.window.add_mouse_callback(self.mouse_handler)
-        self.camera = camera.Camera(1280 / 768)
+        self.camera = camera.Camera(SCREEN_SIZE[0] / SCREEN_SIZE[1])
 
         self.program = shader.create_program(
             "renderer/shaders/camera_vert.gsl", "renderer/shaders/norm_frag.gsl"
@@ -65,7 +65,7 @@ class Screen:
         self.program.use()
         self.program.set_uniform("camera", self.camera.mat_lookat)
 
-        #for n in self.cubes:
+        # for n in self.cubes:
         #    n.y = random.randint(0, 100)
         # self.cube_group.dirty = True
 

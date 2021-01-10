@@ -166,12 +166,17 @@ class Texture:
     Images should be a power of 2.
     """
 
-    def __init__(self, width, height, data):
+    def __init__(self, width, height, data, type=ogl.GL_TEXTURE_2D):
         self.tbo = ogl.glGenTextures(1)
         self.width = width
         self.height = height
         self.data = data
-        self._create_texture()
+        self.type = type
+
+        if type == ogl.GL_TEXTURE_2D:
+            self._create_texture()
+        elif type == ogl.GL_TEXTURE_CUBE_MAP:
+            self._create_cubemap_texture()
 
     @staticmethod
     def image_from_file(file_path):
@@ -180,10 +185,10 @@ class Texture:
         return Texture(image.size[0], image.size[1], data)
 
     def bind(self) -> None:
-        ogl.glBindTexture(ogl.GL_TEXTURE_2D, self.tbo)
+        ogl.glBindTexture(self.type, self.tbo)
 
     def unbind(self) -> None:
-        ogl.glBindTexture(ogl.GL_TEXTURE_2D, 0)
+        ogl.glBindTexture(self.type, 0)
 
     def _create_texture(self) -> None:
         self.bind()
@@ -203,5 +208,37 @@ class Texture:
             ogl.GL_UNSIGNED_BYTE,
             self.data,
         )
+        ogl.glGenerateMipmap(ogl.GL_TEXTURE_2D)
+        self.unbind()
+
+    def _create_cubemap_texture(self) -> None:
+        self.bind()
+        ogl.glTexParameteri(
+            ogl.GL_TEXTURE_CUBE_MAP, ogl.GL_TEXTURE_MAG_FILTER, ogl.GL_LINEAR
+        )
+        ogl.glTexParameteri(
+            ogl.GL_TEXTURE_CUBE_MAP, ogl.GL_TEXTURE_MIN_FILTER, ogl.GL_LINEAR
+        )
+        ogl.glTexParameteri(
+            ogl.GL_TEXTURE_CUBE_MAP, ogl.GL_TEXTURE_WRAP_S, ogl.GL_CLAMP_TO_EDGE
+        )
+        ogl.glTexParameteri(
+            ogl.GL_TEXTURE_CUBE_MAP, ogl.GL_TEXTURE_WRAP_T, ogl.GL_CLAMP_TO_EDGE
+        )
+        ogl.glTexParameteri(
+            ogl.GL_TEXTURE_CUBE_MAP, ogl.GL_TEXTURE_WRAP_R, ogl.GL_CLAMP_TO_EDGE
+        )
+        for n in range(0, 6):
+            ogl.glTexImage2D(
+                ogl.GL_TEXTURE_CUBE_MAP_POSITIVE_X + n,
+                0,
+                ogl.GL_RGB,
+                self.width,
+                self.height,
+                0,
+                ogl.GL_RGB,
+                ogl.GL_UNSIGNED_BYTE,
+                self.data,
+            )
         ogl.glGenerateMipmap(ogl.GL_TEXTURE_2D)
         self.unbind()
