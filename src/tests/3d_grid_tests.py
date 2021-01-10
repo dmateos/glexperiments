@@ -1,8 +1,9 @@
 from renderer import window, shader, camera, entities, primitives
+import random
 import glfw
 
 
-SCREEN_SIZE = (1024, 768)
+SCREEN_SIZE = (2800, 1600)
 
 
 class Screen:
@@ -31,12 +32,14 @@ class Screen:
         self.monkey = entities.Model(self.program, "assets/monkey.obj", -3.0, 0, 10)
 
         self.cubes = []
-        for n in range(0, 500):
+        for n in range(0, 200):
             for nn in range(0, 1):
-                for nnn in range(0, 500):
+                for nnn in range(0, 200):
                     self.cubes.append(
                         entities.ModelInstance(2.0 * n, 2.0 * nn, -2.0 * nnn)
                     )
+        for n in self.cubes:
+            n.y = random.randint(0, 100)
 
         self.monkeys = []
         for n in range(0, 10):
@@ -62,11 +65,14 @@ class Screen:
         self.program.use()
         self.program.set_uniform("camera", self.camera.mat_lookat)
 
+        #for n in self.cubes:
+        #    n.y = random.randint(0, 100)
+        # self.cube_group.dirty = True
+
         self.instanced_program.use()
         self.instanced_program.set_uniform("camera", self.camera.mat_lookat)
 
         self.monkey.draw()
-
         self.cube_group.draw()
         self.monkey_group.draw()
 
