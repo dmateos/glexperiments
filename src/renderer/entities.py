@@ -1,7 +1,7 @@
 import pyrr
 from . import primitives
 
-TEXTURE_COORDINATES = (1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0) * 6
+TEXTURE_COORDINATES = (1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)
 
 
 class ObjectFile(object):

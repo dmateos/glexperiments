@@ -10,9 +10,9 @@ class RenderException(Exception):
 class VertexState:
     """
     Maintains a draw state.
-    VertexArray in opengl. 
+    VertexArray in opengl.
     Some assumptions are made about rendering here.
-    Such as triangle use, uint for index element type. 
+    Such as triangle use, uint for index element type.
     """
 
     def __init__(self) -> None:
@@ -49,7 +49,7 @@ class VertexBuffer:
     """
     Respresents a buffer of data
     Probably should be run within a VertexState with block
-    Using this class may fuck with openGL state not leaving it how it found it. 
+    Using this class may fuck with openGL state not leaving it how it found it.
     """
 
     def __init__(
@@ -86,8 +86,8 @@ class VertexBuffer:
 
 class IndexBuffer:
     """
-    Index into a VBO. 
-    You generally have to create this straight after a VBO while it is still bound(). 
+    Index into a VBO.
+    You generally have to create this straight after a VBO while it is still bound().
     """
 
     def __init__(self, data: list, program, name: str, stepping=3) -> None:
@@ -122,7 +122,7 @@ class IndexBuffer:
 class FrameBuffer:
     """
     Creates a framebuffer which when in context draw calls will render too.
-    Stores the results in a texture which can be used.. as a texture. 
+    Stores the results in a texture which can be used.. as a texture.
     """
 
     def __init__(self, width, height) -> None:
