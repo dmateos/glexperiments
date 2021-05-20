@@ -4,6 +4,7 @@ import pyrr
 import math
 import random
 
+
 SCREEN_SIZE = (1024, 1000)
 
 

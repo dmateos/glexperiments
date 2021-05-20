@@ -4,7 +4,7 @@ from . import primitives
 TEXTURE_COORDINATES = (1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0)
 
 
-class ObjectFile(object):
+class ObjectFile:
     def __init__(self, path):
         self.path = path
         self.verts = []
