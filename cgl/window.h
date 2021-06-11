@@ -11,6 +11,7 @@ typedef struct Window {
 
 struct Window *init_window();
 int destroy_window(Window *window);
-void swap_window(Window *window);
+void swap_window(const Window *window);
+int poll_window(const Window *window);
 
 #endif

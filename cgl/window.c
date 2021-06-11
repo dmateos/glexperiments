@@ -20,8 +20,10 @@ int destroy_window(Window *window) {
     return 0;
 }
 
-void swap_window(Window *window) {
+void swap_window(const Window *window) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     SDL_GL_SwapWindow(window->window);
     SDL_Delay(5);
 }
+
+int poll_window(const Window *window) { return 0; }
