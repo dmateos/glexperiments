@@ -4,14 +4,14 @@
 #include <OpenGL/gl.h>
 #include <SDL2/SDL.h>
 
-typedef struct Window {
+typedef struct Win {
     SDL_Window *window;
     SDL_GLContext glcontext;
 } Window;
 
-struct Window *init_window();
-int destroy_window(Window *window);
-void swap_window(const Window *window);
-int poll_window(const Window *window);
+Window *init_window(int, int);
+int destroy_window(Window *);
+void swap_window(const Window *);
+int poll_window(const Window *);
 
 #endif

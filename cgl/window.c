@@ -1,11 +1,11 @@
 #include "window.h"
 
-struct Window *init_window() {
+Window *init_window(int width, int height) {
     SDL_Init(SDL_INIT_VIDEO);
     Window *window = malloc(sizeof(Window));
     memset(window, 0, sizeof(Window));
 
-    window->window = SDL_CreateWindow("Test", 0, 0, 1280, 1024,
+    window->window = SDL_CreateWindow("Test", 0, 0, width, height,
                                       SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     window->glcontext = SDL_GL_CreateContext(window->window);
 

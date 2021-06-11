@@ -6,7 +6,7 @@
 #include "window.h"
 
 int main() {
-    Window *window = init_window();
+    Window *window = init_window(1280, 1024);
 
     SDL_Event e;
     bool quit = false;
