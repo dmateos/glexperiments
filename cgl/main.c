@@ -5,14 +5,15 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-struct Window {
+typedef struct Window {
     SDL_Window *window;
     SDL_GLContext glcontext;
-};
+} Window;
 
 struct Window *init_window() {
     SDL_Init(SDL_INIT_VIDEO);
-    struct Window *window = malloc(sizeof(struct Window));
+    Window *window = malloc(sizeof(Window));
+    memset(window, 0, sizeof(Window));
 
     window->window = SDL_CreateWindow("Test", 0, 0, 1280, 1024,
                                       SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
@@ -23,14 +24,20 @@ struct Window *init_window() {
     return window;
 }
 
-int destroy_window(struct Window *window) {
+int destroy_window(Window *window) {
     SDL_Quit();
     free(window);
     return 0;
 }
 
+void swap_window(Window *window) {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    SDL_GL_SwapWindow(window->window);
+    SDL_Delay(5);
+}
+
 int main() {
-    struct Window *window = init_window();
+    Window *window = init_window();
 
     SDL_Event e;
     bool quit = false;
@@ -40,9 +47,8 @@ int main() {
                 quit = true;
             }
         }
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        SDL_GL_SwapWindow(window->window);
-        SDL_Delay(5);
+
+        swap_window(window);
     }
 
     destroy_window(window);
