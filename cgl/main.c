@@ -3,10 +3,13 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include "shader.h"
 #include "window.h"
 
 int main() {
     Window *window = init_window(1280, 1024);
+
+    ShaderProgram *shader = init_shaderprogram();
 
     SDL_Event e;
     bool quit = false;
