@@ -15,6 +15,8 @@ struct Window *init_window() {
 }
 
 int destroy_window(Window *window) {
+    SDL_GL_DeleteContext(window->glcontext);
+    SDL_DestroyWindow(window->window);
     SDL_Quit();
     free(window);
     return 0;
