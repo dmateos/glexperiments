@@ -1,7 +1,6 @@
 #include "shader.h"
 
 #include <OpenGL/gl.h>
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,10 +24,11 @@ int destroy_shaderprogram(ShaderProgram *program) { return 0; }
 
 void add_shader(ShaderProgram *program, int type, char *filepath) {
     unsigned int shader_id;
-    char *shader_data = read_file(filepath);
+    const char *shader_data = read_file(filepath);
+    GLint shader_result = 0;
 
     if (!shader_data) {
-        assert("could not load shader data");
+        printf("could not load shader data\n");
         exit(1);
     }
 
@@ -43,10 +43,19 @@ void add_shader(ShaderProgram *program, int type, char *filepath) {
             break;
     }
 
-    // glShaderSource(shader_id, 1, code, strlen(code));
+    glShaderSource(shader_id, 1, &shader_data, NULL);
+    glCompileShader(shader_id);
+    glGetShaderiv(shader_id, GL_COMPILE_STATUS, &shader_result);
+
+    if (!shader_result) {
+        printf("could not compile shader %s\n", filepath);
+        glDeleteShader(shader_id);
+        exit(1);
+    }
+
     program->shaders[program->shader_count++].shader_id = shader_id;
 
-    free_file_data(shader_data);
+    free_file_data((char *)shader_data);
     printf("added new shader to program in slot %d\n",
            program->shader_count - 1);
 }

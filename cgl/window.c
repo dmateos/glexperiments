@@ -1,17 +1,21 @@
 #include "window.h"
 
 #include <OpenGL/gl.h>
-#include <assert.h>
 
 int init_window(Window *window, int width, int height) {
     if (SDL_Init(SDL_INIT_VIDEO) > 0) {
-        assert("could not init window subsystem");
+        printf("could not init window subsystem\n");
         exit(1);
     } else {
         printf("initiated SDL video subsystem\n");
     }
 
     memset(window, 0, sizeof(Window));
+
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
+                        SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
     window->window = SDL_CreateWindow("Test", 0, 0, width, height,
                                       SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
