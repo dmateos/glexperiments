@@ -11,13 +11,13 @@ int init_shaderprogram(ShaderProgram *program) {
     memset(program, 0, sizeof(ShaderProgram));
 
     program->program_id = glCreateProgram();
-    printf("created new GL shader program\n");
+    printf("created new GL shader program %d\n", program->program_id);
     return 0;
 }
 
 void use_shaderprogram(const ShaderProgram *program) {
     glUseProgram(program->program_id);
-    printf("using shader program\n");
+    printf("using shader program %d\n", program->program_id);
 }
 
 int destroy_shaderprogram(ShaderProgram *program) { return 0; }
@@ -56,7 +56,7 @@ void add_shader(ShaderProgram *program, int type, char *filepath) {
     program->shaders[program->shader_count++].shader_id = shader_id;
 
     free_file_data((char *)shader_data);
-    printf("added new shader to program in slot %d\n",
+    printf("added new shader to program %d in slot %d\n", program->program_id,
            program->shader_count - 1);
 }
 
@@ -65,4 +65,5 @@ void compile_shaderprogram(const ShaderProgram *program) {
         glAttachShader(program->program_id, program->shaders[i].shader_id);
     }
     glLinkProgram(program->program_id);
+    printf("compiled shader program %d\n", program->program_id);
 }
