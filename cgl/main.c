@@ -16,8 +16,8 @@ int main() {
     init_shaderprogram(&shader_program);
 
     use_shaderprogram(&shader_program);
-    add_shader(&shader_program, VERTEXSHADER, "render/vert.gsl");
-    add_shader(&shader_program, FRAGSHADER, "render/frag.gsl");
+    add_shader(&shader_program, VERTEXSHADER, "shaders/vert.gsl");
+    add_shader(&shader_program, FRAGSHADER, "shaders/frag.gsl");
 
     while (!quit) {
         while (poll_window(&window, &e)) {

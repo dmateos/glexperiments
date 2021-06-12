@@ -7,7 +7,10 @@ int init_window(Window *window, int width, int height) {
     if (SDL_Init(SDL_INIT_VIDEO) > 0) {
         assert("could not init window subsystem");
         exit(1);
+    } else {
+        printf("initiated SDL video subsystem\n");
     }
+
     memset(window, 0, sizeof(Window));
 
     window->window = SDL_CreateWindow("Test", 0, 0, width, height,
@@ -16,6 +19,7 @@ int init_window(Window *window, int width, int height) {
 
     glClearColor(255, 0, 0, 1);
 
+    printf("created SDL window with openGL context\n");
     return 0;
 }
 
@@ -23,6 +27,8 @@ int destroy_window(Window *window) {
     SDL_GL_DeleteContext(window->glcontext);
     SDL_DestroyWindow(window->window);
     SDL_Quit();
+
+    printf("destroyed SDL window\n");
     return 0;
 }
 
