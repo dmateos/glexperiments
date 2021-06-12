@@ -21,7 +21,14 @@ int init_window(Window *window, int width, int height) {
                                       SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     window->glcontext = SDL_GL_CreateContext(window->window);
 
+    if (SDL_GL_MakeCurrent(window->window, window->glcontext) > 0) {
+        printf("could not init window subsystem\n");
+        exit(1);
+    }
+
     glClearColor(255, 0, 0, 1);
+    // glEnable(GL_DEPTH_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     printf("created SDL window with openGL context\n");
     return 0;
@@ -37,7 +44,6 @@ int destroy_window(Window *window) {
 }
 
 void swap_window(const Window *window) {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     SDL_GL_SwapWindow(window->window);
     SDL_Delay(5);
 }

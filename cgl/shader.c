@@ -1,6 +1,6 @@
 #include "shader.h"
 
-#include <OpenGL/gl.h>
+#include <OpenGL/gl3.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -66,4 +66,10 @@ void compile_shaderprogram(const ShaderProgram *program) {
     }
     glLinkProgram(program->program_id);
     printf("compiled shader program %d\n", program->program_id);
+}
+
+void set_attribute(int index) {
+    glEnableVertexAttribArray(index);
+    glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    printf("set attribute for index %d\n", index);
 }
