@@ -68,8 +68,8 @@ void compile_shaderprogram(const ShaderProgram *program) {
     printf("compiled shader program %d\n", program->program_id);
 }
 
-void set_attribute(int index) {
+void set_attribute(int index, int size) {
     glEnableVertexAttribArray(index);
-    glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE, 0, NULL);
     printf("set attribute for index %d\n", index);
 }

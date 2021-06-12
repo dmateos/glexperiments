@@ -19,6 +19,6 @@ int destroy_shaderprogram(ShaderProgram *);
 void use_shaderprogram(const ShaderProgram *);
 void add_shader(ShaderProgram *, int, char *);
 void compile_shaderprogram(const ShaderProgram *);
-void set_attribute(int);
+void set_attribute(int, int);
 
 #endif

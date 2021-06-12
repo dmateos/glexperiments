@@ -27,13 +27,12 @@ int main() {
     use_shaderprogram(&shader_program);
 
     init_vertex_state(&state);
-
     bind_vertex_state(&state);
 
     init_vertex_buffer(&buffer);
     bind_vertex_buffer(&buffer);
     write_vertex_buffer(&buffer, (void*)&vertices, sizeof(vertices));
-    set_attribute(1);
+    set_attribute(1, 3);
 
     while (!quit) {
         while (poll_window(&window, &e)) {
@@ -42,7 +41,7 @@ int main() {
             }
         }
 
-        draw_array(&state);
+        draw_array(&state, sizeof(vertices) / sizeof(float));
         swap_window(&window);
     }
 
