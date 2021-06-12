@@ -13,8 +13,8 @@ int main() {
     bool quit = false;
 
     init_window(&window, 1280, 1024);
-
     init_shaderprogram(&shader_program);
+
     use_shaderprogram(&shader_program);
     add_shader(&shader_program, VERTEXSHADER, "render/vert.gsl");
     add_shader(&shader_program, FRAGSHADER, "render/frag.gsl");

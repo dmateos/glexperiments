@@ -5,12 +5,13 @@
 #define FRAGSHADER 1
 
 typedef struct Shader {
+    unsigned int shader_id;
 } Shader;
 
 typedef struct Program {
     unsigned int program_id;
     Shader shaders[16];
-    int shader_count;
+    unsigned int shader_count;
 } ShaderProgram;
 
 int init_shaderprogram(ShaderProgram *);

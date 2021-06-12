@@ -29,5 +29,7 @@ void add_shader(ShaderProgram *program, int type, char *code) {
             break;
     }
 
+    program->shaders[program->shader_count++].shader_id = shader_id;
+
     // glShaderSource(shader_id, 1, code, strlen(code));
 }
