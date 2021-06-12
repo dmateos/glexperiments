@@ -1,12 +1,12 @@
 #include "main.h"
 
+#include <cglm/cglm.h>
 #include <stdbool.h>
 #include <stdio.h>
 
 #include "shader.h"
 #include "vertex.h"
 #include "window.h"
-
 float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f};
 float offsets[] = {-1.0f, 0.0f};
 
