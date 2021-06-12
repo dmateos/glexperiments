@@ -16,5 +16,5 @@ void bind_vertex_state(const VertexState *);
 void bind_vertex_buffer(const VertexBuffer *);
 void write_vertex_buffer(VertexBuffer *, void *, int);
 
-void draw_array(const VertexState *, int);
+void draw_array(int);
 #endif

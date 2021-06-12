@@ -8,6 +8,7 @@
 #include "window.h"
 
 float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f};
+float offsets[] = {-1.0f, 0.0f};
 
 int main() {
     Window window;
@@ -28,7 +29,6 @@ int main() {
 
     init_vertex_state(&state);
     bind_vertex_state(&state);
-
     init_vertex_buffer(&buffer);
     bind_vertex_buffer(&buffer);
     write_vertex_buffer(&buffer, (void*)&vertices, sizeof(vertices));
@@ -41,7 +41,11 @@ int main() {
             }
         }
 
-        draw_array(&state, sizeof(vertices) / sizeof(float));
+        offsets[0] += 0.004;
+        set_uniform(get_uniform(&shader_program, "offset"), offsets);
+
+        clear_window();
+        draw_array(sizeof(vertices) / sizeof(float));
         swap_window(&window);
     }
 

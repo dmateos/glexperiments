@@ -20,5 +20,7 @@ void use_shaderprogram(const ShaderProgram *);
 void add_shader(ShaderProgram *, int, char *);
 void compile_shaderprogram(const ShaderProgram *);
 void set_attribute(int, int);
+void set_uniform(int, float *);
+int get_uniform(const ShaderProgram *, char *);
 
 #endif

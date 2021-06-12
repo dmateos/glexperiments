@@ -33,7 +33,7 @@ void write_vertex_buffer(VertexBuffer *buffer, void *data, int size) {
     printf("wrote vertex buffer data with size %d\n", size);
 }
 
-void draw_array(const VertexState *state, int length) {
+void draw_array(int length) {
     glDrawArrays(GL_TRIANGLES, 0, length);
     return;
 }

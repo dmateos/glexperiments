@@ -73,3 +73,9 @@ void set_attribute(int index, int size) {
     glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE, 0, NULL);
     printf("set attribute for index %d\n", index);
 }
+
+void set_uniform(int index, float *value) { glUniform2fv(index, 1, value); }
+
+int get_uniform(const ShaderProgram *program, char *name) {
+    return glGetUniformLocation(program->program_id, name);
+}

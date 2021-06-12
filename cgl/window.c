@@ -28,7 +28,6 @@ int init_window(Window *window, int width, int height) {
 
     glClearColor(255, 0, 0, 1);
     // glEnable(GL_DEPTH_TEST);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     printf("created SDL window with openGL context\n");
     return 0;
@@ -47,5 +46,7 @@ void swap_window(const Window *window) {
     SDL_GL_SwapWindow(window->window);
     SDL_Delay(5);
 }
+
+void clear_window() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 
 int poll_window(const Window *window, SDL_Event *e) { return SDL_PollEvent(e); }
