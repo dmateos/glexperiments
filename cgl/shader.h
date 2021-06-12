@@ -13,9 +13,9 @@ typedef struct Program {
     int shader_count;
 } ShaderProgram;
 
-ShaderProgram *init_shaderprogram();
-int destroy_shaderprogram();
-void use_shaderprogram(ShaderProgram *);
+int init_shaderprogram(ShaderProgram *);
+int destroy_shaderprogram(ShaderProgram *);
+void use_shaderprogram(const ShaderProgram *);
 void add_shader(ShaderProgram *, int, char *);
 
 #endif

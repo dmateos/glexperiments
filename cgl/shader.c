@@ -4,19 +4,18 @@
 #include <stdlib.h>
 #include <string.h>
 
-ShaderProgram *init_shaderprogram() {
-    ShaderProgram *program = malloc(sizeof(ShaderProgram));
+int init_shaderprogram(ShaderProgram *program) {
     memset(program, 0, sizeof(ShaderProgram));
 
     program->program_id = glCreateProgram();
-    return program;
+    return 0;
 }
 
-void use_shaderprogram(ShaderProgram *program) {
+void use_shaderprogram(const ShaderProgram *program) {
     glUseProgram(program->program_id);
 }
 
-int destroy_shaderprogram() { return 0; }
+int destroy_shaderprogram(ShaderProgram *program) { return 0; }
 
 void add_shader(ShaderProgram *program, int type, char *code) {
     unsigned int shader_id;

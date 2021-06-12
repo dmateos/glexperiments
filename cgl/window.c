@@ -3,12 +3,11 @@
 #include <OpenGL/gl.h>
 #include <assert.h>
 
-Window *init_window(int width, int height) {
+int init_window(Window *window, int width, int height) {
     if (SDL_Init(SDL_INIT_VIDEO) > 0) {
         assert("could not init window subsystem");
         exit(1);
     }
-    Window *window = malloc(sizeof(Window));
     memset(window, 0, sizeof(Window));
 
     window->window = SDL_CreateWindow("Test", 0, 0, width, height,
@@ -17,14 +16,13 @@ Window *init_window(int width, int height) {
 
     glClearColor(255, 0, 0, 1);
 
-    return window;
+    return 0;
 }
 
 int destroy_window(Window *window) {
     SDL_GL_DeleteContext(window->glcontext);
     SDL_DestroyWindow(window->window);
     SDL_Quit();
-    free(window);
     return 0;
 }
 
