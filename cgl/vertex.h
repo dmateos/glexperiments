@@ -7,4 +7,7 @@ typedef struct VB {
 typedef struct VS {
 } VertexState;
 
+int init_vertex_state(VertexState*);
+int init_vertex_buffer(VertexBuffer*);
+
 #endif

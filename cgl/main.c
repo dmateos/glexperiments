@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "shader.h"
+#include "vertex.h"
 #include "window.h"
 
 int main() {
@@ -12,8 +13,13 @@ int main() {
     SDL_Event e;
     bool quit = false;
 
+    VertexState state;
+    VertexBuffer buffer;
+
     init_window(&window, 1280, 1024);
     init_shaderprogram(&shader_program);
+    init_vertex_state(&state);
+    init_vertex_buffer(&buffer);
 
     use_shaderprogram(&shader_program);
     add_shader(&shader_program, VERTEXSHADER, "shaders/vert.gsl");
@@ -30,6 +36,7 @@ int main() {
         swap_window(&window);
     }
 
+    destroy_shaderprogram(&shader_program);
     destroy_window(&window);
     return 0;
 }
