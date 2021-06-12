@@ -2,12 +2,18 @@
 #define _VERTEX_H
 
 typedef struct VB {
+    unsigned int vbo;
 } VertexBuffer;
 
 typedef struct VS {
+    unsigned int vao;
 } VertexState;
 
 int init_vertex_state(VertexState*);
 int init_vertex_buffer(VertexBuffer*);
 
+void bind_vertex_state(const VertexState*);
+void bind_vertex_buffer(const VertexBuffer*);
+
+void draw_array(const VertexState*);
 #endif

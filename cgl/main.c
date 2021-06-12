@@ -33,6 +33,8 @@ int main() {
             }
         }
 
+        bind_vertex_state(&state);
+        draw_array(&state);
         swap_window(&window);
     }
 
