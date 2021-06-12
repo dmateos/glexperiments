@@ -59,3 +59,10 @@ void add_shader(ShaderProgram *program, int type, char *filepath) {
     printf("added new shader to program in slot %d\n",
            program->shader_count - 1);
 }
+
+void compile_shaderprogram(const ShaderProgram *program) {
+    for (int i = 0; i < program->shader_count; i++) {
+        glAttachShader(program->program_id, program->shaders[i].shader_id);
+    }
+    glLinkProgram(program->program_id);
+}

@@ -18,5 +18,6 @@ int init_shaderprogram(ShaderProgram *);
 int destroy_shaderprogram(ShaderProgram *);
 void use_shaderprogram(const ShaderProgram *);
 void add_shader(ShaderProgram *, int, char *);
+void compile_shaderprogram(const ShaderProgram *);
 
 #endif
