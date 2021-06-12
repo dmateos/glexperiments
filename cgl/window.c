@@ -1,7 +1,13 @@
 #include "window.h"
 
+#include <OpenGL/gl.h>
+#include <assert.h>
+
 Window *init_window(int width, int height) {
-    SDL_Init(SDL_INIT_VIDEO);
+    if (SDL_Init(SDL_INIT_VIDEO) > 0) {
+        assert("could not init window subsystem");
+        exit(1);
+    }
     Window *window = malloc(sizeof(Window));
     memset(window, 0, sizeof(Window));
 
@@ -28,4 +34,4 @@ void swap_window(const Window *window) {
     SDL_Delay(5);
 }
 
-int poll_window(const Window *window) { return 0; }
+int poll_window(const Window *window, SDL_Event *e) { return SDL_PollEvent(e); }
