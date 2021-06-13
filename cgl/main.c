@@ -43,17 +43,22 @@ int main() {
                 case SDL_KEYDOWN:
                     switch (e.key.keysym.sym) {
                         case SDLK_w:
+                            offsets[1] += 0.03;
+                            break;
                         case SDLK_a:
-                        case SDLK_s:
+                            offsets[0] -= 0.03;
+                            break;
                         case SDLK_d:
-                            printf("key pressed\n");
+                            offsets[0] += 0.03;
+                            break;
+                        case SDLK_s:
+                            offsets[1] -= 0.03;
                             break;
                     }
                     break;
             }
         }
 
-        offsets[0] += 0.004;
         set_uniform(get_uniform(&shader_program, "offset"), offsets);
 
         clear_window();
