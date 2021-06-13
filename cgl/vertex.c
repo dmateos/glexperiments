@@ -4,9 +4,10 @@
 #include <stdio.h>
 #include <string.h>
 
-int init_vertex_state(VertexState *state) {
+int init_vertex_state(VertexState *state, unsigned char type) {
     memset(state, 0, sizeof(VertexState));
     glGenVertexArrays(1, &state->vao);
+    state->draw_type = type;
     printf("initiated new vertex state %u\n", state->vao);
     return 0;
 }
@@ -46,10 +47,18 @@ void write_vertex_buffer(VertexBuffer *buffer, void *data, int size) {
                          GL_STATIC_DRAW);
             break;
     }
+    buffer->length = size;
     printf("wrote vertex buffer data with size %d\n", size);
 }
 
-void draw_array(int length) {
-    glDrawArrays(GL_TRIANGLES, 0, length);
+void draw(VertexState *state, int length) {
+    switch (state->draw_type) {
+        case VERTEX_STATE_DRAW_ARRAY:
+            glDrawArrays(GL_TRIANGLES, 0, length);
+            break;
+        case VERTEX_STATE_DRAW_INDEXED:
+            glDrawElements(GL_TRIANGLES, length, GL_UNSIGNED_INT, NULL);
+            break;
+    }
     return;
 }

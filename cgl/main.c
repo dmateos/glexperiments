@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
     compile_shaderprogram(&shader_program);
     use_shaderprogram(&shader_program);
 
-    init_vertex_state(&state);
+    init_vertex_state(&state, VERTEX_STATE_DRAW_ARRAY);
     bind_vertex_state(&state);
     init_vertex_buffer(&buffer, VERTEX_BUFFER_TYPE_ARRAY);
     bind_vertex_buffer(&buffer);
@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
         set_uniform(get_uniform(&shader_program, "offset"), offsets);
 
         clear_window();
-        draw_array(sizeof(vertices) / sizeof(float));
+        draw(&state, sizeof(vertices) / sizeof(float));
         swap_window(&window);
     }
 
