@@ -18,9 +18,12 @@ int main(int argc, char **argv) {
     VertexState state;
     VertexBuffer buffer;
     bool quit = false;
+    Model model;
 
     init_window(&window, 1280, 1024);
     init_shaderprogram(&shader_program);
+
+    init_model(&model, "models/cube.obj");
 
     add_shader(&shader_program, VERTEXSHADER, "shaders/vert.gsl");
     add_shader(&shader_program, FRAGSHADER, "shaders/frag.gsl");
