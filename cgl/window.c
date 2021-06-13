@@ -26,7 +26,7 @@ int init_window(Window *window, int width, int height) {
         exit(1);
     }
 
-    glClearColor(255, 0, 0, 1);
+    glClearColor(0, 0, 0, 1);
     glEnable(GL_DEPTH_TEST);
 
     printf("created SDL window with openGL context\n");

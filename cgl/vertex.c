@@ -11,8 +11,9 @@ int init_vertex_state(VertexState *state) {
     return 0;
 }
 
-int init_vertex_buffer(VertexBuffer *buffer) {
+int init_vertex_buffer(VertexBuffer *buffer, unsigned char type) {
     memset(buffer, 0, sizeof(VertexBuffer));
+    buffer->type = type;
     glGenBuffers(1, &buffer->vbo);
     printf("initiated new vertex buffer %u\n", buffer->vbo);
     return 0;
@@ -24,7 +25,14 @@ void bind_vertex_state(const VertexState *state) {
 }
 
 void bind_vertex_buffer(const VertexBuffer *buffer) {
-    glBindBuffer(GL_ARRAY_BUFFER, buffer->vbo);
+    switch (buffer->type) {
+        case VERTEX_BUFFER_TYPE_ARRAY:
+            glBindBuffer(GL_ARRAY_BUFFER, buffer->vbo);
+            break;
+        case VERTEX_BUFFER_TYPE_INDEX:
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->vbo);
+            break;
+    }
     printf("bound vertex buffer %u\n", buffer->vbo);
 }
 

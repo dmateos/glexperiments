@@ -1,9 +1,9 @@
 #include "main.h"
 
-#include <cglm/cglm.h>
 #include <stdbool.h>
 #include <stdio.h>
 
+#include "model.h"
 #include "shader.h"
 #include "vertex.h"
 #include "window.h"
@@ -11,13 +11,13 @@
 float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f};
 float offsets[] = {-1.0f, 0.0f};
 
-int main() {
+int main(int argc, char **argv) {
+    SDL_Event e;
     Window window;
     ShaderProgram shader_program;
-    SDL_Event e;
-    bool quit = false;
     VertexState state;
     VertexBuffer buffer;
+    bool quit = false;
 
     init_window(&window, 1280, 1024);
     init_shaderprogram(&shader_program);
@@ -29,9 +29,9 @@ int main() {
 
     init_vertex_state(&state);
     bind_vertex_state(&state);
-    init_vertex_buffer(&buffer);
+    init_vertex_buffer(&buffer, VERTEX_BUFFER_TYPE_ARRAY);
     bind_vertex_buffer(&buffer);
-    write_vertex_buffer(&buffer, (void*)&vertices, sizeof(vertices));
+    write_vertex_buffer(&buffer, (void *)&vertices, sizeof(vertices));
     set_attribute(1, 3);
 
     while (!quit) {
@@ -42,9 +42,6 @@ int main() {
                     break;
                 case SDL_KEYDOWN:
                     switch (e.key.keysym.sym) {
-                        case SDLK_w:
-                            offsets[1] += 0.03;
-                            break;
                         case SDLK_a:
                             offsets[0] -= 0.03;
                             break;
@@ -53,6 +50,9 @@ int main() {
                             break;
                         case SDLK_s:
                             offsets[1] -= 0.03;
+                            break;
+                        case SDLK_w:
+                            offsets[1] += 0.03;
                             break;
                     }
                     break;
