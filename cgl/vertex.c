@@ -37,7 +37,15 @@ void bind_vertex_buffer(const VertexBuffer *buffer) {
 }
 
 void write_vertex_buffer(VertexBuffer *buffer, void *data, int size) {
-    glBufferData(GL_ARRAY_BUFFER, size, (void *)data, GL_STATIC_DRAW);
+    switch (buffer->type) {
+        case VERTEX_BUFFER_TYPE_ARRAY:
+            glBufferData(GL_ARRAY_BUFFER, size, (void *)data, GL_STATIC_DRAW);
+            break;
+        case VERTEX_BUFFER_TYPE_INDEX:
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, (void *)data,
+                         GL_STATIC_DRAW);
+            break;
+    }
     printf("wrote vertex buffer data with size %d\n", size);
 }
 
