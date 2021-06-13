@@ -7,6 +7,7 @@
 #include "shader.h"
 #include "vertex.h"
 #include "window.h"
+
 float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f};
 float offsets[] = {-1.0f, 0.0f};
 
@@ -15,7 +16,6 @@ int main() {
     ShaderProgram shader_program;
     SDL_Event e;
     bool quit = false;
-
     VertexState state;
     VertexBuffer buffer;
 
@@ -36,8 +36,20 @@ int main() {
 
     while (!quit) {
         while (poll_window(&window, &e)) {
-            if (e.type == SDL_QUIT) {
-                quit = true;
+            switch (e.type) {
+                case SDL_QUIT:
+                    quit = true;
+                    break;
+                case SDL_KEYDOWN:
+                    switch (e.key.keysym.sym) {
+                        case SDLK_w:
+                        case SDLK_a:
+                        case SDLK_s:
+                        case SDLK_d:
+                            printf("key pressed\n");
+                            break;
+                    }
+                    break;
             }
         }
 
