@@ -6,8 +6,8 @@
 #include "util.h"
 
 static void parse_obj_file(const char *path) {
-    char *model_data;
-    char *line;
+    char *model_data, *line, *tok;
+    char *line_state, *token_state = NULL;
 
     model_data = read_file(path);
     if (!model_data) {
@@ -15,18 +15,39 @@ static void parse_obj_file(const char *path) {
         exit(1);
     }
 
-    line = strtok(model_data, "\n");
+    line = strtok_r(model_data, "\n", &line_state);
     while (line != NULL) {
         if (strncmp(line, "vn", strlen("vn")) == 0) {
             printf("vn line: %s\n", line);
-        } else if (strncmp(line, "f", strlen("f")) == 0) {
-            printf("f line: %s\n", line);
+            tok = strtok_r(line, " ", &token_state);
+            tok = strtok_r(NULL, " ", &token_state);
+            while (tok != NULL) {
+                printf("vn token: %s\n", tok);
+                if (tok[strlen(tok)] == '\n') {
+                    tok = NULL;
+                } else {
+                    tok = strtok_r(NULL, " ", &token_state);
+                }
+            }
         } else if (strncmp(line, "v", strlen("v")) == 0) {
             printf("v line: %s\n", line);
+            tok = strtok_r(line, " ", &token_state);
+            tok = strtok_r(NULL, " ", &token_state);
+            while (tok != NULL) {
+                printf("v token: %s\n", tok);
+                if (tok[strlen(tok)] == '\n') {
+                    tok = NULL;
+                } else {
+                    tok = strtok_r(NULL, " ", &token_state);
+                }
+            }
+        } else if (strncmp(line, "f", strlen("f")) == 0) {
+            printf("f line: %s\n", line);
         } else {
             printf("unknown line: %s\n", line);
         }
-        line = strtok(NULL, "\n");
+        line = strtok_r(NULL, "\n", &line_state);
+        token_state = NULL;
     }
 
     free_file_data(model_data);
