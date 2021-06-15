@@ -10,7 +10,6 @@ static int parse_obj_file(ObjFile *obj, const char *path) {
     float x, y, z;
     unsigned int n1, n2, n3, v1, v2, v3;
 
-    memset(obj, 0, sizeof(ObjFile));
     model_data = read_file(path);
     if (!model_data) {
         printf("could not load model %s\n", path);
@@ -50,8 +49,7 @@ static int parse_obj_file(ObjFile *obj, const char *path) {
 }
 
 int init_model(Model *model, const char *path) {
-    ObjFile obj;
     memset(model, 0, sizeof(Model));
-    parse_obj_file(&obj, path);
+    parse_obj_file(&model->vdata, path);
     return 0;
 }
