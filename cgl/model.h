@@ -22,5 +22,6 @@ typedef struct _Model {
 } Model;
 
 int init_model(Model *, const ShaderProgram *, const char *);
+int draw_model(const Model *model);
 
 #endif

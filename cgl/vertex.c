@@ -51,7 +51,7 @@ void write_vertex_buffer(VertexBuffer *buffer, void *data, int size) {
     printf("wrote vertex buffer data with size %d\n", size);
 }
 
-void draw(VertexState *state, int length) {
+void draw(const VertexState *state, int length) {
     bind_vertex_state(state);
     switch (state->draw_type) {
         case VERTEX_STATE_DRAW_ARRAY:
@@ -61,5 +61,4 @@ void draw(VertexState *state, int length) {
             glDrawElements(GL_TRIANGLES, length, GL_UNSIGNED_INT, NULL);
             break;
     }
-    return;
 }

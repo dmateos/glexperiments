@@ -69,3 +69,8 @@ int init_model(Model *model, const ShaderProgram *shader, const char *path) {
     set_attribute(1, 3);
     return 0;
 }
+
+int draw_model(const Model *model) {
+    draw(&model->state, model->vdata.vcount);
+    return 0;
+}

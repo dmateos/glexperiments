@@ -26,12 +26,12 @@ int main(int argc, char **argv) {
     init_window(&window, 1280, 1024);
     init_shaderprogram(&shader_program);
 
-    init_model(&model, &shader_program, "models/cube.obj");
-
     add_shader(&shader_program, VERTEXSHADER, "shaders/vert.gsl");
     add_shader(&shader_program, FRAGSHADER, "shaders/frag.gsl");
     compile_shaderprogram(&shader_program);
     use_shaderprogram(&shader_program);
+
+    init_model(&model, &shader_program, "models/cube.obj");
 
     init_vertex_state(&state, VERTEX_STATE_DRAW_INDEXED);
     bind_vertex_state(&state);
@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
         clear_window();
 
         set_uniform(get_uniform(&shader_program, "offset"), offsets_static);
-        draw(&model.state, model.vdata.vcount);
+        draw_model(&model);
 
         set_uniform(get_uniform(&shader_program, "offset"), offsets);
         draw(&state, sizeof(elements) / sizeof(unsigned int));
