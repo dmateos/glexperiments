@@ -48,8 +48,19 @@ static int parse_obj_file(ObjFile *obj, const char *path) {
     return 0;
 }
 
-int init_model(Model *model, const char *path) {
+int init_model(Model *model, ShaderProgram *shader, const char *path) {
     memset(model, 0, sizeof(Model));
+    model->program = shader;
     parse_obj_file(&model->vdata, path);
+
+    init_vertex_state(&model->state, VERTEX_STATE_DRAW_INDEXED);
+    bind_vertex_state(&model->state);
+    init_vertex_buffer(&model->vertex, VERTEX_BUFFER_TYPE_ARRAY);
+    write_vertex_buffer(&model->vertex, (void *)model->vdata.verticies,
+                        sizeof(float) * model->vdata.vcount);
+    init_vertex_buffer(&model->index, VERTEX_BUFFER_TYPE_INDEX);
+    write_vertex_buffer(&model->vertex, (void *)model->vdata.verticie_index,
+                        sizeof(unsigned int) * model->vdata.vicount);
+    set_attribute(1, 3);
     return 0;
 }

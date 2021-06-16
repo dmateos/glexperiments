@@ -16,10 +16,11 @@ typedef struct _Obj {
 typedef struct _Model {
     float x, y, z;
     ShaderProgram *program;
-    VertexState *state;
+    VertexState state;
+    VertexBuffer vertex, index;
     ObjFile vdata;
 } Model;
 
-int init_model(Model *, const char *);
+int init_model(Model *, ShaderProgram *, const char *);
 
 #endif
