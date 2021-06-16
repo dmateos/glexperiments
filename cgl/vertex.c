@@ -52,6 +52,7 @@ void write_vertex_buffer(VertexBuffer *buffer, void *data, int size) {
 }
 
 void draw(VertexState *state, int length) {
+    bind_vertex_state(state);
     switch (state->draw_type) {
         case VERTEX_STATE_DRAW_ARRAY:
             glDrawArrays(GL_TRIANGLES, 0, length);

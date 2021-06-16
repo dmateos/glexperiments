@@ -12,6 +12,7 @@ const float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f,
                           0.0f,  0.0f,  0.5f, 0.0f};
 const unsigned int elements[] = {0, 1, 2};
 float offsets[] = {-1.0f, 0.0f};
+float offsets_static[] = {0.0f, 0.0f};
 
 int main(int argc, char **argv) {
     SDL_Event e;
@@ -19,8 +20,8 @@ int main(int argc, char **argv) {
     ShaderProgram shader_program;
     VertexState state;
     VertexBuffer buffer, index_buffer;
-    bool quit = false;
     Model model;
+    bool quit = false;
 
     init_window(&window, 1280, 1024);
     init_shaderprogram(&shader_program);
@@ -70,11 +71,14 @@ int main(int argc, char **argv) {
             }
         }
 
-        set_uniform(get_uniform(&shader_program, "offset"), offsets);
-
         clear_window();
-        // draw(&model.state, model.vdata.vcount);
+
+        set_uniform(get_uniform(&shader_program, "offset"), offsets_static);
+        draw(&model.state, model.vdata.vcount);
+
+        set_uniform(get_uniform(&shader_program, "offset"), offsets);
         draw(&state, sizeof(elements) / sizeof(unsigned int));
+
         swap_window(&window);
     }
 

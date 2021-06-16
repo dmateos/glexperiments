@@ -15,12 +15,12 @@ typedef struct _Obj {
 
 typedef struct _Model {
     float x, y, z;
-    ShaderProgram *program;
+    const ShaderProgram *program;
     VertexState state;
     VertexBuffer vertex, index;
     ObjFile vdata;
 } Model;
 
-int init_model(Model *, ShaderProgram *, const char *);
+int init_model(Model *, const ShaderProgram *, const char *);
 
 #endif

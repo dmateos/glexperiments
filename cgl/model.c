@@ -48,7 +48,7 @@ static int parse_obj_file(ObjFile *obj, const char *path) {
     return 0;
 }
 
-int init_model(Model *model, ShaderProgram *shader, const char *path) {
+int init_model(Model *model, const ShaderProgram *shader, const char *path) {
     memset(model, 0, sizeof(Model));
     model->program = shader;
     parse_obj_file(&model->vdata, path);
