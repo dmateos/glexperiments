@@ -47,6 +47,6 @@ void swap_window(const Window *window) {
     SDL_Delay(5);
 }
 
-void clear_window() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
+void clear_window(void) { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 
 int poll_window(const Window *window, SDL_Event *e) { return SDL_PollEvent(e); }

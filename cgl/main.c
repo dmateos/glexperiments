@@ -11,8 +11,8 @@
 const float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f,
                           0.0f,  0.0f,  0.5f, 0.0f};
 const unsigned int elements[] = {0, 1, 2};
-float offsets[] = {-1.0f, 0.0f};
 float offsets_static[] = {0.0f, 0.0f};
+float offsets[] = {-1.0f, 0.0f};
 
 int main(int argc, char **argv) {
     SDL_Event e;

@@ -11,16 +11,16 @@ typedef struct Shader {
 typedef struct Program {
     unsigned int program_id;
     Shader shaders[16];
-    unsigned int shader_count;
+    int shader_count;
 } ShaderProgram;
 
 int init_shaderprogram(ShaderProgram *);
 int destroy_shaderprogram(ShaderProgram *);
 void use_shaderprogram(const ShaderProgram *);
-void add_shader(ShaderProgram *, int, char *);
+void add_shader(ShaderProgram *, int, const char *);
 void compile_shaderprogram(const ShaderProgram *);
 void set_attribute(int, int);
 void set_uniform(int, float *);
-int get_uniform(const ShaderProgram *, char *);
+int get_uniform(const ShaderProgram *, const char *);
 
 #endif

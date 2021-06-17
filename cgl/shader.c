@@ -22,7 +22,7 @@ void use_shaderprogram(const ShaderProgram *program) {
 
 int destroy_shaderprogram(ShaderProgram *program) { return 0; }
 
-void add_shader(ShaderProgram *program, int type, char *filepath) {
+void add_shader(ShaderProgram *program, int type, const char *filepath) {
     unsigned int shader_id;
     const char *shader_data = read_file(filepath);
     GLint shader_result = 0;
@@ -76,6 +76,6 @@ void set_attribute(int index, int size) {
 
 void set_uniform(int index, float *value) { glUniform2fv(index, 1, value); }
 
-int get_uniform(const ShaderProgram *program, char *name) {
+int get_uniform(const ShaderProgram *program, const char *name) {
     return glGetUniformLocation(program->program_id, name);
 }
