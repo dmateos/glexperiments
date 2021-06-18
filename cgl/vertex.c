@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int init_vertex_state(VertexState *state, unsigned char type) {
+int init_vertex_state(VertexState *state, DrawType type) {
     memset(state, 0, sizeof(VertexState));
     glGenVertexArrays(1, &state->vao);
     state->draw_type = type;
@@ -12,7 +12,7 @@ int init_vertex_state(VertexState *state, unsigned char type) {
     return 0;
 }
 
-int init_vertex_buffer(VertexBuffer *buffer, unsigned char type) {
+int init_vertex_buffer(VertexBuffer *buffer, BufferType type) {
     memset(buffer, 0, sizeof(VertexBuffer));
     buffer->type = type;
     glGenBuffers(1, &buffer->vbo);

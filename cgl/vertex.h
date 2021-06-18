@@ -1,24 +1,29 @@
 #ifndef _VERTEX_H
 #define _VERTEX_H
 
-#define VERTEX_BUFFER_TYPE_ARRAY 0
-#define VERTEX_BUFFER_TYPE_INDEX 1
+typedef enum buffertype {
+    VERTEX_BUFFER_TYPE_ARRAY,
+    VERTEX_BUFFER_TYPE_INDEX
+} BufferType;
 
 typedef struct VB {
     unsigned int vbo;
-    unsigned char type;
+    BufferType type;
     unsigned int length;
 } VertexBuffer;
 
-#define VERTEX_STATE_DRAW_ARRAY 0
-#define VERTEX_STATE_DRAW_INDEXED 1
+typedef enum drawstate {
+    VERTEX_STATE_DRAW_ARRAY,
+    VERTEX_STATE_DRAW_INDEXED
+} DrawType;
+
 typedef struct VS {
     unsigned int vao;
-    unsigned char draw_type;
+    DrawType draw_type;
 } VertexState;
 
-int init_vertex_state(VertexState *, unsigned char);
-int init_vertex_buffer(VertexBuffer *, unsigned char);
+int init_vertex_state(VertexState *, DrawType);
+int init_vertex_buffer(VertexBuffer *, BufferType);
 
 void bind_vertex_state(const VertexState *);
 void bind_vertex_buffer(const VertexBuffer *);
