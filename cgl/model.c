@@ -71,6 +71,8 @@ int init_model(Model *model, const ShaderProgram *shader, const char *path) {
                         sizeof(unsigned int) * model->vdata.vicount);
 
     set_attribute(1, 3);
+
+    unbind_vertex_state(&model->state);
     return 0;
 }
 

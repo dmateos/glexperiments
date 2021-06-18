@@ -6,13 +6,14 @@
 #include "camera.h"
 #include "model.h"
 #include "shader.h"
+#include "vertex.h"
 #include "window.h"
 
 int main(int argc, char **argv) {
     SDL_Event e;
     Window window;
     ShaderProgram shader_program;
-    Model model;
+    Model model, model2;
     Camera camera;
     bool quit = false;
 
@@ -30,8 +31,10 @@ int main(int argc, char **argv) {
 
     init_camera(&camera, &shader_program);
     init_model(&model, &shader_program, argv[1]);
+    init_model(&model2, &shader_program, argv[1]);
 
     camera.vec[Z] = -6;
+    model2.vec[0] -= 3.0;
 
     while (!quit) {
         while (poll_window(&window, &e)) {
@@ -61,6 +64,7 @@ int main(int argc, char **argv) {
         clear_window();
         update_camera(&camera);
         draw_model(&model);
+        draw_model(&model2);
         swap_window(&window);
     }
 

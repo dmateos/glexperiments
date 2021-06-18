@@ -22,8 +22,10 @@ int init_vertex_buffer(VertexBuffer *buffer, BufferType type) {
 
 void bind_vertex_state(const VertexState *state) {
     glBindVertexArray(state->vao);
-    printf("bound vertex state %u\n", state->vao);
+    // printf("bound vertex state %u\n", state->vao);
 }
+
+void unbind_vertex_state(const VertexState *state) { glBindVertexArray(0); }
 
 void bind_vertex_buffer(const VertexBuffer *buffer) {
     switch (buffer->type) {
@@ -34,7 +36,18 @@ void bind_vertex_buffer(const VertexBuffer *buffer) {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->vbo);
             break;
     }
-    printf("bound vertex buffer %u\n", buffer->vbo);
+    // printf("bound vertex buffer %u\n", buffer->vbo);
+}
+
+void unbind_vertex_buffer(const VertexBuffer *buffer) {
+    switch (buffer->type) {
+        case VERTEX_BUFFER_TYPE_ARRAY:
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            break;
+        case VERTEX_BUFFER_TYPE_INDEX:
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+            break;
+    }
 }
 
 void write_vertex_buffer(VertexBuffer *buffer, void *data, int size) {
@@ -60,5 +73,14 @@ void draw(const VertexState *state, int length) {
         case VERTEX_STATE_DRAW_INDEXED:
             glDrawElements(GL_TRIANGLES, length, GL_UNSIGNED_INT, NULL);
             break;
+    }
+}
+
+void get_error(void) {
+    int error = glGetError();
+    if (error == 0) {
+        printf("NO GL ERRORS\n");
+    } else {
+        printf("%d\n", error);
     }
 }

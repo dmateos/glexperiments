@@ -26,8 +26,11 @@ int init_vertex_state(VertexState *, DrawType);
 int init_vertex_buffer(VertexBuffer *, BufferType);
 
 void bind_vertex_state(const VertexState *);
+void unbind_vertex_state(const VertexState *);
 void bind_vertex_buffer(const VertexBuffer *);
+void unbind_vertex_buffer(const VertexBuffer *);
 void write_vertex_buffer(VertexBuffer *, void *, int);
 
 void draw(const VertexState *, int);
+void get_error(void);
 #endif
