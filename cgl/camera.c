@@ -5,7 +5,7 @@
 
 #include "shader.h"
 
-int init_camera(Camera *camera, ShaderProgram *shader_program) {
+int init_camera(Camera *camera, const ShaderProgram *shader_program) {
     memset(camera, 0, sizeof(Camera));
     camera->shader_program = shader_program;
     glm_perspective(75, 1280 / 1024, 0.1, 1000.0, camera->perspective);

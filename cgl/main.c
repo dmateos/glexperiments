@@ -19,13 +19,14 @@ int main(int argc, char **argv) {
     init_window(&window, 1280, 1024);
     init_shaderprogram(&shader_program);
     init_camera(&camera, &shader_program);
+    camera.vec[Z] = -6;
 
     add_shader(&shader_program, VERTEXSHADER, "shaders/vert.gsl");
     add_shader(&shader_program, FRAGSHADER, "shaders/frag.gsl");
     compile_shaderprogram(&shader_program);
     use_shaderprogram(&shader_program);
 
-    init_model(&model, &shader_program, "models/cube.obj");
+    init_model(&model, &shader_program, argv[1]);
 
     while (!quit) {
         while (poll_window(&window, &e)) {
