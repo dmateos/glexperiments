@@ -46,8 +46,10 @@ int main(int argc, char **argv) {
                 case SDL_KEYDOWN:
                     switch (e.key.keysym.sym) {
                         case SDLK_a:
+                            strafe_camera_left(&camera);
                             break;
                         case SDLK_d:
+                            strafe_camera_right(&camera);
                             break;
                         case SDLK_s:
                             move_camera_backward(&camera);

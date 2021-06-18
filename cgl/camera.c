@@ -5,6 +5,8 @@
 
 #include "shader.h"
 
+static float horizontal[3] = {1.0, 1.0, 1.0};
+
 static void build_lookat(Camera *camera) {
     glm_lookat(camera->position, camera->target, camera->up, camera->view);
 }
@@ -29,6 +31,8 @@ int init_camera(Camera *camera, const ShaderProgram *shader_program) {
     camera->up[1] = 1.0;
     camera->up[2] = 0.0;
 
+    glm_vec3_add(camera->position, camera->front, camera->target);
+
     camera->target[0] = camera->position[0] + camera->front[0];
     camera->target[1] = camera->position[1] + camera->front[1];
     camera->target[2] = camera->position[2] + camera->front[2];
@@ -40,7 +44,6 @@ int init_camera(Camera *camera, const ShaderProgram *shader_program) {
 
 void move_camera_forward(Camera *camera) {
     float posandfront[3];
-    float horizontal[3] = {1.0, 1.0, 1.0};
     glm_vec3_add(camera->position, camera->front, posandfront);
     glm_vec3_mul(posandfront, horizontal, camera->position);
     build_lookat(camera);
@@ -48,15 +51,28 @@ void move_camera_forward(Camera *camera) {
 
 void move_camera_backward(Camera *camera) {
     float posandfront[3];
-    float horizontal[3] = {1.0, 1.0, 1.0};
     glm_vec3_sub(camera->position, camera->front, posandfront);
     glm_vec3_mul(posandfront, horizontal, camera->position);
     build_lookat(camera);
 }
 
-void strafe_camera_left(Camera *camera) { return 0; }
+void strafe_camera_left(Camera *camera) {
+    float crossproduct[3], posandfront[3];
+    glm_vec3_cross(camera->front, camera->up, crossproduct);
+    glm_vec3_normalize(crossproduct);
+    glm_vec3_sub(camera->position, crossproduct, posandfront);
+    glm_vec3_mul(posandfront, horizontal, camera->position);
+    build_lookat(camera);
+}
 
-void strafe_camera_right(Camera *camera) { return 0; }
+void strafe_camera_right(Camera *camera) {
+    float crossproduct[3], posandfront[3];
+    glm_vec3_cross(camera->front, camera->up, crossproduct);
+    glm_vec3_normalize(crossproduct);
+    glm_vec3_add(camera->position, crossproduct, posandfront);
+    glm_vec3_mul(posandfront, horizontal, camera->position);
+    build_lookat(camera);
+}
 
 void update_camera(Camera *camera) {
     set_uniform(get_uniform(camera->shader_program, "perspective"),
