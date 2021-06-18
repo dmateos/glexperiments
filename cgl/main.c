@@ -33,8 +33,9 @@ int main(int argc, char **argv) {
     init_model(&model, &shader_program, argv[1]);
     init_model(&model2, &shader_program, argv[1]);
 
-    camera.vec[Z] = -6;
     model2.vec[0] -= 3.0;
+    model2.vec[2] -= 12.0;
+    model.vec[2] -= 12.0;
 
     while (!quit) {
         while (poll_window(&window, &e)) {
@@ -45,16 +46,14 @@ int main(int argc, char **argv) {
                 case SDL_KEYDOWN:
                     switch (e.key.keysym.sym) {
                         case SDLK_a:
-                            camera.vec[X] -= 0.1;
                             break;
                         case SDLK_d:
-                            camera.vec[X] += 0.1;
                             break;
                         case SDLK_s:
-                            camera.vec[Z] -= 0.1;
+                            move_camera_backward(&camera);
                             break;
                         case SDLK_w:
-                            camera.vec[Z] += 0.1;
+                            move_camera_forward(&camera);
                             break;
                     }
                     break;
