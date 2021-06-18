@@ -12,7 +12,7 @@ typedef struct VB {
     unsigned int length;
 } VertexBuffer;
 
-typedef enum drawstate {
+typedef enum drawtype {
     VERTEX_STATE_DRAW_ARRAY,
     VERTEX_STATE_DRAW_INDEXED
 } DrawType;

@@ -22,7 +22,7 @@ void use_shaderprogram(const ShaderProgram *program) {
 
 int destroy_shaderprogram(ShaderProgram *program) { return 0; }
 
-void add_shader(ShaderProgram *program, int type, const char *filepath) {
+void add_shader(ShaderProgram *program, ShaderType type, const char *filepath) {
     unsigned int shader_id;
     const char *shader_data = read_file(filepath);
     GLint shader_result = 0;

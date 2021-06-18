@@ -1,8 +1,7 @@
 #ifndef _SHADER_H
 #define _SHADER_H
 
-#define VERTEXSHADER 0
-#define FRAGSHADER 1
+typedef enum shadertype { VERTEXSHADER, FRAGSHADER } ShaderType;
 
 typedef struct Shader {
     unsigned int shader_id;
@@ -17,7 +16,7 @@ typedef struct Program {
 int init_shaderprogram(ShaderProgram *);
 int destroy_shaderprogram(ShaderProgram *);
 void use_shaderprogram(const ShaderProgram *);
-void add_shader(ShaderProgram *, int, const char *);
+void add_shader(ShaderProgram *, ShaderType, const char *);
 void compile_shaderprogram(const ShaderProgram *);
 void set_attribute(int, int);
 void set_uniform(int, float *);
