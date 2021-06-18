@@ -1,6 +1,7 @@
 #include "window.h"
 
 #include <OpenGL/gl3.h>
+#include <SDL2/SDL.h>
 
 int init_window(Window *window, int width, int height) {
     if (SDL_Init(SDL_INIT_VIDEO) > 0) {
