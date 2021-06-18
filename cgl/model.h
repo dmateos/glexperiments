@@ -3,7 +3,7 @@
 
 #define X 0
 #define Y 1
-#define Z 3
+#define Z 2
 
 #include <cglm/cglm.h>
 

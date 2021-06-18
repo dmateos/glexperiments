@@ -1,8 +1,10 @@
 #version 330 core
 
 layout(location = 1) in vec3 vp;
-uniform mat4 offset;
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 perspective;
 
 void main(){
-  gl_Position = offset * vec4(vp, 1.0);
+  gl_Position = perspective * view * model * vec4(vp, 1.0);
 }
