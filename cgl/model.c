@@ -45,6 +45,10 @@ static int parse_obj_file(ObjFile *obj, const char *path) {
     }
 
     free_file_data(model_data);
+
+    printf("loaded model %s\n", path);
+    printf("vcount %d, ncount %d, vicount: %d, nicount %d\n", obj->vcount,
+           obj->ncount, obj->vicount, obj->nicount);
     return 0;
 }
 
