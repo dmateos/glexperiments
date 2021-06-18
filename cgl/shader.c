@@ -74,7 +74,9 @@ void set_attribute(int index, int size) {
     printf("set attribute for index %d\n", index);
 }
 
-void set_uniform(int index, float *value) { glUniform2fv(index, 1, value); }
+void set_uniform(int index, float *value) {
+    glUniformMatrix4fv(index, 1, GL_FALSE, value);
+}
 
 int get_uniform(const ShaderProgram *program, const char *name) {
     return glGetUniformLocation(program->program_id, name);

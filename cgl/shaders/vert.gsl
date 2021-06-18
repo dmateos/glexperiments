@@ -1,8 +1,8 @@
 #version 330 core
 
 layout(location = 1) in vec3 vp;
-uniform vec2 offset;
+uniform mat4 offset;
 
 void main(){
-  gl_Position = vec4(vp.x + offset.x, vp.y + offset.y, vp.z, 1.0);
+  gl_Position = offset * vec4(vp, 1.0);
 }

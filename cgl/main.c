@@ -11,15 +11,11 @@
 const float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f,
                           0.0f,  0.0f,  0.5f, 0.0f};
 const unsigned int elements[] = {0, 1, 2};
-float offsets_static[] = {0.0f, 0.0f};
-float offsets[] = {-1.0f, 0.0f};
 
 int main(int argc, char **argv) {
     SDL_Event e;
     Window window;
     ShaderProgram shader_program;
-    VertexState state;
-    VertexBuffer buffer, index_buffer;
     Model model;
     bool quit = false;
 
@@ -33,19 +29,6 @@ int main(int argc, char **argv) {
 
     init_model(&model, &shader_program, "models/cube.obj");
 
-    init_vertex_state(&state, VERTEX_STATE_DRAW_INDEXED);
-    bind_vertex_state(&state);
-
-    init_vertex_buffer(&buffer, VERTEX_BUFFER_TYPE_ARRAY);
-    bind_vertex_buffer(&buffer);
-    write_vertex_buffer(&buffer, (void *)&vertices, sizeof(vertices));
-
-    init_vertex_buffer(&index_buffer, VERTEX_BUFFER_TYPE_INDEX);
-    bind_vertex_buffer(&index_buffer);
-    write_vertex_buffer(&index_buffer, (void *)&elements, sizeof(elements));
-
-    set_attribute(1, 3);
-
     while (!quit) {
         while (poll_window(&window, &e)) {
             switch (e.type) {
@@ -55,16 +38,16 @@ int main(int argc, char **argv) {
                 case SDL_KEYDOWN:
                     switch (e.key.keysym.sym) {
                         case SDLK_a:
-                            offsets[0] -= 0.03;
+                            model.vec[X] -= 0.1;
                             break;
                         case SDLK_d:
-                            offsets[0] += 0.03;
+                            model.vec[X] += 0.1;
                             break;
                         case SDLK_s:
-                            offsets[1] -= 0.03;
+                            model.vec[Y] -= 0.1;
                             break;
                         case SDLK_w:
-                            offsets[1] += 0.03;
+                            model.vec[Y] += 0.1;
                             break;
                     }
                     break;
@@ -72,13 +55,7 @@ int main(int argc, char **argv) {
         }
 
         clear_window();
-
-        set_uniform(get_uniform(&shader_program, "offset"), offsets_static);
         draw_model(&model);
-
-        set_uniform(get_uniform(&shader_program, "offset"), offsets);
-        draw(&state, sizeof(elements) / sizeof(unsigned int));
-
         swap_window(&window);
     }
 

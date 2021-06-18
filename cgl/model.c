@@ -71,6 +71,9 @@ int init_model(Model *model, const ShaderProgram *shader, const char *path) {
 }
 
 int draw_model(const Model *model) {
+    glm_translate_make((vec4 *)model->translation, (float *)model->vec);
+    set_uniform(get_uniform(model->program, "offset"),
+                (float *)model->translation);
     draw(&model->state, model->vdata.vcount);
     return 0;
 }

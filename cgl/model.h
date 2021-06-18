@@ -1,6 +1,12 @@
 #ifndef _MODEL_H
 #define _MODEL_H
 
+#define X 0
+#define Y 1
+#define Z 3
+
+#include <cglm/cglm.h>
+
 #include "shader.h"
 #include "vertex.h"
 
@@ -14,7 +20,9 @@ typedef struct _Obj {
 } ObjFile;
 
 typedef struct _Model {
-    float x, y, z;
+    float vec[3];
+    mat4 translation;
+
     const ShaderProgram *program;
     VertexState state;
     VertexBuffer vertex, index;
