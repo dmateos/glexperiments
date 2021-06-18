@@ -17,5 +17,7 @@ void move_camera_forward(Camera *);
 void move_camera_backward(Camera *);
 void strafe_camera_left(Camera *camera);
 void strafe_camera_right(Camera *camera);
+void rotate_camera_left(Camera *camera);
+void rotate_camera_right(Camera *camera);
 
 #endif

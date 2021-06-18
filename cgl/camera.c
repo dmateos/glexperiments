@@ -1,6 +1,7 @@
 #include "camera.h"
 
 #include <cglm/cglm.h>
+#import <math.h>
 #include <string.h>
 
 #include "shader.h"
@@ -32,10 +33,6 @@ int init_camera(Camera *camera, const ShaderProgram *shader_program) {
     camera->up[2] = 0.0;
 
     glm_vec3_add(camera->position, camera->front, camera->target);
-
-    camera->target[0] = camera->position[0] + camera->front[0];
-    camera->target[1] = camera->position[1] + camera->front[1];
-    camera->target[2] = camera->position[2] + camera->front[2];
 
     build_perspective(camera);
     build_lookat(camera);
@@ -72,6 +69,14 @@ void strafe_camera_right(Camera *camera) {
     glm_vec3_add(camera->position, crossproduct, posandfront);
     glm_vec3_mul(posandfront, horizontal, camera->position);
     build_lookat(camera);
+}
+
+void rotate_camera_left(Camera *camera) {
+    float crossproduct[3], posandfront[3];
+}
+
+void roate_camera_right(Camera *camera) {
+    float crossproduct[3], posandfront[3];
 }
 
 void update_camera(Camera *camera) {
