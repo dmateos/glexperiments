@@ -16,6 +16,11 @@ int main(int argc, char **argv) {
     Camera camera;
     bool quit = false;
 
+    if (argc < 2) {
+        printf("specify model to load\n");
+        exit(1);
+    }
+
     init_window(&window, 1280, 1024);
     init_shaderprogram(&shader_program);
     add_shader(&shader_program, VERTEXSHADER, "shaders/vert.gsl");
