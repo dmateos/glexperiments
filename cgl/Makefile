@@ -12,3 +12,5 @@ OBJ_NAME = a.out
 
 all:
 	$(CC) -o $(OBJ_NAME) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) $(OBJS)
+test:
+	./a.out models/cube.obj

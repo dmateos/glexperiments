@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
                             strafe_camera_left(&camera);
                             break;
                         case SDLK_d:
-                            strafe_camera_right(&camera);
+                            rotate_camera_right(&camera);
                             break;
                         case SDLK_s:
                             move_camera_backward(&camera);

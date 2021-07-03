@@ -1,7 +1,7 @@
 #include "camera.h"
 
 #include <cglm/cglm.h>
-#import <math.h>
+#include <math.h>
 #include <string.h>
 
 #include "shader.h"
@@ -9,6 +9,7 @@
 static float horizontal[3] = {1.0, 1.0, 1.0};
 
 static void build_lookat(Camera *camera) {
+    glm_vec3_add(camera->position, camera->front, camera->target);
     glm_lookat(camera->position, camera->target, camera->up, camera->view);
 }
 
@@ -75,8 +76,12 @@ void rotate_camera_left(Camera *camera) {
     float crossproduct[3], posandfront[3];
 }
 
-void roate_camera_right(Camera *camera) {
-    float crossproduct[3], posandfront[3];
+void rotate_camera_right(Camera *camera) {
+    float rotation[3];
+    float axis[3] = {0.0, 1.0, 0.0};
+    glm_quatv(rotation, -0.2 * 1.0 * M_PI / 180, axis);
+    glm_quat_rotatev(rotation, camera->front, camera->front);
+    build_lookat(camera);
 }
 
 void update_camera(Camera *camera) {

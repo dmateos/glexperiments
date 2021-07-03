@@ -53,15 +53,22 @@ void unbind_vertex_buffer(const VertexBuffer *buffer) {
 void write_vertex_buffer(VertexBuffer *buffer, void *data, int size) {
     switch (buffer->type) {
         case VERTEX_BUFFER_TYPE_ARRAY:
+            printf("wrote vertex array buffer data with size %d\n", size);
             glBufferData(GL_ARRAY_BUFFER, size, (void *)data, GL_STATIC_DRAW);
             break;
         case VERTEX_BUFFER_TYPE_INDEX:
+            printf("wrote vertex index buffer data with size %d\n", size);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, (void *)data,
                          GL_STATIC_DRAW);
             break;
     }
     buffer->length = size;
-    printf("wrote vertex buffer data with size %d\n", size);
+    float *ptr = data;
+    for (int i = 0; i < size / (int)sizeof(float); i++) {
+        printf("%d %f ", i, *ptr);
+        ptr++;
+    }
+    printf("\n");
 }
 
 void draw(const VertexState *state, int length) {
