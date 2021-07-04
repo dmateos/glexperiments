@@ -9,8 +9,9 @@
 static float horizontal[3] = {1.0, 1.0, 1.0};
 
 static void build_lookat(Camera *camera) {
-    glm_vec3_add(camera->position, camera->front, camera->target);
-    glm_lookat(camera->position, camera->target, camera->up, camera->view);
+    float front[3];
+    glm_vec3_add(camera->position, camera->front, front);
+    glm_lookat(camera->position, front, camera->up, camera->view);
 }
 
 static void build_perspective(Camera *camera) {
@@ -23,70 +24,46 @@ int init_camera(Camera *camera, const ShaderProgram *shader_program) {
 
     camera->position[0] = 0.0;
     camera->position[1] = 0.0;
-    camera->position[2] = -10.0;
-
-    camera->front[0] = 0.0;
-    camera->front[1] = 0.0;
-    camera->front[2] = 1.0;
+    camera->position[2] = 10.0;
 
     camera->up[0] = 0.0;
     camera->up[1] = 1.0;
     camera->up[2] = 0.0;
 
-    glm_vec3_add(camera->position, camera->front, camera->target);
+    camera->front[0] = 0.0;
+    camera->front[1] = 0.0;
+    camera->front[2] = -1.0;
 
     build_perspective(camera);
-    build_lookat(camera);
+    update_camera(camera);
     return 0;
 }
 
-void move_camera_forward(Camera *camera) {
-    float posandfront[3];
-    glm_vec3_add(camera->position, camera->front, posandfront);
-    glm_vec3_mul(posandfront, horizontal, camera->position);
-    build_lookat(camera);
-}
-
-void move_camera_backward(Camera *camera) {
-    float posandfront[3];
-    glm_vec3_sub(camera->position, camera->front, posandfront);
-    glm_vec3_mul(posandfront, horizontal, camera->position);
-    build_lookat(camera);
-}
-
-void strafe_camera_left(Camera *camera) {
-    float crossproduct[3], posandfront[3];
-    glm_vec3_cross(camera->front, camera->up, crossproduct);
-    glm_vec3_normalize(crossproduct);
-    glm_vec3_sub(camera->position, crossproduct, posandfront);
-    glm_vec3_mul(posandfront, horizontal, camera->position);
-    build_lookat(camera);
-}
-
-void strafe_camera_right(Camera *camera) {
-    float crossproduct[3], posandfront[3];
-    glm_vec3_cross(camera->front, camera->up, crossproduct);
-    glm_vec3_normalize(crossproduct);
-    glm_vec3_add(camera->position, crossproduct, posandfront);
-    glm_vec3_mul(posandfront, horizontal, camera->position);
-    build_lookat(camera);
-}
-
-void rotate_camera_left(Camera *camera) {
-    float crossproduct[3], posandfront[3];
-}
-
-void rotate_camera_right(Camera *camera) {
-    float rotation[3];
-    float axis[3] = {0.0, 1.0, 0.0};
-    glm_quatv(rotation, -0.2 * 1.0 * M_PI / 180, axis);
-    glm_quat_rotatev(rotation, camera->front, camera->front);
-    build_lookat(camera);
-}
-
 void update_camera(Camera *camera) {
+    float front[3];
+    front[0] = cos(camera->yaw * M_PI / 180) * cos(camera->pitch * M_PI / 180);
+    front[1] = sin(camera->pitch * M_PI / 180);
+    front[2] = cos(camera->yaw * M_PI / 180) * cos(camera->pitch * M_PI / 180);
+    glm_normalize(front);
+
+    build_lookat(camera);
+
     set_uniform(get_uniform(camera->shader_program, "perspective"),
                 (float *)camera->perspective);
     set_uniform(get_uniform(camera->shader_program, "view"),
                 (float *)camera->view);
+}
+
+void move_camera(Camera *camera, CameraDirection direction) {
+    const float velocity = 5;
+
+    if (direction == UP) {
+        glm_vec3_muladds(camera->front, velocity, camera->position);
+    } else if (direction == DOWN) {
+        float tmp[3];
+        glm_vec3_scale(camera->front, velocity, tmp);
+        glm_vec3_sub(camera->position, tmp, camera->position);
+    } else if (direction == LEFT) {
+    } else if (direction == RIGHT) {
+    }
 }
