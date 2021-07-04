@@ -6,7 +6,7 @@
 
 #include "shader.h"
 
-static float horizontal[3] = {1.0, 1.0, 1.0};
+static float worldup[3] = {0.0, 1.0, 0.0};
 
 static void build_lookat(Camera *camera) {
     float front[3];
@@ -26,10 +26,6 @@ int init_camera(Camera *camera, const ShaderProgram *shader_program) {
     camera->position[1] = 0.0;
     camera->position[2] = 10.0;
 
-    camera->up[0] = 0.0;
-    camera->up[1] = 1.0;
-    camera->up[2] = 0.0;
-
     camera->front[0] = 0.0;
     camera->front[1] = 0.0;
     camera->front[2] = -1.0;
@@ -46,6 +42,11 @@ void update_camera(Camera *camera) {
     front[2] = cos(camera->yaw * M_PI / 180) * cos(camera->pitch * M_PI / 180);
     glm_normalize(front);
 
+    glm_cross(camera->front, worldup, camera->right);
+    glm_normalize(camera->right);
+    glm_cross(camera->right, camera->front, camera->up);
+    glm_normalize(camera->up);
+
     build_lookat(camera);
 
     set_uniform(get_uniform(camera->shader_program, "perspective"),
@@ -55,7 +56,7 @@ void update_camera(Camera *camera) {
 }
 
 void move_camera(Camera *camera, CameraDirection direction) {
-    const float velocity = 5;
+    const float velocity = 1.0;
 
     if (direction == UP) {
         glm_vec3_muladds(camera->front, velocity, camera->position);
@@ -64,6 +65,10 @@ void move_camera(Camera *camera, CameraDirection direction) {
         glm_vec3_scale(camera->front, velocity, tmp);
         glm_vec3_sub(camera->position, tmp, camera->position);
     } else if (direction == LEFT) {
+        float tmp[3];
+        glm_vec3_scale(camera->right, velocity, tmp);
+        glm_vec3_sub(camera->position, tmp, camera->position);
     } else if (direction == RIGHT) {
+        glm_vec3_muladds(camera->right, velocity, camera->position);
     }
 }
