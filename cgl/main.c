@@ -32,10 +32,10 @@ int main(int argc, char **argv) {
 
     init_camera(&camera, &shader_program);
     init_model(&model, &shader_program, argv[1]);
-    // init_model(&model2, &shader_program, argv[1]);
+    init_model(&model2, &shader_program, argv[1]);
 
-    // model2.vec[0] -= 3.0;
-    // model2.vec[2] -= 12.0;
+    model2.vec[0] -= 3.0;
+    model2.vec[2] -= 12.0;
     model.vec[2] -= 12.0;
 
     while (!quit) {
@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
         clear_window();
         update_camera(&camera);
         draw_model(&model);
-        // draw_model(&model2);
+        draw_model(&model2);
         swap_window(&window);
     }
 

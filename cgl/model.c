@@ -80,6 +80,6 @@ int draw_model(const Model *model) {
     glm_translate_make((vec4 *)model->translation, (float *)model->vec);
     set_uniform(get_uniform(model->program, "model"),
                 (float *)model->translation);
-    draw(&model->state, model->vdata.vcount);
+    draw(&model->state, model->vdata.vicount);
     return 0;
 }
