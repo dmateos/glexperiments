@@ -18,8 +18,8 @@ int main(int argc, char **argv) {
     bool quit = false;
     int mousex, mousey;
 
-    if (argc < 2) {
-        printf("specify model to load\n");
+    if (argc < 3) {
+        printf("specify models to load\n");
         exit(1);
     }
 
@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 
     init_camera(&camera, &shader_program);
     init_model(&model, &shader_program, argv[1]);
-    init_model(&model2, &shader_program, argv[1]);
+    init_model(&model2, &shader_program, argv[2]);
 
     model2.vec[0] -= 3.0;
     model2.vec[2] -= 12.0;
