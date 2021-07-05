@@ -25,7 +25,7 @@ typedef struct _Model {
 
     const ShaderProgram *program;
     VertexState state;
-    VertexBuffer vertex, index;
+    VertexBuffer vertex, index, normal, nindex;
     ObjFile vdata;
 } Model;
 

@@ -5,7 +5,13 @@
 
 #include "shader.h"
 
-typedef enum cameradirection { UP, DOWN, LEFT, RIGHT } CameraDirection;
+typedef enum cameradirection {
+    CAMERA_FORWARD,
+    CAMERA_BACK,
+    CAMERA_LEFT,
+    CAMERA_RIGHT
+} CameraDirection;
+
 typedef struct Cam {
     mat4 view, perspective;
     const ShaderProgram *shader_program;
@@ -14,8 +20,8 @@ typedef struct Cam {
 } Camera;
 
 int init_camera(Camera *, const ShaderProgram *);
+void update_camera(Camera *);
 void move_camera(Camera *, CameraDirection);
 void move_camera_mouse(Camera *, int, int);
-void update_camera(Camera *);
 
 #endif

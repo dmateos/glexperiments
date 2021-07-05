@@ -47,28 +47,28 @@ int main(int argc, char **argv) {
                 case SDL_KEYDOWN:
                     switch (e.key.keysym.sym) {
                         case SDLK_a:
-                            move_camera(&camera, RIGHT);
+                            move_camera(&camera, CAMERA_RIGHT);
                             break;
                         case SDLK_d:
-                            move_camera(&camera, LEFT);
+                            move_camera(&camera, CAMERA_LEFT);
                             break;
                         case SDLK_s:
-                            move_camera(&camera, DOWN);
+                            move_camera(&camera, CAMERA_BACK);
                             break;
                         case SDLK_w:
-                            move_camera(&camera, UP);
+                            move_camera(&camera, CAMERA_FORWARD);
                             break;
                         case SDLK_i:
-                            camera.pitch += 0.5;
+                            move_camera_mouse(&camera, 1, 0);
                             break;
                         case SDLK_o:
-                            camera.pitch -= 0.5;
+                            move_camera_mouse(&camera, -1, 0);
                             break;
                         case SDLK_j:
-                            camera.yaw += 0.5;
+                            move_camera_mouse(&camera, 0, 1);
                             break;
                         case SDLK_k:
-                            camera.yaw -= 0.5;
+                            move_camera_mouse(&camera, 0, -1);
                             break;
                     }
                     break;

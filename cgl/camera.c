@@ -62,25 +62,25 @@ void update_camera(Camera *camera) {
 void move_camera(Camera *camera, CameraDirection direction) {
     const float velocity = 0.5;
 
-    if (direction == UP) {
+    if (direction == CAMERA_FORWARD) {
         glm_vec3_muladds(camera->front, velocity, camera->position);
-    } else if (direction == DOWN) {
+    } else if (direction == CAMERA_BACK) {
         float tmp[3];
         glm_vec3_scale(camera->front, velocity, tmp);
         glm_vec3_sub(camera->position, tmp, camera->position);
-    } else if (direction == LEFT) {
+    } else if (direction == CAMERA_LEFT) {
         float tmp[3];
         glm_vec3_scale(camera->right, velocity, tmp);
         glm_vec3_sub(camera->position, tmp, camera->position);
-    } else if (direction == RIGHT) {
+    } else if (direction == CAMERA_RIGHT) {
         glm_vec3_muladds(camera->right, velocity, camera->position);
     }
 }
 
 void move_camera_mouse(Camera *camera, int x, int y) {
-    int yaw, pitch;
-    yaw = x * 0.01;
-    pitch = y * 0.01;
+    float yaw, pitch;
+    yaw = x * 0.1;
+    pitch = y * 0.1;
 
     if (pitch > 89.0f) pitch = 89.0f;
     if (pitch < -89.0f) pitch = -89.0f;

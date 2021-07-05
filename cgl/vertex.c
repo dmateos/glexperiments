@@ -87,7 +87,7 @@ void draw(const VertexState *state, int length) {
             glDrawElements(GL_TRIANGLES, length, GL_UNSIGNED_INT, NULL);
             break;
     }
-    printf("drawing %d with %d length\n", state->vao, length);
+    // printf("drawing %d with %d length\n", state->vao, length);
 }
 
 void get_error(void) {
