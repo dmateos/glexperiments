@@ -6,7 +6,7 @@
 
 #include "shader.h"
 
-static float worldup[3] = {0.0, 1.0, 0.0};
+static float worldup[3] = {0.0, -1.0, 0.0};
 
 static void build_lookat(Camera *camera) {
     float front[3];
@@ -77,9 +77,9 @@ void move_camera(Camera *camera, CameraDirection direction) {
     }
 }
 
-void move_camera_mouse(Camera *camera, int x, int y) {
+void pivot_camera(Camera *camera, int p, int y) {
     float yaw, pitch;
-    yaw = x * 0.1;
+    yaw = p * 0.1;
     pitch = y * 0.1;
 
     if (pitch > 89.0f) pitch = 89.0f;

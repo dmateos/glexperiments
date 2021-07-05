@@ -59,16 +59,16 @@ int main(int argc, char **argv) {
                             move_camera(&camera, CAMERA_FORWARD);
                             break;
                         case SDLK_i:
-                            move_camera_mouse(&camera, 1, 0);
+                            pivot_camera(&camera, 1, 0);
                             break;
                         case SDLK_o:
-                            move_camera_mouse(&camera, -1, 0);
+                            pivot_camera(&camera, -1, 0);
                             break;
                         case SDLK_j:
-                            move_camera_mouse(&camera, 0, 1);
+                            pivot_camera(&camera, 0, 1);
                             break;
                         case SDLK_k:
-                            move_camera_mouse(&camera, 0, -1);
+                            pivot_camera(&camera, 0, -1);
                             break;
                     }
                     break;
