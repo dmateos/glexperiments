@@ -16,6 +16,7 @@ int main(int argc, char **argv) {
     Model model, model2;
     Camera camera;
     bool quit = false;
+    int mousex, mousey;
 
     if (argc < 2) {
         printf("specify model to load\n");
@@ -31,10 +32,10 @@ int main(int argc, char **argv) {
 
     init_camera(&camera, &shader_program);
     init_model(&model, &shader_program, argv[1]);
-    init_model(&model2, &shader_program, argv[1]);
+    // init_model(&model2, &shader_program, argv[1]);
 
-    model2.vec[0] -= 3.0;
-    model2.vec[2] -= 12.0;
+    // model2.vec[0] -= 3.0;
+    // model2.vec[2] -= 12.0;
     model.vec[2] -= 12.0;
 
     while (!quit) {
@@ -46,10 +47,10 @@ int main(int argc, char **argv) {
                 case SDL_KEYDOWN:
                     switch (e.key.keysym.sym) {
                         case SDLK_a:
-                            move_camera(&camera, LEFT);
+                            move_camera(&camera, RIGHT);
                             break;
                         case SDLK_d:
-                            move_camera(&camera, RIGHT);
+                            move_camera(&camera, LEFT);
                             break;
                         case SDLK_s:
                             move_camera(&camera, DOWN);
@@ -57,15 +58,30 @@ int main(int argc, char **argv) {
                         case SDLK_w:
                             move_camera(&camera, UP);
                             break;
+                        case SDLK_i:
+                            camera.pitch += 0.5;
+                            break;
+                        case SDLK_o:
+                            camera.pitch -= 0.5;
+                            break;
+                        case SDLK_j:
+                            camera.yaw += 0.5;
+                            break;
+                        case SDLK_k:
+                            camera.yaw -= 0.5;
+                            break;
                     }
                     break;
             }
         }
 
+        SDL_GetMouseState(&mousex, &mousey);
+        // move_camera_mouse(&camera, mousex, mousey);
+
         clear_window();
         update_camera(&camera);
         draw_model(&model);
-        draw_model(&model2);
+        // draw_model(&model2);
         swap_window(&window);
     }
 

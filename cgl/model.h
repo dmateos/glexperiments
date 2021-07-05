@@ -10,7 +10,7 @@
 #include "shader.h"
 #include "vertex.h"
 
-#define OBJ_VERTEX_LIMIT 1024
+#define OBJ_VERTEX_LIMIT 10240
 
 typedef struct _Obj {
     float verticies[OBJ_VERTEX_LIMIT], normals[OBJ_VERTEX_LIMIT];

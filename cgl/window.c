@@ -29,6 +29,9 @@ int init_window(Window *window, int width, int height) {
 
     glClearColor(0, 0, 0, 1);
     glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     printf("created SDL window with openGL context\n");
     return 0;

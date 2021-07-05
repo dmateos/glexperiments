@@ -30,17 +30,21 @@ int init_camera(Camera *camera, const ShaderProgram *shader_program) {
     camera->front[1] = 0.0;
     camera->front[2] = -1.0;
 
+    camera->yaw = -90;
+    camera->pitch = 0;
+
     build_perspective(camera);
     update_camera(camera);
     return 0;
 }
 
 void update_camera(Camera *camera) {
-    float front[3];
-    front[0] = cos(camera->yaw * M_PI / 180) * cos(camera->pitch * M_PI / 180);
-    front[1] = sin(camera->pitch * M_PI / 180);
-    front[2] = cos(camera->yaw * M_PI / 180) * cos(camera->pitch * M_PI / 180);
-    glm_normalize(front);
+    camera->front[0] =
+        cos(camera->yaw * M_PI / 180) * cos(camera->pitch * M_PI / 180);
+    camera->front[1] = sin(camera->pitch * M_PI / 180);
+    camera->front[2] =
+        sin(camera->yaw * M_PI / 180) * cos(camera->pitch * M_PI / 180);
+    glm_normalize(camera->front);
 
     glm_cross(camera->front, worldup, camera->right);
     glm_normalize(camera->right);
@@ -56,7 +60,7 @@ void update_camera(Camera *camera) {
 }
 
 void move_camera(Camera *camera, CameraDirection direction) {
-    const float velocity = 1.0;
+    const float velocity = 0.5;
 
     if (direction == UP) {
         glm_vec3_muladds(camera->front, velocity, camera->position);
@@ -71,4 +75,16 @@ void move_camera(Camera *camera, CameraDirection direction) {
     } else if (direction == RIGHT) {
         glm_vec3_muladds(camera->right, velocity, camera->position);
     }
+}
+
+void move_camera_mouse(Camera *camera, int x, int y) {
+    int yaw, pitch;
+    yaw = x * 0.01;
+    pitch = y * 0.01;
+
+    if (pitch > 89.0f) pitch = 89.0f;
+    if (pitch < -89.0f) pitch = -89.0f;
+
+    camera->yaw += yaw;
+    camera->pitch += pitch;
 }

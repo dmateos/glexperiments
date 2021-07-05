@@ -15,6 +15,7 @@ typedef struct Cam {
 
 int init_camera(Camera *, const ShaderProgram *);
 void move_camera(Camera *, CameraDirection);
+void move_camera_mouse(Camera *, int, int);
 void update_camera(Camera *);
 
 #endif
