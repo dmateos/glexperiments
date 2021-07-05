@@ -56,7 +56,7 @@ void write_vertex_buffer(VertexBuffer *buffer, void *data, int size) {
             printf("wrote vertex array buffer data with size %d\n", size);
             float *fptr = data;
             for (int i = 0; i < size / (int)sizeof(float); i++) {
-                printf("%d %f ", i, *fptr);
+                printf("(%d %f) ", i, *fptr);
                 fptr++;
             }
             printf("\n");
@@ -66,7 +66,7 @@ void write_vertex_buffer(VertexBuffer *buffer, void *data, int size) {
             printf("wrote vertex index buffer data with size %d\n", size);
             int *iptr = data;
             for (int i = 0; i < size / (int)sizeof(int); i++) {
-                printf("%d %d ", i, *iptr);
+                printf("(%d %d) ", i, *iptr + 1);
                 iptr++;
             }
             printf("\n");
@@ -87,6 +87,7 @@ void draw(const VertexState *state, int length) {
             glDrawElements(GL_TRIANGLES, length, GL_UNSIGNED_INT, NULL);
             break;
     }
+    printf("drawing %d with %d length\n", state->vao, length);
 }
 
 void get_error(void) {

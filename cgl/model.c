@@ -34,12 +34,12 @@ static int parse_obj_file(ObjFile *obj, const char *path) {
         } else if (strncmp(l, "f", strlen("f")) == 0) {
             sscanf(l, "f %d//%d %d//%d %d//%d\n", &v1, &n1, &v2, &n2, &v3, &n3);
             printf("f: %d//%d %d//%d %d//%d\n", v1, n1, v2, n2, v3, n3);
-            obj->verticie_index[obj->vicount++] = v1;
-            obj->verticie_index[obj->vicount++] = v2;
-            obj->verticie_index[obj->vicount++] = v3;
-            obj->normal_index[obj->nicount++] = n1;
-            obj->normal_index[obj->nicount++] = n2;
-            obj->normal_index[obj->nicount++] = n3;
+            obj->verticie_index[obj->vicount++] = v1 - 1;
+            obj->verticie_index[obj->vicount++] = v2 - 1;
+            obj->verticie_index[obj->vicount++] = v3 - 1;
+            obj->normal_index[obj->nicount++] = n1 - 1;
+            obj->normal_index[obj->nicount++] = n2 - 1;
+            obj->normal_index[obj->nicount++] = n3 - 1;
         }
         l = strtok_r(NULL, "\n", &line_state);
     }
