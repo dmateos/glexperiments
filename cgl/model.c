@@ -60,12 +60,12 @@ int init_model(Model *model, const ShaderProgram *shader, const char *path) {
     init_vertex_state(&model->state, VERTEX_STATE_DRAW_INDEXED);
     bind_vertex_state(&model->state);
 
-    init_vertex_buffer(&model->vertex, VERTEX_BUFFER_TYPE_ARRAY);
+    init_vertex_buffer(&model->vertex, VERTEX_BUFFER_TYPE_ARRAY, 0);
     bind_vertex_buffer(&model->vertex);
     write_vertex_buffer(&model->vertex, (void *)model->vdata.verticies,
                         sizeof(float) * model->vdata.vcount);
 
-    init_vertex_buffer(&model->index, VERTEX_BUFFER_TYPE_INDEX);
+    init_vertex_buffer(&model->index, VERTEX_BUFFER_TYPE_INDEX, 0);
     bind_vertex_buffer(&model->index);
     write_vertex_buffer(&model->index, (void *)model->vdata.verticie_index,
                         sizeof(unsigned int) * model->vdata.vicount);

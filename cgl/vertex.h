@@ -10,6 +10,7 @@ typedef struct VB {
     unsigned int vbo;
     BufferType type;
     unsigned int length;
+    char instanced;
 } VertexBuffer;
 
 typedef enum drawtype {
@@ -23,7 +24,7 @@ typedef struct VS {
 } VertexState;
 
 int init_vertex_state(VertexState *, DrawType);
-int init_vertex_buffer(VertexBuffer *, BufferType);
+int init_vertex_buffer(VertexBuffer *, BufferType, char);
 
 void bind_vertex_state(const VertexState *);
 void unbind_vertex_state(const VertexState *);

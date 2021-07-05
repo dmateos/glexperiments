@@ -1,5 +1,6 @@
 #include "main.h"
 
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -9,16 +10,17 @@
 #include "vertex.h"
 #include "window.h"
 
+#define MODEL_COUNT 1024
+
 int main(int argc, char **argv) {
     SDL_Event e;
     Window window;
     ShaderProgram shader_program;
-    Model model, model2;
+    Model *model = malloc(sizeof(Model) * MODEL_COUNT);
     Camera camera;
     bool quit = false;
-    int mousex, mousey;
 
-    if (argc < 3) {
+    if (argc < 2) {
         printf("specify models to load\n");
         exit(1);
     }
@@ -31,12 +33,24 @@ int main(int argc, char **argv) {
     use_shaderprogram(&shader_program);
 
     init_camera(&camera, &shader_program);
-    init_model(&model, &shader_program, argv[1]);
-    init_model(&model2, &shader_program, argv[2]);
 
-    model2.vec[0] -= 3.0;
-    model2.vec[2] -= 12.0;
-    model.vec[2] -= 12.0;
+    int col = 0;
+    int row = 0;
+    int rcount = 0;
+    for (int i = 0; i < MODEL_COUNT; i++) {
+        init_model(&model[i], &shader_program, argv[1]);
+        model[i].vec[2] += row;
+        model[i].vec[0] += col;
+
+        row += 3;
+        rcount += 1;
+
+        if ((rcount % (int)sqrt(MODEL_COUNT) == 0) && (rcount != 0)) {
+            row = 0;
+            col += 3;
+            rcount = 0;
+        }
+    }
 
     while (!quit) {
         while (poll_window(&window, &e)) {
@@ -58,34 +72,36 @@ int main(int argc, char **argv) {
                         case SDLK_w:
                             move_camera(&camera, CAMERA_FORWARD);
                             break;
-                        case SDLK_i:
-                            pivot_camera(&camera, 1, 0);
+                        case SDLK_RIGHT:
+                            pivot_camera(&camera, 4, 0);
                             break;
-                        case SDLK_o:
-                            pivot_camera(&camera, -1, 0);
+                        case SDLK_LEFT:
+                            pivot_camera(&camera, -4, 0);
                             break;
-                        case SDLK_j:
-                            pivot_camera(&camera, 0, 1);
+                        case SDLK_UP:
+                            pivot_camera(&camera, 0, 4);
                             break;
-                        case SDLK_k:
-                            pivot_camera(&camera, 0, -1);
+                        case SDLK_DOWN:
+                            pivot_camera(&camera, 0, -4);
                             break;
                     }
                     break;
             }
         }
 
-        SDL_GetMouseState(&mousex, &mousey);
-        // move_camera_mouse(&camera, mousex, mousey);
+        // SDL_GetMouseState(&mousex, &mousey);
+        // pivot_camera(&camera, mousex * 0.01, 0);
 
         clear_window();
         update_camera(&camera);
-        draw_model(&model);
-        draw_model(&model2);
+        for (int i = 0; i < MODEL_COUNT; i++) {
+            draw_model(&model[i]);
+        }
         swap_window(&window);
     }
 
     destroy_shaderprogram(&shader_program);
     destroy_window(&window);
+    free(model);
     return 0;
 }

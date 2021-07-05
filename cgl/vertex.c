@@ -12,10 +12,15 @@ int init_vertex_state(VertexState *state, DrawType type) {
     return 0;
 }
 
-int init_vertex_buffer(VertexBuffer *buffer, BufferType type) {
+int init_vertex_buffer(VertexBuffer *buffer, BufferType type, char instanced) {
     memset(buffer, 0, sizeof(VertexBuffer));
     buffer->type = type;
+    buffer->instanced = instanced;
     glGenBuffers(1, &buffer->vbo);
+
+    if (buffer->instanced) {
+        // glVertexAttribDivisor();
+    }
     printf("initiated new vertex buffer %u\n", buffer->vbo);
     return 0;
 }
