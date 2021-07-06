@@ -10,13 +10,15 @@
 #include "vertex.h"
 #include "window.h"
 
+#define WINDOW_HORIZ 2300
+#define WINDOW_VERT 1600
 #define MODEL_COUNT 1024
 
 int main(int argc, char **argv) {
     SDL_Event e;
     Window window;
     ShaderProgram shader_program;
-    Model *model = malloc(sizeof(Model) * MODEL_COUNT);
+    Model *model;
     Camera camera;
     bool quit = false;
 
@@ -25,14 +27,16 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-    init_window(&window, 1280, 1024);
+    init_window(&window, WINDOW_HORIZ, WINDOW_VERT);
     init_shaderprogram(&shader_program);
     add_shader(&shader_program, VERTEXSHADER, "shaders/vert.gsl");
     add_shader(&shader_program, FRAGSHADER, "shaders/frag.gsl");
     compile_shaderprogram(&shader_program);
     use_shaderprogram(&shader_program);
 
-    init_camera(&camera, &shader_program);
+    init_camera(&camera, &shader_program, WINDOW_HORIZ / WINDOW_VERT);
+
+    model = malloc(sizeof(Model) * MODEL_COUNT);
 
     int col = 0;
     int row = 0;

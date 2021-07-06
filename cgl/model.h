@@ -25,14 +25,15 @@ typedef struct _Model {
 
     const ShaderProgram *program;
     VertexState state;
-    VertexBuffer vertex, index, normal, nindex;
+    VertexBuffer vertex, index;
     ObjFile vdata;
 } Model;
 
 typedef struct _ModelGroup {
     unsigned int count;
+    float offsets[OBJ_VERTEX_LIMIT];
     VertexState state;
-    VertexBuffer vertex, index, normal, nindex;
+    VertexBuffer vertex, index;
     ObjFile vdata;
 } ModelGroup;
 

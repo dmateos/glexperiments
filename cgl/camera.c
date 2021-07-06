@@ -14,11 +14,12 @@ static void build_lookat(Camera *camera) {
     glm_lookat(camera->position, front, camera->up, camera->view);
 }
 
-static void build_perspective(Camera *camera) {
-    glm_perspective(75, 1280 / 1024, 0.1, 1000.0, camera->perspective);
+static void build_perspective(Camera *camera, float aspect) {
+    glm_perspective(75, aspect, 0.1, 1000.0, camera->perspective);
 }
 
-int init_camera(Camera *camera, const ShaderProgram *shader_program) {
+int init_camera(Camera *camera, const ShaderProgram *shader_program,
+                float aspect) {
     memset(camera, 0, sizeof(Camera));
     camera->shader_program = shader_program;
 
@@ -33,7 +34,7 @@ int init_camera(Camera *camera, const ShaderProgram *shader_program) {
     camera->yaw = -90;
     camera->pitch = 0;
 
-    build_perspective(camera);
+    build_perspective(camera, aspect);
     update_camera(camera);
     return 0;
 }
