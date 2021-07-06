@@ -2,10 +2,15 @@
 
 layout (location = 1) in vec3 vp;
 layout (location = 2) in vec3 os;
+layout (location = 3) in vec2 tx;
 uniform mat4 perspective;
 uniform mat4 view;
 
+out vec2 tx_out;
+
 void main(){
+  tx_out = tx;
+
   vec4 vpn = vec4(vp, 1.0);
   vec4 osn = vec4(os, 0.0);
   gl_Position = perspective * view * (vpn + osn);

@@ -6,6 +6,8 @@
 #include "util.h"
 #include "vertex.h"
 
+const float TEXTURE_COORDINATES[] = {1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0};
+
 static int parse_obj_file(ObjFile *obj, const char *path) {
     char *model_data, *l, *line_state;
     float x, y, z;
@@ -73,6 +75,13 @@ int init_model(Model *model, const ShaderProgram *shader, const char *path,
     write_vertex_buffer(&model->index, (void *)model->vdata.verticie_index,
                         sizeof(unsigned int) * model->vdata.vicount);
     set_attribute(1, 3);
+
+    init_vertex_buffer(&model->texture, VERTEX_BUFFER_TYPE_ARRAY, 0);
+    bind_vertex_buffer(&model->texture);
+    write_vertex_buffer(&model->texture, (void *)TEXTURE_COORDINATES,
+                        sizeof(unsigned int) * 8);
+
+    set_attribute(2, 2);
 
     if (model->instance_count > 0) {
         init_vertex_buffer(&model->instance_buffer, VERTEX_BUFFER_TYPE_ARRAY,

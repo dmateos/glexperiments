@@ -13,7 +13,7 @@
 
 #define WINDOW_HORIZ 2300
 #define WINDOW_VERT 1600
-#define MODEL_COUNT 4096 * 16
+#define MODEL_COUNT 64
 
 static int handle_camera(Camera *camera, Window *window) {
     SDL_Event e;
