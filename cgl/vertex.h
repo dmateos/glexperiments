@@ -33,5 +33,7 @@ void unbind_vertex_buffer(const VertexBuffer *);
 void write_vertex_buffer(VertexBuffer *, void *, int);
 
 void draw(const VertexState *, int);
+void draw_instanced(const VertexState *, int, int);
+
 void get_error(void);
 #endif

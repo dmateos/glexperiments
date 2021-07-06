@@ -1,0 +1,12 @@
+#version 330 core
+
+layout (location = 1) in vec3 vp;
+layout (location = 2) in vec3 os;
+uniform mat4 perspective;
+uniform mat4 view;
+
+void main(){
+  vec4 vpn = vec4(vp, 1.0);
+  vec4 osn = vec4(os, 0.0);
+  gl_Position = perspective * view * (vpn + osn);
+}

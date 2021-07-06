@@ -52,9 +52,12 @@ static int parse_obj_file(ObjFile *obj, const char *path) {
     return 0;
 }
 
-int init_model(Model *model, const ShaderProgram *shader, const char *path) {
+int init_model(Model *model, const ShaderProgram *shader, const char *path,
+               int instances, void *instancedata) {
     memset(model, 0, sizeof(Model));
     model->program = shader;
+    model->instance_count = instances;
+
     parse_obj_file(&model->vdata, path);
 
     init_vertex_state(&model->state, VERTEX_STATE_DRAW_INDEXED);
@@ -69,17 +72,30 @@ int init_model(Model *model, const ShaderProgram *shader, const char *path) {
     bind_vertex_buffer(&model->index);
     write_vertex_buffer(&model->index, (void *)model->vdata.verticie_index,
                         sizeof(unsigned int) * model->vdata.vicount);
-
     set_attribute(1, 3);
+
+    if (model->instance_count > 0) {
+        init_vertex_buffer(&model->instance_buffer, VERTEX_BUFFER_TYPE_ARRAY,
+                           1);
+        bind_vertex_buffer(&model->instance_buffer);
+        write_vertex_buffer(&model->instance_buffer, (void *)instancedata,
+                            sizeof(float) * model->instance_count * 3);
+        set_attribute(2, 3);
+    }
 
     unbind_vertex_state(&model->state);
     return 0;
 }
 
 int draw_model(const Model *model) {
-    glm_translate_make((vec4 *)model->translation, (float *)model->vec);
-    set_uniform(get_uniform(model->program, "model"),
-                (float *)model->translation);
-    draw(&model->state, model->vdata.vicount);
+    if (model->instance_count > 0) {
+        draw_instanced(&model->state, model->vdata.vicount,
+                       model->instance_count);
+    } else {
+        glm_translate_make((vec4 *)model->translation, (float *)model->vec);
+        set_uniform(get_uniform(model->program, "model"),
+                    (float *)model->translation);
+        draw(&model->state, model->vdata.vicount);
+    }
     return 0;
 }

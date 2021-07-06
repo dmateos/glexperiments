@@ -19,7 +19,8 @@ int init_vertex_buffer(VertexBuffer *buffer, BufferType type, char instanced) {
     glGenBuffers(1, &buffer->vbo);
 
     if (buffer->instanced) {
-        glVertexAttribDivisor(1, 1);
+        printf("buffer is instanced\n");
+        glVertexAttribDivisor(2, 1);
     }
     printf("initiated new vertex buffer %u\n", buffer->vbo);
     return 0;

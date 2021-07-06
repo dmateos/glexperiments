@@ -27,9 +27,12 @@ typedef struct _Model {
     VertexState state;
     VertexBuffer vertex, index;
     ObjFile vdata;
+
+    unsigned int instance_count;
+    VertexBuffer instance_buffer;
 } Model;
 
-int init_model(Model *, const ShaderProgram *, const char *);
+int init_model(Model *, const ShaderProgram *, const char *, int, void *);
 int draw_model(const Model *model);
 
 #endif
