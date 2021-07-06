@@ -7,12 +7,13 @@
 #include "camera.h"
 #include "model.h"
 #include "shader.h"
+#include "texture.h"
 #include "vertex.h"
 #include "window.h"
 
 #define WINDOW_HORIZ 2300
 #define WINDOW_VERT 1600
-#define MODEL_COUNT 4096
+#define MODEL_COUNT 4096 * 16
 
 static int handle_camera(Camera *camera, Window *window) {
     SDL_Event e;
@@ -59,10 +60,11 @@ int main_instanced(int argc, char **argv) {
     ShaderProgram shader_program;
     Model model;
     Camera camera;
+    Texture texture;
     bool quit = false;
     float model_offsets[MODEL_COUNT * 3];
 
-    if (argc < 2) {
+    if (argc < 3) {
         printf("specify models to load\n");
         exit(1);
     }
@@ -97,6 +99,8 @@ int main_instanced(int argc, char **argv) {
     init_camera(&camera, &shader_program, WINDOW_HORIZ / WINDOW_VERT);
 
     init_model(&model, &shader_program, argv[1], MODEL_COUNT, model_offsets);
+
+    init_texture(&texture, argv[2]);
 
     while (!quit) {
         quit = handle_camera(&camera, &window);
