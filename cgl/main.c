@@ -123,6 +123,7 @@ int main_normal(int argc, char **argv) {
     ShaderProgram shader_program;
     Model *model;
     Camera camera;
+    Texture texture;
     bool quit = false;
 
     if (argc < 2) {
@@ -139,6 +140,7 @@ int main_normal(int argc, char **argv) {
     use_shaderprogram(&shader_program);
 
     init_camera(&camera, &shader_program, WINDOW_HORIZ / WINDOW_VERT);
+    init_texture(&texture, argv[2]);
 
     model = malloc(sizeof(Model) * MODEL_COUNT);
 
@@ -179,7 +181,7 @@ int main_normal(int argc, char **argv) {
 }
 
 int main(int argc, char **argv) {
-    main_instanced(argc, argv);
-    // main_normal(argc, argv);
+    // main_instanced(argc, argv);
+    main_normal(argc, argv);
     return 0;
 }

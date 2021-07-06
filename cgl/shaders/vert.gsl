@@ -1,10 +1,15 @@
 #version 330 core
 
 layout(location = 1) in vec3 vp;
+layout (location = 3) in vec2 tx;
+
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 perspective;
 
+out vec2 tx_out;
+
 void main(){
+  tx_out = tx;
   gl_Position = perspective * view * model * vec4(vp, 1.0);
 }
