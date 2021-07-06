@@ -12,7 +12,7 @@
 
 #define WINDOW_HORIZ 2300
 #define WINDOW_VERT 1600
-#define MODEL_COUNT 64
+#define MODEL_COUNT 4096
 
 int main_instanced(int argc, char **argv) {
     SDL_Event e;
@@ -31,13 +31,13 @@ int main_instanced(int argc, char **argv) {
     int col = 0;
     int row = 0;
     int rcount = 0;
-    for (int i = 0; i < MODEL_COUNT; i += 3) {
-        row += 3;
-        rcount += 1;
-
+    for (int i = 0; i < MODEL_COUNT * 3; i += 3) {
         model_offsets[i] += row;
         model_offsets[i + 1] += 0.0;
         model_offsets[i + 2] += col;
+
+        row += 3;
+        rcount += 1;
 
         if ((rcount % (int)sqrt(MODEL_COUNT) == 0) && (rcount != 0)) {
             row = 0;
