@@ -29,14 +29,6 @@ typedef struct _Model {
     ObjFile vdata;
 } Model;
 
-typedef struct _ModelGroup {
-    unsigned int count;
-    float offsets[OBJ_VERTEX_LIMIT];
-    VertexState state;
-    VertexBuffer vertex, index;
-    ObjFile vdata;
-} ModelGroup;
-
 int init_model(Model *, const ShaderProgram *, const char *);
 int draw_model(const Model *model);
 

@@ -95,6 +95,19 @@ void draw(const VertexState *state, int length) {
     // printf("drawing %d with %d length\n", state->vao, length);
 }
 
+void draw_instanced(const VertexState *state, int length, int count) {
+    bind_vertex_state(state);
+    switch (state->draw_type) {
+        case VERTEX_STATE_DRAW_ARRAY:
+            printf("not implemented\n");
+            break;
+        case VERTEX_STATE_DRAW_INDEXED:
+            glDrawElementsInstanced(GL_TRIANGLES, length, GL_UNSIGNED_INT, NULL,
+                                    count);
+            break;
+    }
+}
+
 void get_error(void) {
     int error = glGetError();
     if (error == 0) {
