@@ -7,5 +7,6 @@ typedef struct _textuer_t {
 
 int init_texture(Texture*, const char*);
 void bind_texture(Texture*);
+void unbind_texture(Texture*);
 
 #endif

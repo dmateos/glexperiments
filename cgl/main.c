@@ -13,7 +13,7 @@
 
 #define WINDOW_HORIZ 2300
 #define WINDOW_VERT 1600
-#define MODEL_COUNT 64
+#define MODEL_COUNT 64 * 64
 
 static int handle_camera(Camera *camera, Window *window) {
     SDL_Event e;
@@ -126,7 +126,7 @@ int main_normal(int argc, char **argv) {
     Texture texture;
     bool quit = false;
 
-    if (argc < 2) {
+    if (argc < 3) {
         printf("specify models to load\n");
         exit(1);
     }
@@ -181,7 +181,7 @@ int main_normal(int argc, char **argv) {
 }
 
 int main(int argc, char **argv) {
-    // main_instanced(argc, argv);
-    main_normal(argc, argv);
+    main_instanced(argc, argv);
+    // main_normal(argc, argv);
     return 0;
 }
