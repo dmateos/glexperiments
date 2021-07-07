@@ -49,6 +49,9 @@ static int handle_camera(Camera *camera, Window *window) {
                     case SDLK_DOWN:
                         pivot_camera(camera, 0, -4);
                         break;
+                    case SDLK_e:
+                        toggle_wireframe();
+                        break;
                 }
                 break;
         }

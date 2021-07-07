@@ -57,3 +57,15 @@ void swap_window(const Window *window) {
 void clear_window(void) { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 
 int poll_window(const Window *window, SDL_Event *e) { return SDL_PollEvent(e); }
+
+void toggle_wireframe(void) {
+    static char wireframe = 0;
+
+    if (wireframe) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        wireframe = 0;
+    } else {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        wireframe = 1;
+    }
+}
