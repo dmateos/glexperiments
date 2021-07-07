@@ -70,31 +70,34 @@ int init_model(Model *model, const ShaderProgram *shader, const char *path,
     init_vertex_state(&model->state, VERTEX_STATE_DRAW_INDEXED);
     bind_vertex_state(&model->state);
 
+    // Vertex Data
     init_vertex_buffer(&model->vertex, VERTEX_BUFFER_TYPE_ARRAY, 0);
     bind_vertex_buffer(&model->vertex);
     write_vertex_buffer(&model->vertex, (void *)model->vdata.verticies,
                         sizeof(float) * model->vdata.vcount);
 
+    // Vertex Index data
     init_vertex_buffer(&model->index, VERTEX_BUFFER_TYPE_INDEX, 0);
     bind_vertex_buffer(&model->index);
     write_vertex_buffer(&model->index, (void *)model->vdata.verticie_index,
                         sizeof(unsigned int) * model->vdata.vicount);
-    set_attribute(1, 3);
+    set_attribute(get_attribute(shader, "vp"), 3);
 
+    // Texture coordinate data
     init_vertex_buffer(&model->texture, VERTEX_BUFFER_TYPE_ARRAY, 0);
     bind_vertex_buffer(&model->texture);
     write_vertex_buffer(&model->texture, (void *)TEXTURE_COORDINATES,
                         sizeof(float) * 8 * 6);
+    set_attribute(get_attribute(shader, "tx"), 2);
 
-    set_attribute(3, 2);
-
+    // Instance offset data (if applicable)
     if (model->instance_count > 0) {
         init_vertex_buffer(&model->instance_buffer, VERTEX_BUFFER_TYPE_ARRAY,
                            1);
         bind_vertex_buffer(&model->instance_buffer);
         write_vertex_buffer(&model->instance_buffer, (void *)instancedata,
                             sizeof(float) * model->instance_count * 3);
-        set_attribute(2, 3);
+        set_attribute(get_attribute(shader, "os"), 3);
     }
 
     unbind_vertex_state(&model->state);

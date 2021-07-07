@@ -78,6 +78,10 @@ void set_uniform(int index, float *value) {
     glUniformMatrix4fv(index, 1, GL_FALSE, value);
 }
 
+int get_attribute(const ShaderProgram *program, const char *name) {
+    return glGetAttribLocation(program->program_id, name);
+}
+
 int get_uniform(const ShaderProgram *program, const char *name) {
     return glGetUniformLocation(program->program_id, name);
 }
