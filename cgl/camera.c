@@ -62,15 +62,14 @@ void update_camera(Camera *camera) {
 
 void move_camera(Camera *camera, CameraDirection direction) {
     const float velocity = 0.5;
+    float tmp[3];
 
     if (direction == CAMERA_FORWARD) {
         glm_vec3_muladds(camera->front, velocity, camera->position);
     } else if (direction == CAMERA_BACK) {
-        float tmp[3];
         glm_vec3_scale(camera->front, velocity, tmp);
         glm_vec3_sub(camera->position, tmp, camera->position);
     } else if (direction == CAMERA_LEFT) {
-        float tmp[3];
         glm_vec3_scale(camera->right, velocity, tmp);
         glm_vec3_sub(camera->position, tmp, camera->position);
     } else if (direction == CAMERA_RIGHT) {

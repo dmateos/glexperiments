@@ -30,7 +30,7 @@ int init_window(Window *window, int width, int height) {
         exit(1);
     }
 
-    glClearColor(0, 0, 0, 1);
+    glClearColor(0, 0, 0.5, 1);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 

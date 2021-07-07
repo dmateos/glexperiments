@@ -11,9 +11,10 @@
 #include "vertex.h"
 #include "window.h"
 
-#define WINDOW_HORIZ 2300
-#define WINDOW_VERT 1600
-#define MODEL_COUNT 64 * 64
+#define WINDOW_HORIZ 1280
+#define WINDOW_VERT 1024
+#define MODEL_COUNT 16
+#define INSTANCED 1
 
 static int handle_camera(Camera *camera, Window *window) {
     SDL_Event e;
@@ -97,9 +98,7 @@ int main_instanced(int argc, char **argv) {
     use_shaderprogram(&shader_program);
 
     init_camera(&camera, &shader_program, WINDOW_HORIZ / WINDOW_VERT);
-
     init_model(&model, &shader_program, argv[1], MODEL_COUNT, model_offsets);
-
     init_texture(&texture, argv[2]);
 
     while (!quit) {
@@ -141,7 +140,6 @@ int main_normal(int argc, char **argv) {
 
     init_camera(&camera, &shader_program, WINDOW_HORIZ / WINDOW_VERT);
     init_texture(&texture, argv[2]);
-
     model = malloc(sizeof(Model) * MODEL_COUNT);
 
     int col = 0;
@@ -181,7 +179,11 @@ int main_normal(int argc, char **argv) {
 }
 
 int main(int argc, char **argv) {
-    main_instanced(argc, argv);
-    // main_normal(argc, argv);
-    return 0;
+    int ret = 0;
+    if (INSTANCED) {
+        ret = main_instanced(argc, argv);
+    } else {
+        ret = main_normal(argc, argv);
+    }
+    return ret;
 }
