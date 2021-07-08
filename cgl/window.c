@@ -49,10 +49,7 @@ int destroy_window(Window *window) {
     return 0;
 }
 
-void swap_window(const Window *window) {
-    SDL_GL_SwapWindow(window->window);
-    SDL_Delay(5);
-}
+void swap_window(const Window *window) { SDL_GL_SwapWindow(window->window); }
 
 void clear_window(void) { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 
@@ -68,4 +65,18 @@ void toggle_wireframe(void) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         wireframe = 1;
     }
+}
+
+int get_window_fps(void) {
+    static unsigned int frame_count, previous_time;
+    unsigned int cur_time = SDL_GetTicks();
+    frame_count++;
+
+    if (cur_time - previous_time >= 1000) {
+        printf("%u\n", frame_count);
+        frame_count = 0;
+        previous_time = cur_time;
+    }
+
+    return 0;
 }
