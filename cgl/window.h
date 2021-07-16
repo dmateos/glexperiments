@@ -14,5 +14,6 @@ void swap_window(const Window *);
 void clear_window(void);
 int poll_window(const Window *, SDL_Event *);
 void toggle_wireframe(void);
+int get_window_fps(const Window *);
 
 #endif

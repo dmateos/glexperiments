@@ -1,10 +1,6 @@
 #ifndef _MODEL_H
 #define _MODEL_H
 
-#define X 0
-#define Y 1
-#define Z 2
-
 #include <cglm/cglm.h>
 
 #include "shader.h"
@@ -28,6 +24,7 @@ typedef struct _Model {
     VertexBuffer vertex, index, texture;
     ObjFile vdata;
 
+    // Only used for instances
     unsigned int instance_count;
     VertexBuffer instance_buffer;
 } Model;

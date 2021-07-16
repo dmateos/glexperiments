@@ -78,15 +78,15 @@ int main_instanced(int argc, char **argv) {
     int rcount = 0;
     for (int i = 0; i < MODEL_COUNT * 3; i += 3) {
         model_offsets[i] += row;
-        model_offsets[i + 1] += 0.0;
+        model_offsets[i + 1] += ((float)rand() / (float)(RAND_MAX)) * 100.0;
         model_offsets[i + 2] += col;
 
-        row += 3;
+        row += 10;
         rcount += 1;
 
         if ((rcount % (int)sqrt(MODEL_COUNT) == 0) && (rcount != 0)) {
             row = 0;
-            col += 3;
+            col += 10;
             rcount = 0;
         }
     }
@@ -106,7 +106,7 @@ int main_instanced(int argc, char **argv) {
 
     while (!quit) {
         quit = handle_camera(&camera, &window);
-        get_window_fps();
+        get_window_fps(&window);
 
         clear_window();
 

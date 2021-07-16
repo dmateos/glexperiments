@@ -36,5 +36,4 @@ void draw(const VertexState *, int);
 void draw_instanced(const VertexState *, int, int);
 
 void get_error(void);
-int get_window_fps(void);
 #endif

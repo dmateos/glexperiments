@@ -5,8 +5,7 @@
 #include <string.h>
 
 static SDL_Surface *load_image(const char *path) {
-    SDL_Surface *image;
-    image = IMG_Load(path);
+    SDL_Surface *image = IMG_Load(path);
 
     if (image != NULL) {
         printf("loaded image %s from disk\n", path);
@@ -46,6 +45,6 @@ int init_texture(Texture *t, const char *path) {
     return 0;
 }
 
-void bind_texture(Texture *t) { glBindTexture(GL_TEXTURE_2D, t->tbo); }
+void bind_texture(const Texture *t) { glBindTexture(GL_TEXTURE_2D, t->tbo); }
 
-void unbind_texture(Texture *t) { glBindTexture(GL_TEXTURE_2D, 0); }
+void unbind_texture(const Texture *t) { glBindTexture(GL_TEXTURE_2D, 0); }

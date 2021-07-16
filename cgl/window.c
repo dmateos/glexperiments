@@ -34,8 +34,6 @@ int init_window(Window *window, int width, int height) {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
     printf("created SDL window with openGL context\n");
     return 0;
 }
@@ -67,13 +65,15 @@ void toggle_wireframe(void) {
     }
 }
 
-int get_window_fps(void) {
+int get_window_fps(const Window *window) {
     static unsigned int frame_count, previous_time;
     unsigned int cur_time = SDL_GetTicks();
+    char strbuf[1024];
     frame_count++;
 
     if (cur_time - previous_time >= 1000) {
-        printf("%u\n", frame_count);
+        snprintf(strbuf, sizeof(strbuf), "%d", frame_count);
+        SDL_SetWindowTitle(window->window, strbuf);
         frame_count = 0;
         previous_time = cur_time;
     }
