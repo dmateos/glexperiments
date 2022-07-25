@@ -13,7 +13,7 @@
 
 #define WINDOW_HORIZ 1280
 #define WINDOW_VERT 1024
-#define MODEL_COUNT 16 * 16 * 16 * 16 * 16
+#define MODEL_COUNT 16
 #define INSTANCED 1
 
 static int handle_camera(Camera *camera, Window *window) {
