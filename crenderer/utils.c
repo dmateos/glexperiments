@@ -41,21 +41,21 @@ int parse_obj_file(ObjFile *obj, const char *path) {
     if (strncmp(l, "vn", strlen("vn")) == 0) {
       // Vertex Normals
       sscanf(l, "vn %f %f %f\n", &x, &y, &z);
-      printf("vn %f %f %f\n", x, y, z);
+      // printf("vn %f %f %f\n", x, y, z);
       obj->normals[obj->ncount++] = x;
       obj->normals[obj->ncount++] = y;
       obj->normals[obj->ncount++] = z;
     } else if (strncmp(l, "v", strlen("v")) == 0) {
       // Vertex
       sscanf(l, "v %f %f %f\n", &x, &y, &z);
-      printf("v %f %f %f\n", x, y, z);
+      // printf("v %f %f %f\n", x, y, z);
       obj->verticies[obj->vcount++] = x;
       obj->verticies[obj->vcount++] = y;
       obj->verticies[obj->vcount++] = z;
     } else if (strncmp(l, "f", strlen("f")) == 0) {
       // Index's for above split by //
       sscanf(l, "f %d//%d %d//%d %d//%d\n", &v1, &n1, &v2, &n2, &v3, &n3);
-      printf("f: %d//%d %d//%d %d//%d\n", v1, n1, v2, n2, v3, n3);
+      // printf("f: %d//%d %d//%d %d//%d\n", v1, n1, v2, n2, v3, n3);
       obj->verticie_index[obj->vicount++] = v1 - 1;
       obj->verticie_index[obj->vicount++] = v2 - 1;
       obj->verticie_index[obj->vicount++] = v3 - 1;

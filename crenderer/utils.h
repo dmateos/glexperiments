@@ -1,7 +1,7 @@
 #ifndef _UTILS_H
 #define _UTILS_H
 
-#define OBJ_VERTEX_LIMIT 10240
+#define OBJ_VERTEX_LIMIT 102400
 
 typedef struct _Obj {
   float verticies[OBJ_VERTEX_LIMIT], normals[OBJ_VERTEX_LIMIT];
