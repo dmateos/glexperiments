@@ -72,6 +72,8 @@ static Triangle *load_triangles_from_model(const char *file_path, unsigned int *
 
   for (unsigned int i = 0, y = 0; i < vicount_divided; i++, y += 3) {
     triangles[i].r = (char)255;
+    triangles[i].g = (char)0;
+    triangles[i].b = (char)0;
 
     triangles[i].p1[0] = model->verticies[model->verticie_index[y] * 3];
     triangles[i].p1[1] = model->verticies[(model->verticie_index[y] * 3) + 1];
@@ -99,10 +101,11 @@ int main(int argc, char **argv) {
   SDL_Window *window;
   SDL_Renderer *renderer;
   SDL_Event e;
-  Triangle *triangles;
-  unsigned int tcount;
+  Triangle *triangles, *triangles2;
+  unsigned int tcount, tcount2;
 
-  triangles = load_triangles_from_model("monkey.obj", &tcount, 200, 750, 600);
+  triangles = load_triangles_from_model("monkey.obj", &tcount, 150, 450, 600);
+  triangles2 = load_triangles_from_model("monkey.obj", &tcount2, 150, 950, 600);
 
   if (SDL_Init(SDL_INIT_VIDEO) > 0) {
     printf("could not init window subsystem\n");
@@ -124,8 +127,10 @@ int main(int argc, char **argv) {
     SDL_RenderClear(renderer);
 
     for (unsigned int i = 0; i < tcount; i++) {
-      // print_triangle(&triangles[i]);
       render_triangle(renderer, &triangles[i]);
+    }
+    for (unsigned int i = 0; i < tcount2; i++) {
+      render_triangle(renderer, &triangles2[i]);
     }
 
     SDL_RenderPresent(renderer);
