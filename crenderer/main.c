@@ -59,7 +59,7 @@ static void scale_triangle(Triangle *t, float s) {
   glm_mat4_mulv3(scale, t->p3, 1.0, t->p3);
 }
 
-static Triangle *load_triangles_from_model(const char *file_path, int *size, float scale, float offsetx, float offsety) {
+static Triangle *load_triangles_from_model(const char *file_path, unsigned int *size, float scale, float offsetx, float offsety) {
   ObjFile *model;
   Triangle *triangles;
   unsigned int vicount_divided;
@@ -90,6 +90,7 @@ static Triangle *load_triangles_from_model(const char *file_path, int *size, flo
     transform_triangle(&triangles[i], offsetx, offsety);
   }
 
+  free(model);
   *size = vicount_divided;
   return triangles;
 }
@@ -98,34 +99,10 @@ int main(int argc, char **argv) {
   SDL_Window *window;
   SDL_Renderer *renderer;
   SDL_Event e;
-  ObjFile *model;
   Triangle *triangles;
-  unsigned int vicount_divided;
+  unsigned int tcount;
 
-  model = malloc(sizeof *model);
-  parse_obj_file(model, "monkey.obj");
-  triangles = malloc(sizeof(*triangles) * model->vicount / 3);
-  vicount_divided = model->vicount / 3;
-
-  for (unsigned int i = 0, y = 0; i < vicount_divided; i++, y += 3) {
-    triangles[i].r = (char)255;
-
-    triangles[i].p1[0] = model->verticies[model->verticie_index[y] * 3];
-    triangles[i].p1[1] = model->verticies[(model->verticie_index[y] * 3) + 1];
-    triangles[i].p1[2] = model->verticies[(model->verticie_index[y] * 3) + 2];
-
-    triangles[i].p2[0] = model->verticies[model->verticie_index[y + 1] * 3];
-    triangles[i].p2[1] = model->verticies[(model->verticie_index[y + 1] * 3) + 1];
-    triangles[i].p2[2] = model->verticies[(model->verticie_index[y + 1] * 3) + 2];
-
-    triangles[i].p3[0] = model->verticies[model->verticie_index[y + 2] * 3];
-    triangles[i].p3[1] = model->verticies[(model->verticie_index[y + 2] * 3) + 1];
-    triangles[i].p3[2] = model->verticies[(model->verticie_index[y + 2] * 3) + 2];
-
-    rotate_triangle(&triangles[i], 180);
-    scale_triangle(&triangles[i], 200.0);
-    transform_triangle(&triangles[i], 600, 600);
-  }
+  triangles = load_triangles_from_model("monkey.obj", &tcount, 200, 750, 600);
 
   if (SDL_Init(SDL_INIT_VIDEO) > 0) {
     printf("could not init window subsystem\n");
@@ -146,8 +123,8 @@ int main(int argc, char **argv) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    for (unsigned int i = 0; i < vicount_divided; i++) {
-      print_triangle(&triangles[i]);
+    for (unsigned int i = 0; i < tcount; i++) {
+      // print_triangle(&triangles[i]);
       render_triangle(renderer, &triangles[i]);
     }
 
@@ -157,7 +134,6 @@ int main(int argc, char **argv) {
 
   SDL_DestroyWindow(window);
   SDL_DestroyRenderer(renderer);
-  free(model);
   free(triangles);
   return 0;
 }
