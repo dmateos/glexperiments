@@ -65,6 +65,7 @@ static Triangle *load_triangles_from_model(const char *file_path, unsigned int *
   unsigned int vicount_divided;
 
   model = malloc(sizeof *model);
+  memset(model, 0, sizeof(*model));
   parse_obj_file(model, file_path);
 
   vicount_divided = model->vicount / 3;
