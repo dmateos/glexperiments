@@ -16,13 +16,13 @@ typedef struct _triangle {
 
 static float deg_2_rad(float degrees) { return degrees * (3.1415 / 180); }
 
-static void print_triangle(Triangle *t) {
+static void print_triangle(const Triangle *t) {
   printf("p1: %f %f %f\n", t->p1[0], t->p1[1], t->p1[2]);
   printf("p2: %f %f %f\n", t->p2[0], t->p2[1], t->p2[2]);
   printf("p3: %f %f %f\n\n", t->p3[0], t->p3[1], t->p3[2]);
 }
 
-static void render_triangle(SDL_Renderer *renderer, Triangle *t) {
+static void render_triangle(SDL_Renderer *renderer, const Triangle *t) {
   SDL_SetRenderDrawColor(renderer, t->r, t->g, t->b, 255);
   SDL_RenderDrawLine(renderer, t->p1[0], t->p1[1], t->p2[0], t->p2[1]);
   SDL_RenderDrawLine(renderer, t->p2[0], t->p2[1], t->p3[0], t->p3[1]);
@@ -57,6 +57,41 @@ static void scale_triangle(Triangle *t, float s) {
   glm_mat4_mulv3(scale, t->p1, 1.0, t->p1);
   glm_mat4_mulv3(scale, t->p2, 1.0, t->p2);
   glm_mat4_mulv3(scale, t->p3, 1.0, t->p3);
+}
+
+static Triangle *load_triangles_from_model(const char *file_path, int *size, float scale, float offsetx, float offsety) {
+  ObjFile *model;
+  Triangle *triangles;
+  unsigned int vicount_divided;
+
+  model = malloc(sizeof *model);
+  parse_obj_file(model, file_path);
+
+  vicount_divided = model->vicount / 3;
+  triangles = malloc(sizeof(*triangles) * vicount_divided);
+
+  for (unsigned int i = 0, y = 0; i < vicount_divided; i++, y += 3) {
+    triangles[i].r = (char)255;
+
+    triangles[i].p1[0] = model->verticies[model->verticie_index[y] * 3];
+    triangles[i].p1[1] = model->verticies[(model->verticie_index[y] * 3) + 1];
+    triangles[i].p1[2] = model->verticies[(model->verticie_index[y] * 3) + 2];
+
+    triangles[i].p2[0] = model->verticies[model->verticie_index[y + 1] * 3];
+    triangles[i].p2[1] = model->verticies[(model->verticie_index[y + 1] * 3) + 1];
+    triangles[i].p2[2] = model->verticies[(model->verticie_index[y + 1] * 3) + 2];
+
+    triangles[i].p3[0] = model->verticies[model->verticie_index[y + 2] * 3];
+    triangles[i].p3[1] = model->verticies[(model->verticie_index[y + 2] * 3) + 1];
+    triangles[i].p3[2] = model->verticies[(model->verticie_index[y + 2] * 3) + 2];
+
+    rotate_triangle(&triangles[i], 180);
+    scale_triangle(&triangles[i], scale);
+    transform_triangle(&triangles[i], offsetx, offsety);
+  }
+
+  *size = vicount_divided;
+  return triangles;
 }
 
 int main(int argc, char **argv) {
