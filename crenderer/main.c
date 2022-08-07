@@ -65,29 +65,27 @@ int main(int argc, char **argv) {
   SDL_Event e;
   ObjFile *model;
   Triangle *triangles;
+  unsigned int vicount_divided;
 
   model = malloc(sizeof *model);
   parse_obj_file(model, "monkey.obj");
-  triangles = malloc(sizeof(*triangles) * model->vicount);
+  triangles = malloc(sizeof(*triangles) * model->vicount / 3);
+  vicount_divided = model->vicount / 3;
 
-  for (unsigned int i = 0; i < model->vicount; i++) {
-    triangles[i].r = 255;
+  for (unsigned int i = 0, y = 0; i < vicount_divided; i++, y += 3) {
+    triangles[i].r = (char)255;
 
-    triangles[i].p1[0] = model->verticies[model->verticie_index[i] * 3];
-    triangles[i].p1[1] = model->verticies[(model->verticie_index[i] * 3) + 1];
-    triangles[i].p1[2] = model->verticies[(model->verticie_index[i] * 3) + 2];
+    triangles[i].p1[0] = model->verticies[model->verticie_index[y] * 3];
+    triangles[i].p1[1] = model->verticies[(model->verticie_index[y] * 3) + 1];
+    triangles[i].p1[2] = model->verticies[(model->verticie_index[y] * 3) + 2];
 
-    triangles[i].p2[0] = model->verticies[model->verticie_index[i + 1] * 3];
-    triangles[i].p2[1] =
-        model->verticies[(model->verticie_index[i + 1] * 3) + 1];
-    triangles[i].p2[2] =
-        model->verticies[(model->verticie_index[i + 1] * 3) + 2];
+    triangles[i].p2[0] = model->verticies[model->verticie_index[y + 1] * 3];
+    triangles[i].p2[1] = model->verticies[(model->verticie_index[y + 1] * 3) + 1];
+    triangles[i].p2[2] = model->verticies[(model->verticie_index[y + 1] * 3) + 2];
 
-    triangles[i].p3[0] = model->verticies[model->verticie_index[i + 2] * 3];
-    triangles[i].p3[1] =
-        model->verticies[(model->verticie_index[i + 2] * 3) + 1];
-    triangles[i].p3[2] =
-        model->verticies[(model->verticie_index[i + 2] * 3) + 2];
+    triangles[i].p3[0] = model->verticies[model->verticie_index[y + 2] * 3];
+    triangles[i].p3[1] = model->verticies[(model->verticie_index[y + 2] * 3) + 1];
+    triangles[i].p3[2] = model->verticies[(model->verticie_index[y + 2] * 3) + 2];
 
     rotate_triangle(&triangles[i], 180);
     scale_triangle(&triangles[i], 200.0);
@@ -105,16 +103,15 @@ int main(int argc, char **argv) {
   while (1) {
     while (SDL_PollEvent(&e)) {
       switch (e.type) {
-        case SDL_QUIT:
-          exit(0);
+      case SDL_QUIT:
+        exit(0);
       }
     }
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    printf("%d\n", model->vicount);
-    for (unsigned int i = 0; i < model->vicount / 3; i++) {
+    for (unsigned int i = 0; i < vicount_divided; i++) {
       print_triangle(&triangles[i]);
       render_triangle(renderer, &triangles[i]);
     }
