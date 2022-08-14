@@ -1,4 +1,5 @@
 #include "main.h"
+#include "utils.h"
 
 #include <SDL2/SDL.h>
 #include <cglm/cglm.h>
@@ -7,14 +8,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "utils.h"
-
+#define d2r(degrees) degrees *(M_PI / 180)
 typedef struct {
   char r, g, b;
   float p1[3], p2[3], p3[3];
 } Triangle;
-
-static float deg_2_rad(float degrees) { return degrees * (3.1415 / 180); }
 
 static void print_triangle(const Triangle *t) {
   printf("p1: %f %f %f\n", t->p1[0], t->p1[1], t->p1[2]);
@@ -31,7 +29,7 @@ static void render_triangle(SDL_Renderer *renderer, const Triangle *t) {
 
 static void rotate_triangle(Triangle *t, float degrees, vec3 axis) {
   mat4 rotated;
-  glm_rotate_make(rotated, deg_2_rad(degrees), axis);
+  glm_rotate_make(rotated, d2r(degrees), axis);
 
   glm_vec3_rotate_m4(rotated, t->p1, t->p1);
   glm_vec3_rotate_m4(rotated, t->p2, t->p2);
