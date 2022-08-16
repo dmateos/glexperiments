@@ -9,6 +9,7 @@
 #include <unistd.h>
 
 #define d2r(degrees) degrees *(M_PI / 180)
+
 typedef struct {
   char r, g, b;
   float p1[3], p2[3], p3[3];
@@ -29,8 +30,8 @@ static void render_triangle(SDL_Renderer *renderer, const Triangle *t) {
 
 static void rotate_triangle(Triangle *t, float degrees, vec3 axis) {
   mat4 rotated;
-  glm_rotate_make(rotated, d2r(degrees), axis);
 
+  glm_rotate_make(rotated, d2r(degrees), axis);
   glm_vec3_rotate_m4(rotated, t->p1, t->p1);
   glm_vec3_rotate_m4(rotated, t->p2, t->p2);
   glm_vec3_rotate_m4(rotated, t->p3, t->p3);
@@ -39,8 +40,8 @@ static void rotate_triangle(Triangle *t, float degrees, vec3 axis) {
 static void transform_triangle(Triangle *t, float x, float y) {
   mat4 translate;
   vec3 tc = {x, y, 0.0};
-  glm_translate_make(translate, tc);
 
+  glm_translate_make(translate, tc);
   glm_mat4_mulv3(translate, t->p1, 1.0, t->p1);
   glm_mat4_mulv3(translate, t->p2, 1.0, t->p2);
   glm_mat4_mulv3(translate, t->p3, 1.0, t->p3);
@@ -49,8 +50,8 @@ static void transform_triangle(Triangle *t, float x, float y) {
 static void scale_triangle(Triangle *t, float s) {
   mat4 scale;
   vec3 tc = {s, s, s};
-  glm_scale_make(scale, tc);
 
+  glm_scale_make(scale, tc);
   glm_mat4_mulv3(scale, t->p1, 1.0, t->p1);
   glm_mat4_mulv3(scale, t->p2, 1.0, t->p2);
   glm_mat4_mulv3(scale, t->p3, 1.0, t->p3);
