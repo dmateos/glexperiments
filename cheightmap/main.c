@@ -76,12 +76,14 @@ void free_png(Image *img) {
   // png_destroy_read_struct(img->png_ptr);
 }
 
-void print_png(Image *img) {
+void print_png(Image *img, SDL_Renderer *renderer) {
   for (int y = 0; y < img->height; y++) {
     png_byte *row = img->row_ptrs[y];
     for (int x = 0; x < img->width; x++) {
       png_byte *ptr = &(row[x * 4]);
-      printf("%d - %d ]: %d - %d - %d - %d\n", x, y, ptr[0], ptr[1], ptr[2], ptr[3]);
+      // printf("%d - %d ]: %d - %d - %d - %d\n", x, y, ptr[0], ptr[1], ptr[2], ptr[3]);
+      SDL_SetRenderDrawColor(renderer, ptr[0], ptr[1], ptr[2], ptr[3]);
+      SDL_RenderDrawPoint(renderer, x, y);
     }
   }
 }
@@ -102,12 +104,8 @@ int main(int argc, char **argv) {
     exit(1);
   }
   read_png(argv[1], &test_img);
-  print_png(&test_img);
-  free_png(&test_img);
 
-  exit(0);
-
-  window = SDL_CreateWindow("Test", 0, 0, 1024, 768, SDL_WINDOW_RESIZABLE);
+  window = SDL_CreateWindow("Test", 0, 0, test_img.width, test_img.height, SDL_WINDOW_RESIZABLE);
   renderer = SDL_CreateRenderer(window, -1, 0);
 
   while (1) {
@@ -118,13 +116,14 @@ int main(int argc, char **argv) {
       }
     }
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
+    print_png(&test_img, renderer);
     SDL_RenderPresent(renderer);
     SDL_Delay(10);
   }
 
   SDL_DestroyWindow(window);
   SDL_DestroyRenderer(renderer);
+  free_png(&test_img);
   return 0;
 }
