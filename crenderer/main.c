@@ -11,7 +11,7 @@
 #define d2r(degrees) degrees *(M_PI / 180)
 
 typedef struct {
-  char r, g, b;
+  unsigned char r, g, b;
   float p1[3], p2[3], p3[3];
 } Triangle;
 
@@ -70,9 +70,9 @@ static Triangle *load_triangles_from_model(const char *file_path, unsigned int *
   triangles = malloc(sizeof(*triangles) * vicount_divided);
 
   for (unsigned int i = 0, y = 0; i < vicount_divided; i++, y += 3) {
-    triangles[i].r = (char)255;
-    triangles[i].g = (char)0;
-    triangles[i].b = (char)0;
+    triangles[i].r = (unsigned char)255;
+    triangles[i].g = (unsigned char)0;
+    triangles[i].b = (unsigned char)0;
 
     triangles[i].p1[0] = model->verticies[model->verticie_index[y] * 3];
     triangles[i].p1[1] = model->verticies[(model->verticie_index[y] * 3) + 1];

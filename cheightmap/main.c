@@ -1,11 +1,11 @@
-#include "main.h"
-
 #include <SDL2/SDL.h>
 #include <cglm/cglm.h>
 #include <png.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+
+#include "main.h"
 
 typedef struct {
   int width, height, passes;
@@ -64,6 +64,7 @@ static void read_png(const char *filename, Image *img) {
   }
   png_read_image(img->png_ptr, img->row_ptrs);
 
+  printf("%d %d %d %x %x\n", img->width, img->height, img->passes, img->color_type, img->bit_depth);
   fclose(fp);
 }
 
@@ -72,15 +73,15 @@ void free_png(Image *img) {
     free(img->row_ptrs[y]);
   }
   free(img->row_ptrs);
-  // png_destroy_info_struct(img->png_ptr, img->info_ptr);
-  // png_destroy_read_struct(img->png_ptr);
+  // png_destroy_info_struct(&img->png_ptr, &img->info_ptr);
+  //  png_destroy_read_struct(&img->png_ptr, NULL, NULL);
 }
 
 void print_png(Image *img, SDL_Renderer *renderer) {
   for (int y = 0; y < img->height; y++) {
     png_byte *row = img->row_ptrs[y];
     for (int x = 0; x < img->width; x++) {
-      png_byte *ptr = &(row[x * 4]);
+      png_byte *ptr = &(row[x * 1]); // Need to tweak this offset
       // printf("%d - %d ]: %d - %d - %d - %d\n", x, y, ptr[0], ptr[1], ptr[2], ptr[3]);
       SDL_SetRenderDrawColor(renderer, ptr[0], ptr[1], ptr[2], ptr[3]);
       SDL_RenderDrawPoint(renderer, x, y);
@@ -93,6 +94,7 @@ int main(int argc, char **argv) {
   SDL_Renderer *renderer;
   SDL_Event e;
   Image test_img;
+  int cont = 1;
 
   if (SDL_Init(SDL_INIT_VIDEO) > 0) {
     printf("could not init window subsystem\n");
@@ -108,18 +110,18 @@ int main(int argc, char **argv) {
   window = SDL_CreateWindow("Test", 0, 0, test_img.width, test_img.height, SDL_WINDOW_RESIZABLE);
   renderer = SDL_CreateRenderer(window, -1, 0);
 
-  while (1) {
+  while (cont) {
     while (SDL_PollEvent(&e)) {
       switch (e.type) {
       case SDL_QUIT:
-        exit(0);
+        cont = 0;
       }
     }
 
     SDL_RenderClear(renderer);
     print_png(&test_img, renderer);
     SDL_RenderPresent(renderer);
-    SDL_Delay(10);
+    SDL_Delay(100);
   }
 
   SDL_DestroyWindow(window);
