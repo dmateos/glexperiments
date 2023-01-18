@@ -28,6 +28,12 @@ static void render_triangle(SDL_Renderer *renderer, const Triangle *t) {
   SDL_RenderDrawLine(renderer, t->p3[0], t->p3[1], t->p1[0], t->p1[1]);
 }
 
+static void render_triangles(SDL_Renderer *renderer, const Triangle *triangles, unsigned int count) {
+  for (unsigned int i = 0; i < count; i++) {
+    render_triangle(renderer, &triangles[i]);
+  }
+}
+
 static void rotate_triangle(Triangle *t, float degrees, vec3 axis) {
   mat4 rotated;
 
@@ -128,15 +134,9 @@ int main(int argc, char **argv) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    for (unsigned int i = 0; i < tcount1; i++) {
-      render_triangle(renderer, &triangles1[i]);
-    }
-    for (unsigned int i = 0; i < tcount2; i++) {
-      render_triangle(renderer, &triangles2[i]);
-    }
-    for (unsigned int i = 0; i < tcount3; i++) {
-      render_triangle(renderer, &triangles3[i]);
-    }
+    render_triangles(renderer, triangles1, tcount1);
+    render_triangles(renderer, triangles2, tcount2);
+    render_triangles(renderer, triangles3, tcount3);
 
     SDL_RenderPresent(renderer);
     SDL_Delay(10);

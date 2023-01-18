@@ -15,6 +15,11 @@ typedef struct {
   png_bytep *row_ptrs;
 } Image;
 
+static float rgb2lum(float r, float g, float b) {
+  float v = (0.2126 * r + 0.7152 * g + 0.0722 * b);
+  return v;
+}
+
 static void read_png(const char *filename, Image *img) {
   char header[8];
   FILE *fp = fopen(filename, "rb");
@@ -83,6 +88,7 @@ void print_png(Image *img, SDL_Renderer *renderer) {
     for (int x = 0; x < img->width; x++) {
       png_byte *ptr = &(row[x * 1]); // Need to tweak this offset
       // printf("%d - %d ]: %d - %d - %d - %d\n", x, y, ptr[0], ptr[1], ptr[2], ptr[3]);
+      // float lum = rgb2lum(ptr[0], ptr[1], ptr[2]);
       SDL_SetRenderDrawColor(renderer, ptr[0], ptr[1], ptr[2], ptr[3]);
       SDL_RenderDrawPoint(renderer, x, y);
     }
