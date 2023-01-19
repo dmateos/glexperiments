@@ -12,7 +12,7 @@ int init_vertex_state(VertexState *state, DrawType type) {
     return 0;
 }
 
-int init_vertex_buffer(VertexBuffer *buffer, BufferType type, char instanced) {
+int init_vertex_buffer(VertexBuffer *buffer, BufferType type, int8_t instanced) {
     memset(buffer, 0, sizeof(VertexBuffer));
     buffer->type = type;
     buffer->instanced = instanced;
@@ -56,7 +56,7 @@ void unbind_vertex_buffer(const VertexBuffer *buffer) {
     }
 }
 
-void write_vertex_buffer(VertexBuffer *buffer, void *data, int size) {
+void write_vertex_buffer(VertexBuffer *buffer, void *data, int32_t size) {
     switch (buffer->type) {
         case VERTEX_BUFFER_TYPE_ARRAY:
             printf("wrote vertex array buffer data with size %d\n", size);
@@ -70,7 +70,7 @@ void write_vertex_buffer(VertexBuffer *buffer, void *data, int size) {
             break;
         case VERTEX_BUFFER_TYPE_INDEX:
             printf("wrote vertex index buffer data with size %d\n", size);
-            int *iptr = data;
+            int32_t *iptr = data;
             for (int i = 0; i < size / (int)sizeof(int); i++) {
                 printf("(%d %d) ", i, *iptr + 1);
                 iptr++;
@@ -83,7 +83,7 @@ void write_vertex_buffer(VertexBuffer *buffer, void *data, int size) {
     buffer->length = size;
 }
 
-void draw(const VertexState *state, int length) {
+void draw(const VertexState *state, int32_t length) {
     bind_vertex_state(state);
     switch (state->draw_type) {
         case VERTEX_STATE_DRAW_ARRAY:
@@ -96,7 +96,7 @@ void draw(const VertexState *state, int length) {
     // printf("drawing %d with %d length\n", state->vao, length);
 }
 
-void draw_instanced(const VertexState *state, int length, int count) {
+void draw_instanced(const VertexState *state, int32_t length, int32_t count) {
     bind_vertex_state(state);
     switch (state->draw_type) {
         case VERTEX_STATE_DRAW_ARRAY:
@@ -110,7 +110,7 @@ void draw_instanced(const VertexState *state, int length, int count) {
 }
 
 void get_error(void) {
-    int error = glGetError();
+    int32_t error = glGetError();
     if (error == 0) {
         printf("NO GL ERRORS\n");
     } else {
