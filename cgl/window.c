@@ -4,47 +4,46 @@
 #include <SDL2/SDL.h>
 
 int init_window(Window *window, int width, int height) {
-    if (SDL_Init(SDL_INIT_VIDEO) > 0) {
-        printf("could not init window subsystem\n");
-        exit(1);
-    } else {
-        printf("initiated SDL video subsystem\n");
-    }
+  if (SDL_Init(SDL_INIT_VIDEO) > 0) {
+    printf("could not init window subsystem\n");
+    exit(1);
+  } else {
+    printf("initiated SDL video subsystem\n");
+  }
 
-    memset(window, 0, sizeof(Window));
+  memset(window, 0, sizeof(Window));
 
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
-                        SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
-    // SDL_SetRelativeMouseMode(1);
-    // SDL_WarpMouseInWindow(window, width / 2, height / 2);
+  // SDL_SetRelativeMouseMode(1);
+  // SDL_WarpMouseInWindow(window, width / 2, height / 2);
 
-    window->window = SDL_CreateWindow("Test", 0, 0, width, height,
-                                      SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-    window->glcontext = SDL_GL_CreateContext(window->window);
+  window->window = SDL_CreateWindow("Test", 0, 0, width, height,
+                                    SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+  window->glcontext = SDL_GL_CreateContext(window->window);
 
-    if (SDL_GL_MakeCurrent(window->window, window->glcontext) > 0) {
-        printf("could not init window subsystem\n");
-        exit(1);
-    }
+  if (SDL_GL_MakeCurrent(window->window, window->glcontext) > 0) {
+    printf("could not init window subsystem\n");
+    exit(1);
+  }
 
-    glClearColor(0, 0, 0.5, 1);
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+  glClearColor(0, 0, 0.5, 1);
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
 
-    printf("created SDL window with openGL context\n");
-    return 0;
+  printf("created SDL window with openGL context\n");
+  return 0;
 }
 
 int destroy_window(Window *window) {
-    SDL_GL_DeleteContext(window->glcontext);
-    SDL_DestroyWindow(window->window);
-    SDL_Quit();
+  SDL_GL_DeleteContext(window->glcontext);
+  SDL_DestroyWindow(window->window);
+  SDL_Quit();
 
-    printf("destroyed SDL window\n");
-    return 0;
+  printf("destroyed SDL window\n");
+  return 0;
 }
 
 void swap_window(const Window *window) { SDL_GL_SwapWindow(window->window); }
@@ -54,29 +53,29 @@ void clear_window(void) { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 int poll_window(const Window *window, SDL_Event *e) { return SDL_PollEvent(e); }
 
 void toggle_wireframe(void) {
-    static char wireframe = 0;
+  static char wireframe = 0;
 
-    if (wireframe) {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        wireframe = 0;
-    } else {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        wireframe = 1;
-    }
+  if (wireframe) {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    wireframe = 0;
+  } else {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    wireframe = 1;
+  }
 }
 
 int get_window_fps(const Window *window) {
-    static unsigned int frame_count, previous_time;
-    unsigned int cur_time = SDL_GetTicks();
-    char strbuf[1024];
-    frame_count++;
+  static unsigned int frame_count, previous_time;
+  unsigned int cur_time = SDL_GetTicks();
+  char strbuf[1024];
+  frame_count++;
 
-    if (cur_time - previous_time >= 1000) {
-        snprintf(strbuf, sizeof(strbuf), "%d", frame_count);
-        SDL_SetWindowTitle(window->window, strbuf);
-        frame_count = 0;
-        previous_time = cur_time;
-    }
+  if (cur_time - previous_time >= 1000) {
+    snprintf(strbuf, sizeof(strbuf), "%d", frame_count);
+    SDL_SetWindowTitle(window->window, strbuf);
+    frame_count = 0;
+    previous_time = cur_time;
+  }
 
-    return 0;
+  return 0;
 }

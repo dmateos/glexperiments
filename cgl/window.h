@@ -4,8 +4,8 @@
 #include <SDL2/SDL.h>
 
 typedef struct Win {
-    SDL_Window *window;
-    SDL_GLContext glcontext;
+  SDL_Window *window;
+  SDL_GLContext glcontext;
 } Window;
 
 int init_window(Window *, int, int);
