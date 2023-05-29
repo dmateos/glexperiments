@@ -18,10 +18,11 @@ typedef struct _Obj {
 typedef struct _Model {
     float vec[3];
     mat4 translation;
+    const ShaderProgram* program;
 
-    const ShaderProgram *program;
     VertexState state;
     VertexBuffer vertex, index, texture;
+
     ObjFile vdata;
 
     // Only used for instances
@@ -29,7 +30,7 @@ typedef struct _Model {
     VertexBuffer instance_buffer;
 } Model;
 
-int init_model(Model *, const ShaderProgram *, const char *, int, void *);
-int draw_model(const Model *model);
+int init_model(Model*, const ShaderProgram*, const char*, int, void*);
+int draw_model(const Model* model);
 
 #endif

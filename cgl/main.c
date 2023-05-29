@@ -18,42 +18,43 @@
 
 static int handle_camera(Camera *camera, Window *window) {
   SDL_Event e;
+
   while (poll_window(window, &e)) {
     switch (e.type) {
-      case SDL_QUIT:
-        return 1;
+    case SDL_QUIT:
+      return 1;
+      break;
+    case SDL_KEYDOWN:
+      switch (e.key.keysym.sym) {
+      case SDLK_a:
+        move_camera(camera, CAMERA_RIGHT);
         break;
-      case SDL_KEYDOWN:
-        switch (e.key.keysym.sym) {
-          case SDLK_a:
-            move_camera(camera, CAMERA_RIGHT);
-            break;
-          case SDLK_d:
-            move_camera(camera, CAMERA_LEFT);
-            break;
-          case SDLK_s:
-            move_camera(camera, CAMERA_BACK);
-            break;
-          case SDLK_w:
-            move_camera(camera, CAMERA_FORWARD);
-            break;
-          case SDLK_RIGHT:
-            pivot_camera(camera, 4, 0);
-            break;
-          case SDLK_LEFT:
-            pivot_camera(camera, -4, 0);
-            break;
-          case SDLK_UP:
-            pivot_camera(camera, 0, 4);
-            break;
-          case SDLK_DOWN:
-            pivot_camera(camera, 0, -4);
-            break;
-          case SDLK_e:
-            toggle_wireframe();
-            break;
-        }
+      case SDLK_d:
+        move_camera(camera, CAMERA_LEFT);
         break;
+      case SDLK_s:
+        move_camera(camera, CAMERA_BACK);
+        break;
+      case SDLK_w:
+        move_camera(camera, CAMERA_FORWARD);
+        break;
+      case SDLK_RIGHT:
+        pivot_camera(camera, 4, 0);
+        break;
+      case SDLK_LEFT:
+        pivot_camera(camera, -4, 0);
+        break;
+      case SDLK_UP:
+        pivot_camera(camera, 0, 4);
+        break;
+      case SDLK_DOWN:
+        pivot_camera(camera, 0, -4);
+        break;
+      case SDLK_e:
+        toggle_wireframe();
+        break;
+      }
+      break;
     }
   }
   return 0;

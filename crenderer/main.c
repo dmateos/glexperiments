@@ -28,7 +28,8 @@ static void render_triangle(SDL_Renderer *renderer, const Triangle *t) {
   SDL_RenderDrawLine(renderer, t->p3[0], t->p3[1], t->p1[0], t->p1[1]);
 }
 
-static void render_triangles(SDL_Renderer *renderer, const Triangle *triangles, unsigned int count) {
+static void render_triangles(SDL_Renderer *renderer, const Triangle *triangles,
+                             unsigned int count) {
   for (unsigned int i = 0; i < count; i++) {
     render_triangle(renderer, &triangles[i]);
   }
@@ -63,7 +64,10 @@ static void scale_triangle(Triangle *t, float s) {
   glm_mat4_mulv3(scale, t->p3, 1.0, t->p3);
 }
 
-static Triangle *load_triangles_from_model(const char *file_path, unsigned int *size, float scale, float offsetx, float offsety, vec3 rot_axis) {
+static Triangle *load_triangles_from_model(const char *file_path,
+                                           unsigned int *size, float scale,
+                                           float offsetx, float offsety,
+                                           vec3 rot_axis) {
   ObjFile *model;
   Triangle *triangles;
   unsigned int vicount_divided;
@@ -85,12 +89,16 @@ static Triangle *load_triangles_from_model(const char *file_path, unsigned int *
     triangles[i].p1[2] = model->verticies[(model->verticie_index[y] * 3) + 2];
 
     triangles[i].p2[0] = model->verticies[model->verticie_index[y + 1] * 3];
-    triangles[i].p2[1] = model->verticies[(model->verticie_index[y + 1] * 3) + 1];
-    triangles[i].p2[2] = model->verticies[(model->verticie_index[y + 1] * 3) + 2];
+    triangles[i].p2[1] =
+        model->verticies[(model->verticie_index[y + 1] * 3) + 1];
+    triangles[i].p2[2] =
+        model->verticies[(model->verticie_index[y + 1] * 3) + 2];
 
     triangles[i].p3[0] = model->verticies[model->verticie_index[y + 2] * 3];
-    triangles[i].p3[1] = model->verticies[(model->verticie_index[y + 2] * 3) + 1];
-    triangles[i].p3[2] = model->verticies[(model->verticie_index[y + 2] * 3) + 2];
+    triangles[i].p3[1] =
+        model->verticies[(model->verticie_index[y + 2] * 3) + 1];
+    triangles[i].p3[2] =
+        model->verticies[(model->verticie_index[y + 2] * 3) + 2];
 
     rotate_triangle(&triangles[i], 180, rot_axis);
     scale_triangle(&triangles[i], scale);
@@ -111,9 +119,12 @@ int main(int argc, char **argv) {
   vec3 default_rot = {0.0, 0.0, 1.0};
   vec3 more_rot = {0.0, 1.0, 1.0};
 
-  triangles1 = load_triangles_from_model("monkey.obj", &tcount1, 150, 450, 600, default_rot);
-  triangles2 = load_triangles_from_model("torus.obj", &tcount2, 150, 800, 550, default_rot);
-  triangles3 = load_triangles_from_model("torus.obj", &tcount3, 150, 800, 550, more_rot);
+  triangles1 = load_triangles_from_model("monkey.obj", &tcount1, 150, 450, 600,
+                                         default_rot);
+  triangles2 = load_triangles_from_model("torus.obj", &tcount2, 150, 800, 550,
+                                         default_rot);
+  triangles3 =
+      load_triangles_from_model("torus.obj", &tcount3, 150, 800, 550, more_rot);
 
   if (SDL_Init(SDL_INIT_VIDEO) > 0) {
     printf("could not init window subsystem\n");
@@ -139,7 +150,7 @@ int main(int argc, char **argv) {
     render_triangles(renderer, triangles3, tcount3);
 
     SDL_RenderPresent(renderer);
-    SDL_Delay(10);
+    SDL_Delay(1);
   }
 
   SDL_DestroyWindow(window);
