@@ -6,7 +6,7 @@ COMPILER_FLAGS = -std=c99 -Wall -O2 -D GL_SILENCE_DEPRECATION -Wextra  \
           -Wformat=2 -Wno-unused-parameter -Wshadow \
           -Wwrite-strings -Wstrict-prototypes -Wold-style-definition \
           -Wredundant-decls -Wnested-externs -Wmissing-include-dirs \
-					-mmacosx-version-min=12.0
+					-mmacosx-version-min=13.0
 
 LINKER_FLAGS = -lSDL2 -lSDL2_image -l SDL2_gfx -l cglm -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
 OBJ_NAME = a.out
