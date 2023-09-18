@@ -70,14 +70,8 @@ void compile_shaderprogram(const ShaderProgram *program) {
 
 void set_attribute(int index, int size, int stride, long offset) {
   glEnableVertexAttribArray(index);
-  if (offset == 0) {
-    glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE,
-                          sizeof(float) * stride, NULL);
-  } else {
-    glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE,
-                          sizeof(float) * stride,
-                          (void *)(offset * sizeof(float)));
-  }
+  glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE, sizeof(float) * stride,
+                        (void *)(offset * sizeof(float)));
   printf("set attribute for index %d with stride %d\n", index, stride);
 }
 

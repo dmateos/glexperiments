@@ -10,8 +10,8 @@
 #include "vertex.h"
 
 static int parse_obj_file_new(ObjFile *model, const char *path) {
-  const struct aiScene *scene = aiImportFile(
-      path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices);
+  const struct aiScene *scene =
+      aiImportFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
   if (scene == NULL) {
     printf("could not import assimp file %s\n", path);
@@ -30,8 +30,14 @@ static int parse_obj_file_new(ObjFile *model, const char *path) {
       model->verticies[model->vcount++] = mesh->mNormals[j].y;
       model->verticies[model->vcount++] = mesh->mNormals[j].z;
 
-      model->verticies[model->vcount++] = 0.0;
-      model->verticies[model->vcount++] = 0.0;
+      if (mesh->mTextureCoords[0] == NULL) {
+        model->verticies[model->vcount++] = 0.0f;
+        model->verticies[model->vcount++] = 0.0f;
+        printf("making up texture coords\n");
+      } else {
+        model->verticies[model->vcount++] = mesh->mTextureCoords[0][j].x;
+        model->verticies[model->vcount++] = mesh->mTextureCoords[0][j].y;
+      }
 
       printf("vertex %d: %f %f %f\n", j, mesh->mVertices[j].x,
              mesh->mVertices[j].y, mesh->mVertices[j].z);
