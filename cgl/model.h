@@ -6,30 +6,31 @@
 #include "shader.h"
 #include "vertex.h"
 
-#define OBJ_VERTEX_LIMIT 10240
+#define OBJ_VERTEX_LIMIT 102400
 
-typedef struct _Obj {
-  float verticies[OBJ_VERTEX_LIMIT], normals[OBJ_VERTEX_LIMIT];
+typedef struct {
+  float verticies[OBJ_VERTEX_LIMIT];
   unsigned int verticie_index[OBJ_VERTEX_LIMIT];
-  unsigned int normal_index[OBJ_VERTEX_LIMIT];
-  unsigned int ncount, vcount, vicount, nicount;
+  unsigned int vcount, vicount;
 } ObjFile;
 
-typedef struct _Model {
+typedef struct {
   float vec[3];
   mat4 translation;
 
   const ShaderProgram *program;
   VertexState state;
-  VertexBuffer vertex, index, texture;
+  VertexBuffer vertex, index, texture, texture_index;
   ObjFile vdata;
+
+  VertexBuffer interleaved_vertex_data;
 
   // Only used for instances
   unsigned int instance_count;
   VertexBuffer instance_buffer;
 } Model;
 
-int init_model(Model*, const ShaderProgram*, const char*, int, void*);
-int draw_model(const Model* model);
+int init_model(Model *, const ShaderProgram *, const char *, int, void *);
+int draw_model(const Model *model);
 
 #endif

@@ -1,64 +1,52 @@
 #include "model.h"
 
+#include <assimp/cimport.h>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
 #include <cglm/cglm.h>
 #include <string.h>
 
 #include "util.h"
 #include "vertex.h"
 
-const float TEXTURE_COORDINATES[] = {
-    1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0,
-    1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0,
-};
+static int parse_obj_file_new(ObjFile *model, const char *path) {
+  const struct aiScene *scene = aiImportFile(
+      path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices);
 
-static int parse_obj_file(ObjFile *obj, const char *path) {
-  char *model_data, *l, *line_state;
-  float x, y, z;
-  unsigned int n1, n2, n3, v1, v2, v3;
-
-  model_data = read_file(path);
-  if (model_data == NULL) {
-    printf("could not load model %s\n", path);
-    exit(1);
+  if (scene == NULL) {
+    printf("could not import assimp file %s\n", path);
+    return 1;
   }
 
-  l = strtok_r(model_data, "\n", &line_state);
-  while (l != NULL) {
-    if (strncmp(l, "vn", strlen("vn")) == 0) {
-      // Vertex Normals
-      sscanf(l, "vn %f %f %f\n", &x, &y, &z);
-      printf("vn %f %f %f\n", x, y, z);
-      obj->normals[obj->ncount++] = x;
-      obj->normals[obj->ncount++] = y;
-      obj->normals[obj->ncount++] = z;
-    } else if (strncmp(l, "v", strlen("v")) == 0) {
-      // Vertex
-      sscanf(l, "v %f %f %f\n", &x, &y, &z);
-      printf("v %f %f %f\n", x, y, z);
-      obj->verticies[obj->vcount++] = x;
-      obj->verticies[obj->vcount++] = y;
-      obj->verticies[obj->vcount++] = z;
-    } else if (strncmp(l, "f", strlen("f")) == 0) {
-      // Index's for above split by //
-      sscanf(l, "f %d//%d %d//%d %d//%d\n", &v1, &n1, &v2, &n2, &v3, &n3);
-      printf("f: %d//%d %d//%d %d//%d\n", v1, n1, v2, n2, v3, n3);
-      obj->verticie_index[obj->vicount++] = v1 - 1;
-      obj->verticie_index[obj->vicount++] = v2 - 1;
-      obj->verticie_index[obj->vicount++] = v3 - 1;
-      obj->normal_index[obj->nicount++] = n1 - 1;
-      obj->normal_index[obj->nicount++] = n2 - 1;
-      obj->normal_index[obj->nicount++] = n3 - 1;
+  for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
+    printf("mesh %d has %d verticies\n", i, scene->mMeshes[i]->mNumVertices);
+    const struct aiMesh *mesh = scene->mMeshes[i];
+    for (unsigned int j = 0; j < mesh->mNumVertices; j++) {
+      model->verticies[model->vcount++] = mesh->mVertices[j].x;
+      model->verticies[model->vcount++] = mesh->mVertices[j].y;
+      model->verticies[model->vcount++] = mesh->mVertices[j].z;
+
+      model->verticies[model->vcount++] = mesh->mNormals[j].x;
+      model->verticies[model->vcount++] = mesh->mNormals[j].y;
+      model->verticies[model->vcount++] = mesh->mNormals[j].z;
+
+      model->verticies[model->vcount++] = 0.0;
+      model->verticies[model->vcount++] = 0.0;
+
+      printf("vertex %d: %f %f %f\n", j, mesh->mVertices[j].x,
+             mesh->mVertices[j].y, mesh->mVertices[j].z);
     }
-    l = strtok_r(NULL, "\n", &line_state);
+
+    for (unsigned int j = 0; j < mesh->mNumFaces; j++) {
+      const struct aiFace *face = &mesh->mFaces[j];
+      for (unsigned int k = 0; k < face->mNumIndices; k++) {
+        model->verticie_index[model->vicount++] = face->mIndices[k];
+      }
+    }
   }
 
-  free_file_data(model_data);
-
-  printf("loaded model %s\n", path);
-  printf("vcount %d, ncount %d, vicount: %d, nicount %d\n", obj->vcount,
-         obj->ncount, obj->vicount, obj->nicount);
+  aiReleaseImport(scene);
+  printf("model is ok\n");
   return 0;
 }
 
@@ -68,7 +56,7 @@ int init_model(Model *model, const ShaderProgram *shader, const char *path,
   model->program = shader;
   model->instance_count = instances;
 
-  parse_obj_file(&model->vdata, path);
+  parse_obj_file_new(&model->vdata, path);
 
   init_vertex_state(&model->state, VERTEX_STATE_DRAW_INDEXED);
   bind_vertex_state(&model->state);
@@ -84,14 +72,9 @@ int init_model(Model *model, const ShaderProgram *shader, const char *path,
   bind_vertex_buffer(&model->index);
   write_vertex_buffer(&model->index, (void *)model->vdata.verticie_index,
                       sizeof(unsigned int) * model->vdata.vicount);
-  set_attribute(get_attribute(shader, "vp"), 3);
-
-  // Texture coordinate data
-  init_vertex_buffer(&model->texture, VERTEX_BUFFER_TYPE_ARRAY, 0);
-  bind_vertex_buffer(&model->texture);
-  write_vertex_buffer(&model->texture, (void *)TEXTURE_COORDINATES,
-                      sizeof(float) * 8 * 6);
-  set_attribute(get_attribute(shader, "tx"), 2);
+  set_attribute(get_attribute(shader, "vp"), 3, 8, 0);
+  set_attribute(get_attribute(shader, "nm"), 3, 8, 3);
+  set_attribute(get_attribute(shader, "tx"), 2, 8, 6);
 
   // Instance offset data (if applicable)
   if (model->instance_count > 0) {
@@ -99,7 +82,7 @@ int init_model(Model *model, const ShaderProgram *shader, const char *path,
     bind_vertex_buffer(&model->instance_buffer);
     write_vertex_buffer(&model->instance_buffer, (void *)instancedata,
                         sizeof(float) * model->instance_count * 3);
-    set_attribute(get_attribute(shader, "os"), 3);
+    set_attribute(get_attribute(shader, "os"), 3, 0, 0);
   }
 
   unbind_vertex_state(&model->state);

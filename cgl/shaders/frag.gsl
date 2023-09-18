@@ -1,11 +1,13 @@
 #version 330 core
 
-in vec3 color_out;
+in vec3 nm_out;
 in vec2 tx_out;
+
 out vec4 color;
 
 uniform sampler2D st;
 
 void main() {
-  color = texture(st, tx_out);
+  //color = texture(st, tx_out);
+  color = vec4(nm_out, 1.0);
 }

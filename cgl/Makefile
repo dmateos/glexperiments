@@ -8,10 +8,10 @@ COMPILER_FLAGS = -std=c99 -Wall -O2 -D GL_SILENCE_DEPRECATION -Wextra  \
           -Wredundant-decls -Wnested-externs -Wmissing-include-dirs \
 					-mmacosx-version-min=13.0
 
-LINKER_FLAGS = -lSDL2 -lSDL2_image -l SDL2_gfx -l cglm -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+LINKER_FLAGS = -lSDL2 -lSDL2_image -l SDL2_gfx -l cglm -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo -lAssimp
 OBJ_NAME = a.out
 
 all:
 	$(CC) -o $(OBJ_NAME) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) $(OBJS)
 test:
-	./a.out models/cube.obj models/container.jpg
+	./a.out models/cube.obj models/gridtex.png
