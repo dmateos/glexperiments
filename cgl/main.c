@@ -13,7 +13,7 @@
 
 #define WINDOW_HORIZ 1280
 #define WINDOW_VERT 1024
-#define MODEL_COUNT 10000
+#define MODEL_COUNT 100000
 #define INSTANCED 1
 
 // handle mouse, do it like a blender 3d app where you click to drag
@@ -118,7 +118,7 @@ int main_instanced(int argc, char **argv) {
   int rcount = 0;
   for (int i = 0; i < MODEL_COUNT * 3; i += 3) {
     model_offsets[i] += row;
-    model_offsets[i + 1] += ((float)rand() / (float)(RAND_MAX)) * 100.0;
+    model_offsets[i + 1] += ((float)rand() / (float)(RAND_MAX)) * 1000.0;
     model_offsets[i + 2] += col;
 
     row += 10;
