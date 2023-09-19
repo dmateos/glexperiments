@@ -6,6 +6,7 @@
 typedef struct Win {
   SDL_Window *window;
   SDL_GLContext glcontext;
+  int mouse_x, mouse_y;
 } Window;
 
 int init_window(Window *, int, int);

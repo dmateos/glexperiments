@@ -12,8 +12,8 @@ out vec3 nm_out;
 out vec2 tx_out;
 
 void main(){
-  tx_out = tx;
   nm_out = nm;
+  tx_out = tx;
 
   vec4 vpn = vec4(vp, 1.0);
   vec4 osn = vec4(os, 0.0);

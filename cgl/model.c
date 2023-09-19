@@ -1,5 +1,6 @@
 #include "model.h"
 
+#include <OpenGL/gl3.h>
 #include <assimp/cimport.h>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -9,7 +10,7 @@
 #include "util.h"
 #include "vertex.h"
 
-static int parse_obj_file_new(ObjFile *model, const char *path) {
+static int parse_obj_file(ObjFile *model, const char *path) {
   const struct aiScene *scene =
       aiImportFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
@@ -62,7 +63,7 @@ int init_model(Model *model, const ShaderProgram *shader, const char *path,
   model->program = shader;
   model->instance_count = instances;
 
-  parse_obj_file_new(&model->vdata, path);
+  parse_obj_file(&model->vdata, path);
 
   init_vertex_state(&model->state, VERTEX_STATE_DRAW_INDEXED);
   bind_vertex_state(&model->state);
@@ -88,6 +89,7 @@ int init_model(Model *model, const ShaderProgram *shader, const char *path,
     bind_vertex_buffer(&model->instance_buffer);
     write_vertex_buffer(&model->instance_buffer, (void *)instancedata,
                         sizeof(float) * model->instance_count * 3);
+    glVertexAttribDivisor(get_attribute(shader, "os"), 1);
     set_attribute(get_attribute(shader, "os"), 3, 0, 0);
   }
 

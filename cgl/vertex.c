@@ -1,4 +1,5 @@
 #include "vertex.h"
+#include "shader.h"
 
 #include <OpenGL/gl3.h>
 #include <stdio.h>
@@ -21,7 +22,6 @@ int init_vertex_buffer(VertexBuffer *buffer, BufferType type,
 
   if (buffer->instanced) {
     printf("buffer is instanced\n");
-    glVertexAttribDivisor(2, 1);
   }
   printf("initiated new vertex buffer %u\n", buffer->vbo);
   return 0;

@@ -20,10 +20,8 @@ typedef struct {
 
   const ShaderProgram *program;
   VertexState state;
-  VertexBuffer vertex, index, texture, texture_index;
+  VertexBuffer vertex, index;
   ObjFile vdata;
-
-  VertexBuffer interleaved_vertex_data;
 
   // Only used for instances
   unsigned int instance_count;
