@@ -1,4 +1,4 @@
-OBJS = $(wildcard *.c renderer/*.c)
+OBJS = $(wildcard *.c renderer/*.c base/*.c) 
 CC = gcc
 INCLUDE_PATHS = -I/opt/homebrew/include -I/usr/local/include
 LIBRARY_PATHS = -L/opt/homebrew/lib -L/usr/local/lib

@@ -11,6 +11,8 @@
 #include "renderer/vertex.h"
 #include "renderer/window.h"
 
+#include "base/list.h"
+
 #define WINDOW_HORIZ 1280
 #define WINDOW_VERT 1024
 #define MODEL_COUNT 1
@@ -213,6 +215,10 @@ int main_normal(int argc, char **argv) {
 
 int main(int argc, char **argv) {
   int ret = 0;
+
+  test_list();
+  return 0;
+
   if (INSTANCED) {
     ret = main_instanced(argc, argv);
   } else {
