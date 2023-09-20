@@ -173,7 +173,7 @@ int main_normal(int argc, char **argv) {
 
   init_camera(&camera, &shader_program, WINDOW_HORIZ / WINDOW_VERT);
   init_texture(&texture, argv[2]);
-  model = malloc(sizeof(Model) * MODEL_COUNT);
+  model = (Model *)malloc(sizeof(Model) * MODEL_COUNT);
 
   int col = 0;
   int row = 0;

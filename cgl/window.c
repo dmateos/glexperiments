@@ -17,8 +17,8 @@ int init_window(Window *window, int width, int height) {
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
-  SDL_SetRelativeMouseMode(1);
-  SDL_WarpMouseInWindow(window, width / 2, height / 2);
+  SDL_SetRelativeMouseMode(SDL_TRUE);
+  SDL_WarpMouseInWindow(window->window, width / 2, height / 2);
 
   window->window = SDL_CreateWindow("Test", 0, 0, width, height,
                                     SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
