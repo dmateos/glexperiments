@@ -4,12 +4,12 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "camera.h"
-#include "model.h"
-#include "shader.h"
-#include "texture.h"
-#include "vertex.h"
-#include "window.h"
+#include "renderer/camera.h"
+#include "renderer/model.h"
+#include "renderer/shader.h"
+#include "renderer/texture.h"
+#include "renderer/vertex.h"
+#include "renderer/window.h"
 
 #define WINDOW_HORIZ 1280
 #define WINDOW_VERT 1024
@@ -124,8 +124,8 @@ int main_instanced(int argc, char **argv) {
 
   init_shaderprogram(&shader_program);
   add_shader(&shader_program, VERTEXSHADER,
-             "shaders/instanced_camera_vert.gsl");
-  add_shader(&shader_program, FRAGSHADER, "shaders/frag.gsl");
+             "renderer/shaders/instanced_camera_vert.gsl");
+  add_shader(&shader_program, FRAGSHADER, "renderer/shaders/frag.gsl");
   compile_shaderprogram(&shader_program);
   use_shaderprogram(&shader_program);
 
@@ -166,8 +166,8 @@ int main_normal(int argc, char **argv) {
   init_window(&window, WINDOW_HORIZ, WINDOW_VERT);
 
   init_shaderprogram(&shader_program);
-  add_shader(&shader_program, VERTEXSHADER, "shaders/vert.gsl");
-  add_shader(&shader_program, FRAGSHADER, "shaders/frag.gsl");
+  add_shader(&shader_program, VERTEXSHADER, "renderer/shaders/vert.gsl");
+  add_shader(&shader_program, FRAGSHADER, "renderer/shaders/frag.gsl");
   compile_shaderprogram(&shader_program);
   use_shaderprogram(&shader_program);
 
