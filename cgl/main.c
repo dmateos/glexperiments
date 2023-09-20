@@ -15,8 +15,8 @@
 
 #define WINDOW_HORIZ 1280
 #define WINDOW_VERT 1024
-#define MODEL_COUNT 1
-#define INSTANCED 0
+#define MODEL_COUNT 1000000
+#define INSTANCED 1
 
 // handle mouse, do it like a blender 3d app where you click to drag
 // and right click to rotate
