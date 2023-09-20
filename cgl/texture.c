@@ -14,6 +14,12 @@ static SDL_Surface *load_image(const char *path) {
     exit(1);
   }
 
+  // check if image dimensions are powers of 2
+  if ((image->w & (image->w - 1)) != 0) {
+    printf("image %s's width is not a power of 2\n", path);
+    exit(1);
+  }
+
   return image;
 }
 

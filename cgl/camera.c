@@ -15,7 +15,7 @@ static void build_lookat(Camera *camera) {
 }
 
 static void build_perspective(Camera *camera, float aspect) {
-  glm_perspective(75, aspect, 0.1, 1000.0, camera->perspective);
+  glm_perspective(75, aspect, 0.1, 10000.0, camera->perspective);
 }
 
 int init_camera(Camera *camera, const ShaderProgram *shader_program,

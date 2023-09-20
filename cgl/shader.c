@@ -72,7 +72,8 @@ void set_attribute(int index, int size, int stride, long offset) {
   glEnableVertexAttribArray(index);
   glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE, sizeof(float) * stride,
                         (void *)(offset * sizeof(float)));
-  printf("set attribute for index %d with stride %d\n", index, stride);
+  printf("set attribute for index %d, size %d, stride %d, offset %ld\n", index,
+         size, stride, offset);
 }
 
 void set_uniform(int index, float *value) {
