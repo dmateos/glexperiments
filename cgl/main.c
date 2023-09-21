@@ -217,7 +217,7 @@ int main_normal(int argc, char **argv) {
 int main(int argc, char **argv) {
   int ret = 0;
 
-  test_list();
+  list_test();
   return 0;
 
   if (INSTANCED) {

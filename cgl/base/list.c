@@ -4,31 +4,31 @@
 #include <stdlib.h>
 #include <string.h>
 
-list_t list_create(void) {
-  list_t list = {.head = NULL, .size = 0};
+List list_create(void) {
+  List list = {.head = NULL, .size = 0};
   return list;
 }
 
-void list_destroy(list_t *list) {
-  list_node_t *node = list->head;
+void list_destroy(List *list) {
+  ListNode *node = list->head;
   while (node != NULL) {
-    list_node_t *next = node->next;
+    ListNode *next = node->next;
     printf("freeing node 0x%p\n", node);
     free(node);
     node = next;
   }
 }
 
-void list_push(list_t *list, void *data) {
-  list_node_t *node = malloc(sizeof(list_node_t));
+void list_push(List *list, void *data) {
+  ListNode *node = malloc(sizeof(ListNode));
   node->data = data;
   node->next = list->head;
   list->head = node;
   printf("pushed node 0x%p, head now 0x%p\n", node, list->head);
 }
 
-void *list_pop(list_t *list) {
-  list_node_t *node = list->head;
+void *list_pop(List *list) {
+  ListNode *node = list->head;
   if (node == NULL) {
     return NULL;
   }
@@ -38,11 +38,11 @@ void *list_pop(list_t *list) {
   return data;
 }
 
-void test_list(void) {
+void list_test(void) {
   const char test_strings[][6] = {"test1", "test2", "test3"};
   int i = 0;
 
-  list_t list = list_create();
+  List list = list_create();
   list_push(&list, (void *)"test3");
   list_push(&list, (void *)"test2");
   list_push(&list, (void *)"test1");

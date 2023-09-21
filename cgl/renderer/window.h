@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 
-typedef struct Win {
+typedef struct {
   SDL_Window *window;
   SDL_GLContext glcontext;
   int mouse_x, mouse_y;

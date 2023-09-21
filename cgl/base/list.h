@@ -4,21 +4,21 @@
 typedef struct list_node {
   struct list_node *next;
   void *data;
-} list_node_t;
+} ListNode;
 
 typedef struct list {
-  list_node_t *head;
+  ListNode *head;
   int size;
-} list_t;
+} List;
 
-list_t list_create(void);
-void list_destroy(list_t *);
-void list_push(list_t *, void *);
-void *list_pop(list_t *);
-void test_list(void);
+List list_create(void);
+void list_destroy(List *);
+void list_push(List *, void *);
+void *list_pop(List *);
+void list_test(void);
 
 // Macro to iterate over a list
 #define list_for_each(list)                                                    \
-  for (list_node_t *node = list.head; node != NULL; node = node->next)
+  for (ListNode *node = list.head; node != NULL; node = node->next)
 
 #endif
