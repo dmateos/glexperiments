@@ -25,17 +25,17 @@ typedef struct VS {
   DrawType draw_type;
 } VertexState;
 
-int init_vertex_state(VertexState *, DrawType);
-int init_vertex_buffer(VertexBuffer *, BufferType, int8_t);
+int vertex_init_state(VertexState *, DrawType);
+int vertex_init_buffer(VertexBuffer *, BufferType, int8_t);
 
-void bind_vertex_state(const VertexState *);
-void unbind_vertex_state(const VertexState *);
-void bind_vertex_buffer(const VertexBuffer *);
-void unbind_vertex_buffer(const VertexBuffer *);
-void write_vertex_buffer(VertexBuffer *, void *, int32_t);
+void vertex_bind_state(const VertexState *);
+void vertex_unbind_state(const VertexState *);
+void vertex_bind_buffer(const VertexBuffer *);
+void vertex_unbind_buffer(const VertexBuffer *);
+void vertex_write_buffer(VertexBuffer *, void *, int32_t);
 
-void draw(const VertexState *, int32_t);
-void draw_instanced(const VertexState *, int32_t, int32_t);
+void vertex_draw(const VertexState *, int32_t);
+void vertex_draw_instanced(const VertexState *, int32_t, int32_t);
 
-void get_error(void);
+void vertex_get_error(void);
 #endif

@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int init_vertex_state(VertexState *state, DrawType type) {
+int vertex_init_state(VertexState *state, DrawType type) {
   memset(state, 0, sizeof(VertexState));
   glGenVertexArrays(1, &state->vao);
   state->draw_type = type;
@@ -13,7 +13,7 @@ int init_vertex_state(VertexState *state, DrawType type) {
   return 0;
 }
 
-int init_vertex_buffer(VertexBuffer *buffer, BufferType type,
+int vertex_init_buffer(VertexBuffer *buffer, BufferType type,
                        int8_t instanced) {
   memset(buffer, 0, sizeof(VertexBuffer));
   buffer->type = type;
@@ -27,14 +27,14 @@ int init_vertex_buffer(VertexBuffer *buffer, BufferType type,
   return 0;
 }
 
-void bind_vertex_state(const VertexState *state) {
+void vertex_bind_state(const VertexState *state) {
   glBindVertexArray(state->vao);
   // printf("bound vertex state %u\n", state->vao);
 }
 
-void unbind_vertex_state(const VertexState *state) { glBindVertexArray(0); }
+void vertex_unbind_state(const VertexState *state) { glBindVertexArray(0); }
 
-void bind_vertex_buffer(const VertexBuffer *buffer) {
+void vertex_bind_buffer(const VertexBuffer *buffer) {
   switch (buffer->type) {
   case VERTEX_BUFFER_TYPE_ARRAY:
     glBindBuffer(GL_ARRAY_BUFFER, buffer->vbo);
@@ -46,7 +46,7 @@ void bind_vertex_buffer(const VertexBuffer *buffer) {
   // printf("bound vertex buffer %u\n", buffer->vbo);
 }
 
-void unbind_vertex_buffer(const VertexBuffer *buffer) {
+void vertex_unbind_buffer(const VertexBuffer *buffer) {
   switch (buffer->type) {
   case VERTEX_BUFFER_TYPE_ARRAY:
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -57,7 +57,7 @@ void unbind_vertex_buffer(const VertexBuffer *buffer) {
   }
 }
 
-void write_vertex_buffer(VertexBuffer *buffer, void *data, int32_t size) {
+void vertex_write_buffer(VertexBuffer *buffer, void *data, int32_t size) {
   switch (buffer->type) {
   case VERTEX_BUFFER_TYPE_ARRAY: {
     printf("wrote vertex array buffer data with size %d\n", size);
@@ -84,8 +84,8 @@ void write_vertex_buffer(VertexBuffer *buffer, void *data, int32_t size) {
   buffer->length = size;
 }
 
-void draw(const VertexState *state, int32_t length) {
-  bind_vertex_state(state);
+void vertex_draw(const VertexState *state, int32_t length) {
+  vertex_bind_state(state);
   switch (state->draw_type) {
   case VERTEX_STATE_DRAW_ARRAY:
     glDrawArrays(GL_TRIANGLES, 0, length);
@@ -97,8 +97,9 @@ void draw(const VertexState *state, int32_t length) {
   // printf("drawing %d with %d length\n", state->vao, length);
 }
 
-void draw_instanced(const VertexState *state, int32_t length, int32_t count) {
-  bind_vertex_state(state);
+void vertex_draw_instanced(const VertexState *state, int32_t length,
+                           int32_t count) {
+  vertex_bind_state(state);
   switch (state->draw_type) {
   case VERTEX_STATE_DRAW_ARRAY:
     printf("not implemented\n");
@@ -109,7 +110,7 @@ void draw_instanced(const VertexState *state, int32_t length, int32_t count) {
   }
 }
 
-void get_error(void) {
+void vertex_get_error(void) {
   int32_t error = glGetError();
   if (error == 0) {
     printf("NO GL ERRORS\n");

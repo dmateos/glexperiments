@@ -1,7 +1,7 @@
 #ifndef _UTIL_H
 #define _UTIL_H
 
-char *read_file(const char *filename);
-void free_file_data(char *filedata);
+char *util_read_file(const char *filename);
+void util_free_file(char *filedata);
 
 #endif

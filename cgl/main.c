@@ -28,10 +28,10 @@ static void handle_mouse(Camera *camera, Window *window) {
   dy = (y - window->mouse_y);
 
   if (dx != 0) {
-    pivot_camera(camera, dx, 0);
+    camera_pivot(camera, dx, 0);
   }
   if (dy != 0) {
-    pivot_camera(camera, 0, dy);
+    camera_pivot(camera, 0, dy);
   }
 
   if (button_state & SDL_BUTTON(SDL_BUTTON_LEFT)) {
@@ -49,7 +49,7 @@ static int handle_camera(Camera *camera, Window *window) {
 
   handle_mouse(camera, window);
 
-  while (poll_window(window, &e)) {
+  while (window_poll(window, &e)) {
     switch (e.type) {
     case SDL_QUIT:
       return 1;
@@ -57,31 +57,31 @@ static int handle_camera(Camera *camera, Window *window) {
     case SDL_KEYDOWN:
       switch (e.key.keysym.sym) {
       case SDLK_a:
-        move_camera(camera, CAMERA_RIGHT);
+        camera_move(camera, CAMERA_RIGHT);
         break;
       case SDLK_d:
-        move_camera(camera, CAMERA_LEFT);
+        camera_move(camera, CAMERA_LEFT);
         break;
       case SDLK_s:
-        move_camera(camera, CAMERA_BACK);
+        camera_move(camera, CAMERA_BACK);
         break;
       case SDLK_w:
-        move_camera(camera, CAMERA_FORWARD);
+        camera_move(camera, CAMERA_FORWARD);
         break;
       case SDLK_RIGHT:
-        pivot_camera(camera, 4, 0);
+        camera_pivot(camera, 4, 0);
         break;
       case SDLK_LEFT:
-        pivot_camera(camera, -4, 0);
+        camera_pivot(camera, -4, 0);
         break;
       case SDLK_UP:
-        pivot_camera(camera, 0, 4);
+        camera_pivot(camera, 0, 4);
         break;
       case SDLK_DOWN:
-        pivot_camera(camera, 0, -4);
+        camera_pivot(camera, 0, -4);
         break;
       case SDLK_e:
-        toggle_wireframe();
+        window_wireframe();
         break;
       }
       break;
@@ -122,32 +122,32 @@ int main_instanced(int argc, char **argv) {
     }
   }
 
-  init_window(&window, WINDOW_HORIZ, WINDOW_VERT);
+  window_init(&window, WINDOW_HORIZ, WINDOW_VERT);
 
-  init_shaderprogram(&shader_program);
-  add_shader(&shader_program, VERTEXSHADER,
-             "renderer/shaders/instanced_camera_vert.gsl");
-  add_shader(&shader_program, FRAGSHADER, "renderer/shaders/frag.gsl");
-  compile_shaderprogram(&shader_program);
-  use_shaderprogram(&shader_program);
+  shader_program_init(&shader_program);
+  shader_program_add(&shader_program, VERTEXSHADER,
+                     "renderer/shaders/instanced_camera_vert.gsl");
+  shader_program_add(&shader_program, FRAGSHADER, "renderer/shaders/frag.gsl");
+  shader_program_compile(&shader_program);
+  shader_use(&shader_program);
 
-  init_camera(&camera, &shader_program, WINDOW_HORIZ / WINDOW_VERT);
-  init_model(&model, &shader_program, argv[1], MODEL_COUNT, model_offsets);
-  init_texture(&texture, argv[2]);
+  camera_init(&camera, &shader_program, WINDOW_HORIZ / WINDOW_VERT);
+  model_init(&model, &shader_program, argv[1], MODEL_COUNT, model_offsets);
+  texture_init(&texture, argv[2]);
 
   while (!quit) {
     quit = handle_camera(&camera, &window);
-    get_window_fps(&window);
+    window_get_fps(&window);
 
-    clear_window();
+    window_clear();
 
-    update_camera(&camera);
-    draw_model(&model);
-    swap_window(&window);
+    camera_update(&camera);
+    model_draw(&model);
+    window_swap(&window);
   }
 
-  destroy_shaderprogram(&shader_program);
-  destroy_window(&window);
+  shader_program_destroy(&shader_program);
+  window_destroy(&window);
 
   return 0;
 }
@@ -165,23 +165,24 @@ int main_normal(int argc, char **argv) {
     exit(1);
   }
 
-  init_window(&window, WINDOW_HORIZ, WINDOW_VERT);
+  window_init(&window, WINDOW_HORIZ, WINDOW_VERT);
 
-  init_shaderprogram(&shader_program);
-  add_shader(&shader_program, VERTEXSHADER, "renderer/shaders/vert.gsl");
-  add_shader(&shader_program, FRAGSHADER, "renderer/shaders/frag.gsl");
-  compile_shaderprogram(&shader_program);
-  use_shaderprogram(&shader_program);
+  shader_program_init(&shader_program);
+  shader_program_add(&shader_program, VERTEXSHADER,
+                     "renderer/shaders/vert.gsl");
+  shader_program_add(&shader_program, FRAGSHADER, "renderer/shaders/frag.gsl");
+  shader_program_compile(&shader_program);
+  shader_use(&shader_program);
 
-  init_camera(&camera, &shader_program, WINDOW_HORIZ / WINDOW_VERT);
-  init_texture(&texture, argv[2]);
+  camera_init(&camera, &shader_program, WINDOW_HORIZ / WINDOW_VERT);
+  texture_init(&texture, argv[2]);
   model = (Model *)malloc(sizeof(Model) * MODEL_COUNT);
 
   int col = 0;
   int row = 0;
   int rcount = 0;
   for (int i = 0; i < MODEL_COUNT; i++) {
-    init_model(&model[i], &shader_program, argv[1], 0, NULL);
+    model_init(&model[i], &shader_program, argv[1], 0, NULL);
     model[i].vec[2] += row;
     model[i].vec[0] += col;
 
@@ -198,17 +199,17 @@ int main_normal(int argc, char **argv) {
   while (!quit) {
     quit = handle_camera(&camera, &window);
 
-    clear_window();
+    window_clear();
 
-    update_camera(&camera);
+    camera_update(&camera);
     for (int i = 0; i < MODEL_COUNT; i++) {
-      draw_model(&model[i]);
+      model_draw(&model[i]);
     }
-    swap_window(&window);
+    window_swap(&window);
   }
 
-  destroy_shaderprogram(&shader_program);
-  destroy_window(&window);
+  shader_program_destroy(&shader_program);
+  window_destroy(&window);
   free(model);
   return 0;
 }

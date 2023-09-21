@@ -7,7 +7,7 @@
 
 #include "util.h"
 
-int init_shaderprogram(ShaderProgram *program) {
+int shader_program_init(ShaderProgram *program) {
   memset(program, 0, sizeof(ShaderProgram));
 
   program->program_id = glCreateProgram();
@@ -15,16 +15,17 @@ int init_shaderprogram(ShaderProgram *program) {
   return 0;
 }
 
-void use_shaderprogram(const ShaderProgram *program) {
+void shader_use(const ShaderProgram *program) {
   glUseProgram(program->program_id);
   printf("using shader program %d\n", program->program_id);
 }
 
-int destroy_shaderprogram(ShaderProgram *program) { return 0; }
+int shader_program_destroy(ShaderProgram *program) { return 0; }
 
-void add_shader(ShaderProgram *program, ShaderType type, const char *filepath) {
+void shader_program_add(ShaderProgram *program, ShaderType type,
+                        const char *filepath) {
   unsigned int shader_id;
-  const char *shader_data = read_file(filepath);
+  const char *shader_data = util_read_file(filepath);
   GLint shader_result = 0;
 
   if (!shader_data) {
@@ -55,12 +56,12 @@ void add_shader(ShaderProgram *program, ShaderType type, const char *filepath) {
 
   program->shaders[program->shader_count++].shader_id = shader_id;
 
-  free_file_data((char *)shader_data);
+  util_free_file((char *)shader_data);
   printf("added new shader to program %d in slot %d\n", program->program_id,
          program->shader_count - 1);
 }
 
-void compile_shaderprogram(const ShaderProgram *program) {
+void shader_program_compile(const ShaderProgram *program) {
   for (int i = 0; i < program->shader_count; i++) {
     glAttachShader(program->program_id, program->shaders[i].shader_id);
   }
@@ -68,7 +69,7 @@ void compile_shaderprogram(const ShaderProgram *program) {
   printf("compiled shader program %d\n", program->program_id);
 }
 
-void set_attribute(int index, int size, int stride, long offset) {
+void shader_set_attribute(int index, int size, int stride, long offset) {
   glEnableVertexAttribArray(index);
   glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE, sizeof(float) * stride,
                         (void *)(offset * sizeof(float)));
@@ -76,14 +77,14 @@ void set_attribute(int index, int size, int stride, long offset) {
          size, stride, offset);
 }
 
-void set_uniform(int index, float *value) {
+void shader_set_uniform(int index, float *value) {
   glUniformMatrix4fv(index, 1, GL_FALSE, value);
 }
 
-int get_attribute(const ShaderProgram *program, const char *name) {
+int shader_get_attribute(const ShaderProgram *program, const char *name) {
   return glGetAttribLocation(program->program_id, name);
 }
 
-int get_uniform(const ShaderProgram *program, const char *name) {
+int shader_get_uniform(const ShaderProgram *program, const char *name) {
   return glGetUniformLocation(program->program_id, name);
 }

@@ -28,7 +28,7 @@ typedef struct {
   VertexBuffer instance_buffer;
 } Model;
 
-int init_model(Model *, const ShaderProgram *, const char *, int, void *);
-int draw_model(const Model *model);
+int model_init(Model *, const ShaderProgram *, const char *, int, void *);
+int model_draw(const Model *model);
 
 #endif

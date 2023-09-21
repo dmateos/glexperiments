@@ -13,13 +13,13 @@ typedef struct Program {
   int shader_count;
 } ShaderProgram;
 
-int init_shaderprogram(ShaderProgram *);
-int destroy_shaderprogram(ShaderProgram *);
-void use_shaderprogram(const ShaderProgram *);
-void add_shader(ShaderProgram *, ShaderType, const char *);
-void compile_shaderprogram(const ShaderProgram *);
-void set_attribute(int, int, int, long);
-void set_uniform(int, float *);
-int get_attribute(const ShaderProgram *, const char *);
-int get_uniform(const ShaderProgram *, const char *);
+int shader_program_init(ShaderProgram *);
+int shader_program_destroy(ShaderProgram *);
+void shader_use(const ShaderProgram *);
+void shader_program_add(ShaderProgram *, ShaderType, const char *);
+void shader_program_compile(const ShaderProgram *);
+void shader_set_attribute(int, int, int, long);
+void shader_set_uniform(int, float *);
+int shader_get_attribute(const ShaderProgram *, const char *);
+int shader_get_uniform(const ShaderProgram *, const char *);
 #endif

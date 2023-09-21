@@ -18,7 +18,7 @@ static void build_perspective(Camera *camera, float aspect) {
   glm_perspective(75, aspect, 0.1, 10000.0, camera->perspective);
 }
 
-int init_camera(Camera *camera, const ShaderProgram *shader_program,
+int camera_init(Camera *camera, const ShaderProgram *shader_program,
                 float aspect) {
   memset(camera, 0, sizeof(Camera));
   camera->shader_program = shader_program;
@@ -35,11 +35,11 @@ int init_camera(Camera *camera, const ShaderProgram *shader_program,
   camera->pitch = 0;
 
   build_perspective(camera, aspect);
-  update_camera(camera);
+  camera_update(camera);
   return 0;
 }
 
-void update_camera(Camera *camera) {
+void camera_update(Camera *camera) {
   camera->front[0] =
       cos(camera->yaw * M_PI / 180) * cos(camera->pitch * M_PI / 180);
   camera->front[1] = sin(camera->pitch * M_PI / 180);
@@ -54,13 +54,13 @@ void update_camera(Camera *camera) {
 
   build_lookat(camera);
 
-  set_uniform(get_uniform(camera->shader_program, "perspective"),
-              (float *)camera->perspective);
-  set_uniform(get_uniform(camera->shader_program, "view"),
-              (float *)camera->view);
+  shader_set_uniform(shader_get_uniform(camera->shader_program, "perspective"),
+                     (float *)camera->perspective);
+  shader_set_uniform(shader_get_uniform(camera->shader_program, "view"),
+                     (float *)camera->view);
 }
 
-void move_camera(Camera *camera, CameraDirection direction) {
+void camera_move(Camera *camera, CameraDirection direction) {
   const float velocity = 0.5;
   float tmp[3];
 
@@ -77,7 +77,7 @@ void move_camera(Camera *camera, CameraDirection direction) {
   }
 }
 
-void pivot_camera(Camera *camera, int p, int y) {
+void camera_pivot(Camera *camera, int p, int y) {
   float yaw, pitch;
   yaw = p * 0.1;
   pitch = y * 0.1;

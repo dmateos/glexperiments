@@ -3,7 +3,7 @@
 #include <OpenGL/gl3.h>
 #include <SDL2/SDL.h>
 
-int init_window(Window *window, int width, int height) {
+int window_init(Window *window, int width, int height) {
   if (SDL_Init(SDL_INIT_VIDEO) > 0) {
     printf("could not init window subsystem\n");
     exit(1);
@@ -37,7 +37,7 @@ int init_window(Window *window, int width, int height) {
   return 0;
 }
 
-int destroy_window(Window *window) {
+int window_destroy(Window *window) {
   SDL_GL_DeleteContext(window->glcontext);
   SDL_DestroyWindow(window->window);
   SDL_Quit();
@@ -46,13 +46,13 @@ int destroy_window(Window *window) {
   return 0;
 }
 
-void swap_window(const Window *window) { SDL_GL_SwapWindow(window->window); }
+void window_swap(const Window *window) { SDL_GL_SwapWindow(window->window); }
 
-void clear_window(void) { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
+void window_clear(void) { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 
-int poll_window(const Window *window, SDL_Event *e) { return SDL_PollEvent(e); }
+int window_poll(const Window *window, SDL_Event *e) { return SDL_PollEvent(e); }
 
-void toggle_wireframe(void) {
+void window_wireframe(void) {
   static char wireframe = 0;
 
   if (wireframe) {
@@ -64,7 +64,7 @@ void toggle_wireframe(void) {
   }
 }
 
-int get_window_fps(const Window *window) {
+int window_get_fps(const Window *window) {
   static unsigned int frame_count, previous_time;
   unsigned int cur_time = SDL_GetTicks();
   char strbuf[1024];

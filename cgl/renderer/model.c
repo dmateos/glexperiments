@@ -57,7 +57,7 @@ static int parse_obj_file(ObjFile *model, const char *path) {
   return 0;
 }
 
-int init_model(Model *model, const ShaderProgram *shader, const char *path,
+int model_init(Model *model, const ShaderProgram *shader, const char *path,
                int instances, void *instancedata) {
   memset(model, 0, sizeof(Model));
   model->program = shader;
@@ -65,46 +65,47 @@ int init_model(Model *model, const ShaderProgram *shader, const char *path,
 
   parse_obj_file(&model->vdata, path);
 
-  init_vertex_state(&model->state, VERTEX_STATE_DRAW_INDEXED);
-  bind_vertex_state(&model->state);
+  vertex_init_state(&model->state, VERTEX_STATE_DRAW_INDEXED);
+  vertex_bind_state(&model->state);
 
   // Vertex Data
-  init_vertex_buffer(&model->vertex, VERTEX_BUFFER_TYPE_ARRAY, 0);
-  bind_vertex_buffer(&model->vertex);
-  write_vertex_buffer(&model->vertex, (void *)model->vdata.verticies,
+  vertex_init_buffer(&model->vertex, VERTEX_BUFFER_TYPE_ARRAY, 0);
+  vertex_bind_buffer(&model->vertex);
+  vertex_write_buffer(&model->vertex, (void *)model->vdata.verticies,
                       sizeof(float) * model->vdata.vcount);
 
   // Vertex Index data
-  init_vertex_buffer(&model->index, VERTEX_BUFFER_TYPE_INDEX, 0);
-  bind_vertex_buffer(&model->index);
-  write_vertex_buffer(&model->index, (void *)model->vdata.verticie_index,
+  vertex_init_buffer(&model->index, VERTEX_BUFFER_TYPE_INDEX, 0);
+  vertex_bind_buffer(&model->index);
+  vertex_write_buffer(&model->index, (void *)model->vdata.verticie_index,
                       sizeof(unsigned int) * model->vdata.vicount);
-  set_attribute(get_attribute(shader, "vp"), 3, 8, 0);
-  set_attribute(get_attribute(shader, "nm"), 3, 8, 3);
-  set_attribute(get_attribute(shader, "tx"), 2, 8, 6);
+  shader_set_attribute(shader_get_attribute(shader, "vp"), 3, 8, 0);
+  shader_set_attribute(shader_get_attribute(shader, "nm"), 3, 8, 3);
+  shader_set_attribute(shader_get_attribute(shader, "tx"), 2, 8, 6);
 
   // Instance offset data (if applicable)
   if (model->instance_count > 0) {
-    init_vertex_buffer(&model->instance_buffer, VERTEX_BUFFER_TYPE_ARRAY, 1);
-    bind_vertex_buffer(&model->instance_buffer);
-    write_vertex_buffer(&model->instance_buffer, (void *)instancedata,
+    vertex_init_buffer(&model->instance_buffer, VERTEX_BUFFER_TYPE_ARRAY, 1);
+    vertex_bind_buffer(&model->instance_buffer);
+    vertex_write_buffer(&model->instance_buffer, (void *)instancedata,
                         sizeof(float) * model->instance_count * 3);
-    glVertexAttribDivisor(get_attribute(shader, "os"), 1);
-    set_attribute(get_attribute(shader, "os"), 3, 0, 0);
+    glVertexAttribDivisor(shader_get_attribute(shader, "os"), 1);
+    shader_set_attribute(shader_get_attribute(shader, "os"), 3, 0, 0);
   }
 
-  unbind_vertex_state(&model->state);
+  vertex_unbind_state(&model->state);
   return 0;
 }
 
-int draw_model(const Model *model) {
+int model_draw(const Model *model) {
   if (model->instance_count > 0) {
-    draw_instanced(&model->state, model->vdata.vicount, model->instance_count);
+    vertex_draw_instanced(&model->state, model->vdata.vicount,
+                          model->instance_count);
   } else {
     glm_translate_make((vec4 *)model->translation, (float *)model->vec);
-    set_uniform(get_uniform(model->program, "model"),
-                (float *)model->translation);
-    draw(&model->state, model->vdata.vicount);
+    shader_set_uniform(shader_get_uniform(model->program, "model"),
+                       (float *)model->translation);
+    vertex_draw(&model->state, model->vdata.vicount);
   }
   return 0;
 }

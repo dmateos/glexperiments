@@ -9,12 +9,12 @@ typedef struct Win {
   int mouse_x, mouse_y;
 } Window;
 
-int init_window(Window *, int, int);
-int destroy_window(Window *);
-void swap_window(const Window *);
-void clear_window(void);
-int poll_window(const Window *, SDL_Event *);
-void toggle_wireframe(void);
-int get_window_fps(const Window *);
+int window_init(Window *, int, int);
+int window_destroy(Window *);
+void window_swap(const Window *);
+void window_clear(void);
+int window_poll(const Window *, SDL_Event *);
+void window_wireframe(void);
+int window_get_fps(const Window *);
 
 #endif

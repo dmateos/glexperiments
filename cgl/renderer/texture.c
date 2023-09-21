@@ -23,13 +23,13 @@ static SDL_Surface *load_image(const char *path) {
   return image;
 }
 
-int init_texture(Texture *t, const char *path) {
+int texture_init(Texture *t, const char *path) {
   memset(t, 0, sizeof(Texture));
   SDL_Surface *img = load_image(path);
   int mode = GL_RGB;
 
   glGenTextures(1, &t->tbo);
-  bind_texture(t);
+  texture_bind(t);
   printf("inited new texture %u with %d and %d dimentions\n", t->tbo, img->w,
          img->h);
 
@@ -51,13 +51,13 @@ int init_texture(Texture *t, const char *path) {
   return 0;
 }
 
-int init_cubemap_texture(Texture *t, const char *path) {
+int texture_init_cubemap(Texture *t, const char *path) {
   memset(t, 0, sizeof(Texture));
   SDL_Surface *img = load_image(path);
   int mode = GL_RGB;
 
   glGenTextures(1, &t->tbo);
-  bind_cubemap_texture(t);
+  texture_bind_cubemap(t);
   if (img->format->BytesPerPixel == 4) {
     mode = GL_RGBA;
   }
@@ -76,14 +76,14 @@ int init_cubemap_texture(Texture *t, const char *path) {
   return 0;
 }
 
-void bind_texture(const Texture *t) { glBindTexture(GL_TEXTURE_2D, t->tbo); }
+void texture_bind(const Texture *t) { glBindTexture(GL_TEXTURE_2D, t->tbo); }
 
-void bind_cubemap_texture(const Texture *t) {
+void texture_bind_cubemap(const Texture *t) {
   glBindTexture(GL_TEXTURE_CUBE_MAP, t->tbo);
 }
 
-void unbind_texture(const Texture *t) { glBindTexture(GL_TEXTURE_2D, 0); }
+void texture_unbind(const Texture *t) { glBindTexture(GL_TEXTURE_2D, 0); }
 
-void unbind_cubemap_texture(const Texture *t) {
+void texture_unbind_cubemap(const Texture *t) {
   glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }

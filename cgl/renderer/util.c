@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *read_file(const char *filename) {
+char *util_read_file(const char *filename) {
   char *buffer = 0;
   long length;
   FILE *f = fopen(filename, "rb");
@@ -23,4 +23,4 @@ char *read_file(const char *filename) {
   return buffer;
 }
 
-void free_file_data(char *filedata) { free(filedata); }
+void util_free_file(char *filedata) { free(filedata); }

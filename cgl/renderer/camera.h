@@ -19,9 +19,9 @@ typedef struct Cam {
   float yaw, pitch;
 } Camera;
 
-int init_camera(Camera *, const ShaderProgram *, float aspect);
-void update_camera(Camera *);
-void move_camera(Camera *, CameraDirection);
-void pivot_camera(Camera *, int, int);
+int camera_init(Camera *, const ShaderProgram *, float aspect);
+void camera_update(Camera *);
+void camera_move(Camera *, CameraDirection);
+void camera_pivot(Camera *, int, int);
 
 #endif
