@@ -3,24 +3,17 @@
 
 #include <stdint.h>
 
-typedef enum buffertype {
-  VERTEX_BUFFER_TYPE_ARRAY,
-  VERTEX_BUFFER_TYPE_INDEX
-} BufferType;
+typedef enum { VERTEX_BUFFER_TYPE_ARRAY, VERTEX_BUFFER_TYPE_INDEX } BufferType;
+typedef enum { VERTEX_STATE_DRAW_ARRAY, VERTEX_STATE_DRAW_INDEXED } DrawType;
 
-typedef struct VB {
+typedef struct {
   uint32_t vbo;
   BufferType type;
   uint32_t length;
   int8_t instanced;
 } VertexBuffer;
 
-typedef enum drawtype {
-  VERTEX_STATE_DRAW_ARRAY,
-  VERTEX_STATE_DRAW_INDEXED
-} DrawType;
-
-typedef struct VS {
+typedef struct {
   uint32_t vao;
   DrawType draw_type;
 } VertexState;

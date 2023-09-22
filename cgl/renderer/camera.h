@@ -5,7 +5,7 @@
 
 #include "shader.h"
 
-typedef enum cameradirection {
+typedef enum {
   CAMERA_FORWARD,
   CAMERA_BACK,
   CAMERA_LEFT,

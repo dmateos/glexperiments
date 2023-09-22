@@ -8,7 +8,12 @@
 typedef struct {
   Camera camera;
   ShaderProgram shader;
-  Model models[1024];
+  SceneNode *head;
 } Scene;
+
+typedef struct {
+  SceneNode *next;
+  Model models[1024];
+} SceneNode;
 
 #endif
