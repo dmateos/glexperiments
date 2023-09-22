@@ -109,3 +109,14 @@ int model_draw(const Model *model) {
   }
   return 0;
 }
+
+/*
+int model_proximity(Model *model, float *vec, float radius) {
+  float dist = glm_vec3_distance((vec3 *)model->vec, (vec3 *)vec);
+  if (dist < radius) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+*/
