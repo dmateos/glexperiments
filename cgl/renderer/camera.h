@@ -12,7 +12,7 @@ typedef enum cameradirection {
   CAMERA_RIGHT
 } CameraDirection;
 
-typedef struct Cam {
+typedef struct {
   mat4 view, perspective;
   const ShaderProgram *shader_program;
   float position[3], front[3], up[3], right[3];

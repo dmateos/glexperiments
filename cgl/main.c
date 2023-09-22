@@ -15,8 +15,8 @@
 
 #define WINDOW_HORIZ 1280
 #define WINDOW_VERT 1024
-#define MODEL_COUNT 1000000
-#define INSTANCED 1
+#define MODEL_COUNT 1
+#define INSTANCED 0
 
 // handle mouse, do it like a blender 3d app where you click to drag
 // and right click to rotate
@@ -31,7 +31,7 @@ static void handle_mouse(Camera *camera, Window *window) {
     camera_pivot(camera, dx, 0);
   }
   if (dy != 0) {
-    camera_pivot(camera, 0, dy);
+    camera_pivot(camera, 0, -dy);
   }
 
   if (button_state & SDL_BUTTON(SDL_BUTTON_LEFT)) {
@@ -218,7 +218,6 @@ int main(int argc, char **argv) {
   int ret = 0;
 
   list_test();
-  return 0;
 
   if (INSTANCED) {
     ret = main_instanced(argc, argv);

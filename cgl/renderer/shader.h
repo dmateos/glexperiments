@@ -3,11 +3,11 @@
 
 typedef enum shadertype { VERTEXSHADER, FRAGSHADER } ShaderType;
 
-typedef struct Shader {
+typedef struct {
   unsigned int shader_id;
 } Shader;
 
-typedef struct Program {
+typedef struct {
   unsigned int program_id;
   Shader shaders[16];
   int shader_count;

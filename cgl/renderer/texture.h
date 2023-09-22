@@ -1,7 +1,7 @@
 #ifndef _TEXTURE_H
 #define _TEXTURE_H
 
-typedef struct _textuer_t {
+typedef struct {
   unsigned int tbo, width, height;
 } Texture;
 
