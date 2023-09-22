@@ -5,8 +5,6 @@
 #include "renderer/texture.h"
 #include "renderer/window.h"
 
-#define WINDOW_HORIZ 1280
-#define WINDOW_VERT 1024
 #define MODEL_COUNT 1
 
 // handle mouse, do it like a blender 3d app where you click to drag
@@ -119,7 +117,7 @@ int test_instanced(Window *window, int argc, char **argv) {
   shader_program_compile(&shader_program);
   shader_use(&shader_program);
 
-  camera_init(&camera, &shader_program, WINDOW_HORIZ / WINDOW_VERT);
+  camera_init(&camera, &shader_program, window->width / window->height);
   model_init(&model, &shader_program, argv[1], MODEL_COUNT, model_offsets);
   texture_init(&texture, argv[2]);
 
@@ -159,7 +157,7 @@ int test_normal(Window *window, int argc, char **argv) {
   shader_program_compile(&shader_program);
   shader_use(&shader_program);
 
-  camera_init(&camera, &shader_program, WINDOW_HORIZ / WINDOW_VERT);
+  camera_init(&camera, &shader_program, window->width / window->height);
   texture_init(&texture, argv[2]);
   model = (Model *)malloc(sizeof(Model) * MODEL_COUNT);
 

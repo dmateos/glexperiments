@@ -12,6 +12,8 @@ int window_init(Window *window, int width, int height) {
   }
 
   memset(window, 0, sizeof(Window));
+  window->width = width;
+  window->height = height;
 
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
