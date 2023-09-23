@@ -1,0 +1,7 @@
+{
+    "C_Cpp.intelliSenseEngineFallback": "disabled",
+    "files.associations": {
+        "*.yml": "yaml",
+        "__node_handle": "c"
+    }
+}

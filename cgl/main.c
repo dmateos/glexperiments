@@ -68,7 +68,6 @@ static int handle_camera(Camera *camera, Window *window) {
         break;
       case SDLK_RIGHT:
         camera_pivot(camera, 4, 0);
-        break;
       case SDLK_LEFT:
         camera_pivot(camera, -4, 0);
         break;
@@ -86,6 +85,17 @@ static int handle_camera(Camera *camera, Window *window) {
     }
   }
   return 0;
+}
+
+static void handle_scene(Window *window) {
+  Camera camera;
+  bool quit = false;
+
+  while (!quit) {
+    quit = handle_camera(&camera, window);
+    window_clear();
+    window_swap(window);
+  }
 }
 
 int main(int argc, char **argv) {
