@@ -5,8 +5,6 @@
 #include "renderer/texture.h"
 #include "renderer/window.h"
 
-#define MODEL_COUNT 1
-
 // handle mouse, do it like a blender 3d app where you click to drag
 // and right click to rotate
 static void handle_mouse(Camera *camera, Window *window) {
@@ -79,13 +77,13 @@ static int handle_camera(Camera *camera, Window *window) {
   return 0;
 }
 
-int test_instanced(Window *window, int argc, char **argv) {
+int test_instanced(Window *window, int mc, int argc, char **argv) {
   ShaderProgram shader_program;
   Model model;
   Camera camera;
   Texture texture;
   bool quit = false;
-  float model_offsets[MODEL_COUNT * 3];
+  float model_offsets[mc * 3];
 
   if (argc < 3) {
     printf("specify models to load\n");
@@ -95,7 +93,7 @@ int test_instanced(Window *window, int argc, char **argv) {
   int col = 0;
   int row = 0;
   int rcount = 0;
-  for (int i = 0; i < MODEL_COUNT * 3; i += 3) {
+  for (int i = 0; i < mc * 3; i += 3) {
     model_offsets[i] += row;
     model_offsets[i + 1] += ((float)rand() / (float)(RAND_MAX)) * 1000.0;
     model_offsets[i + 2] += col;
@@ -103,7 +101,7 @@ int test_instanced(Window *window, int argc, char **argv) {
     row += 10;
     rcount += 1;
 
-    if ((rcount % (int)sqrt(MODEL_COUNT) == 0) && (rcount != 0)) {
+    if ((rcount % (int)sqrt(mc) == 0) && (rcount != 0)) {
       row = 0;
       col += 10;
       rcount = 0;
@@ -118,7 +116,7 @@ int test_instanced(Window *window, int argc, char **argv) {
   shader_use(&shader_program);
 
   camera_init(&camera, &shader_program, window->width / window->height);
-  model_init(&model, &shader_program, argv[1], MODEL_COUNT, model_offsets);
+  model_init(&model, &shader_program, argv[1], mc, model_offsets);
   texture_init(&texture, argv[2]);
 
   while (!quit) {
@@ -138,7 +136,7 @@ int test_instanced(Window *window, int argc, char **argv) {
   return 0;
 }
 
-int test_normal(Window *window, int argc, char **argv) {
+int test_normal(Window *window, int mc, int argc, char **argv) {
   ShaderProgram shader_program;
   Model *model;
   Camera camera;
@@ -159,12 +157,12 @@ int test_normal(Window *window, int argc, char **argv) {
 
   camera_init(&camera, &shader_program, window->width / window->height);
   texture_init(&texture, argv[2]);
-  model = (Model *)malloc(sizeof(Model) * MODEL_COUNT);
+  model = (Model *)malloc(sizeof(Model) * mc);
 
   int col = 0;
   int row = 0;
   int rcount = 0;
-  for (int i = 0; i < MODEL_COUNT; i++) {
+  for (int i = 0; i < mc; i++) {
     model_init(&model[i], &shader_program, argv[1], 0, NULL);
     model[i].vec[2] += row;
     model[i].vec[0] += col;
@@ -172,7 +170,7 @@ int test_normal(Window *window, int argc, char **argv) {
     row += 3;
     rcount += 1;
 
-    if ((rcount % (int)sqrt(MODEL_COUNT) == 0) && (rcount != 0)) {
+    if ((rcount % (int)sqrt(mc) == 0) && (rcount != 0)) {
       row = 0;
       col += 3;
       rcount = 0;
@@ -185,7 +183,7 @@ int test_normal(Window *window, int argc, char **argv) {
     window_clear();
 
     camera_update(&camera);
-    for (int i = 0; i < MODEL_COUNT; i++) {
+    for (int i = 0; i < mc; i++) {
       model_draw(&model[i]);
     }
     window_swap(window);

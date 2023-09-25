@@ -120,3 +120,5 @@ int model_proximity(Model *model, float *vec, float radius) {
   }
 }
 */
+
+void model_free(Model *model) {}

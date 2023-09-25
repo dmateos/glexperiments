@@ -14,7 +14,9 @@
 
 #define WINDOW_HORIZ 1280
 #define WINDOW_VERT 1024
-#define INSTANCED 0
+#define INSTANCED 1
+#define TEST 1
+#define MODEL_COUNT 1000000
 
 // handle mouse, do it like a blender 3d app where you click to drag
 // and right click to rotate
@@ -68,6 +70,7 @@ static int handle_camera(Camera *camera, Window *window) {
         break;
       case SDLK_RIGHT:
         camera_pivot(camera, 4, 0);
+        break;
       case SDLK_LEFT:
         camera_pivot(camera, -4, 0);
         break;
@@ -87,7 +90,7 @@ static int handle_camera(Camera *camera, Window *window) {
   return 0;
 }
 
-static void handle_scene(Window *window) {
+static int handle_scene(Window *window) {
   Camera camera;
   bool quit = false;
 
@@ -96,6 +99,7 @@ static void handle_scene(Window *window) {
     window_clear();
     window_swap(window);
   }
+  return 0;
 }
 
 int main(int argc, char **argv) {
@@ -106,10 +110,14 @@ int main(int argc, char **argv) {
 
   window_init(&window, WINDOW_HORIZ, WINDOW_VERT);
 
-  if (INSTANCED) {
-    ret = test_instanced(&window, argc, argv);
+  if (TEST) {
+    if (INSTANCED) {
+      ret = test_instanced(&window, MODEL_COUNT, argc, argv);
+    } else {
+      ret = test_normal(&window, MODEL_COUNT, argc, argv);
+    }
   } else {
-    ret = test_normal(&window, argc, argv);
+    ret = handle_scene(&window);
   }
   return ret;
 }

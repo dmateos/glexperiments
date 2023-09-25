@@ -31,5 +31,6 @@ typedef struct {
 int model_init(Model *, const ShaderProgram *, const char *, int, void *);
 int model_draw(const Model *model);
 int model_proximity(Model *, float *, float);
+void model_free(Model *model);
 
 #endif
