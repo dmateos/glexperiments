@@ -16,10 +16,14 @@ void scene_init(Scene *scene) {
   model_init(&scene->test_model, &scene->shader, "assets/models/cube.obj", 0,
              NULL);
   texture_init(&scene->texture, "assets/textures/gridtex.png");
+  printf("scene initialized\n");
 }
 
 void scene_draw(Scene *scene) { model_draw(&scene->test_model); }
 
 void scene_skybox_init(Scene *scene) {}
 
-void scene_free(Scene *scene) { model_free(&scene->test_model); }
+void scene_free(Scene *scene) {
+  model_free(&scene->test_model);
+  printf("scene freed\n");
+}
