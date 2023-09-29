@@ -9,8 +9,8 @@
 #define OBJ_VERTEX_LIMIT 102400
 
 typedef struct {
-  float verticies[OBJ_VERTEX_LIMIT];
-  unsigned int verticie_index[OBJ_VERTEX_LIMIT];
+  float *verticies;
+  unsigned int *verticie_index;
   unsigned int vcount, vicount;
 } ObjFile;
 

@@ -21,6 +21,9 @@ static int parse_obj_file(ObjFile *model, const char *path) {
 
   for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
     printf("mesh %d has %d verticies\n", i, scene->mMeshes[i]->mNumVertices);
+    model->verticies =
+        malloc(sizeof(float) * scene->mMeshes[i]->mNumVertices * 8);
+
     const struct aiMesh *mesh = scene->mMeshes[i];
     for (unsigned int j = 0; j < mesh->mNumVertices; j++) {
       model->verticies[model->vcount++] = mesh->mVertices[j].x;
@@ -44,6 +47,8 @@ static int parse_obj_file(ObjFile *model, const char *path) {
              mesh->mVertices[j].y, mesh->mVertices[j].z);
     }
 
+    // todo maybe fix
+    model->verticie_index = malloc(sizeof(unsigned int) * mesh->mNumFaces * 3);
     for (unsigned int j = 0; j < mesh->mNumFaces; j++) {
       const struct aiFace *face = &mesh->mFaces[j];
       for (unsigned int k = 0; k < face->mNumIndices; k++) {
@@ -53,7 +58,8 @@ static int parse_obj_file(ObjFile *model, const char *path) {
   }
 
   aiReleaseImport(scene);
-  printf("model is ok\n");
+  printf("mesh data ok, vcount: %d, vicount: %d\n", model->vcount,
+         model->vicount);
   return 0;
 }
 
@@ -121,4 +127,8 @@ int model_proximity(Model *model, float *vec, float radius) {
 }
 */
 
-void model_free(Model *model) {}
+void model_free(Model *model) {
+  free(model->vdata.verticies);
+  free(model->vdata.verticie_index);
+  printf("freed model\n");
+}

@@ -130,6 +130,7 @@ int test_instanced(Window *window, int mc, int argc, char **argv) {
     window_swap(window);
   }
 
+  model_free(&model);
   shader_program_destroy(&shader_program);
   window_destroy(window);
 
@@ -191,6 +192,10 @@ int test_normal(Window *window, int mc, int argc, char **argv) {
 
   shader_program_destroy(&shader_program);
   window_destroy(window);
+
+  for (int i = 0; i < mc; i++) {
+    model_free(&model[i]);
+  }
   free(model);
   return 0;
 }
