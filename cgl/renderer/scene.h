@@ -4,6 +4,7 @@
 #include "camera.h"
 #include "model.h"
 #include "shader.h"
+#include "texture.h"
 
 typedef struct _sn {
   struct _sn *next;
@@ -16,9 +17,12 @@ typedef struct {
 
 typedef struct {
   Camera camera;
-  ShaderProgram *shader;
+  ShaderProgram shader;
   SceneSkybox skybox;
   SceneNode *head;
+
+  Model test_model;
+  Texture texture;
 } Scene;
 
 void scene_init(Scene *scene);

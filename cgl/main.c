@@ -16,8 +16,8 @@
 #define WINDOW_HORIZ 1280
 #define WINDOW_VERT 1024
 #define INSTANCED 0
-#define TEST 1
-#define MODEL_COUNT 100
+#define TEST 0
+#define MODEL_COUNT 1
 
 // handle mouse, do it like a blender 3d app where you click to drag
 // and right click to rotate
@@ -92,15 +92,15 @@ static int handle_camera(Camera *camera, Window *window) {
 }
 
 static int handle_scene(Window *window) {
-  Camera camera;
   Scene scene;
   bool quit = false;
 
   scene_init(&scene);
 
   while (!quit) {
-    quit = handle_camera(&camera, window);
+    quit = handle_camera(&scene.camera, window);
     window_clear();
+    camera_update(&scene.camera);
 
     scene_draw(&scene);
     window_swap(window);
