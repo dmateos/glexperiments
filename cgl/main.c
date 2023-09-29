@@ -115,11 +115,10 @@ int main(int argc, char **argv) {
   Window window;
   int ret = 0;
 
-  list_test();
-
   window_init(&window, WINDOW_HORIZ, WINDOW_VERT);
 
   if (TEST) {
+    list_test();
     if (INSTANCED) {
       ret = test_instanced(&window, MODEL_COUNT, argc, argv);
     } else {

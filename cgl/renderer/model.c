@@ -43,8 +43,10 @@ static int parse_obj_file(ObjFile *model, const char *path) {
         model->verticies[model->vcount++] = mesh->mTextureCoords[0][j].y;
       }
 
-      printf("vertex %d: %f %f %f\n", j, mesh->mVertices[j].x,
-             mesh->mVertices[j].y, mesh->mVertices[j].z);
+      /*
+        printf("vertex %d: %f %f %f\n", j, mesh->mVertices[j].x,
+        mesh->mVertices[j].y, mesh->mVertices[j].z);
+      */
     }
 
     // todo maybe fix
@@ -58,7 +60,7 @@ static int parse_obj_file(ObjFile *model, const char *path) {
   }
 
   aiReleaseImport(scene);
-  printf("mesh data ok, vcount: %d, vicount: %d\n", model->vcount,
+  printf("mesh data %s, vcount: %d, vicount: %d\n", path, model->vcount,
          model->vicount);
   return 0;
 }
@@ -101,6 +103,7 @@ int model_init(Model *model, const ShaderProgram *shader, const char *path,
 
   texture_init(&model->texture, tpath);
   vertex_unbind_state(&model->state);
+  printf("initialized model %s\n", path);
   return 0;
 }
 
