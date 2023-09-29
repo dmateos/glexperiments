@@ -105,6 +105,8 @@ static int handle_scene(Window *window) {
     scene_draw(&scene);
     window_swap(window);
   }
+
+  scene_free(&scene);
   return 0;
 }
 
@@ -125,5 +127,7 @@ int main(int argc, char **argv) {
   } else {
     ret = handle_scene(&window);
   }
+
+  window_destroy(&window);
   return ret;
 }

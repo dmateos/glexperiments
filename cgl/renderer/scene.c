@@ -16,11 +16,13 @@ void scene_init(Scene *scene) {
   model_init(&scene->test_model, &scene->shader, "assets/models/cube.obj", 0,
              NULL);
   texture_init(&scene->texture, "assets/textures/gridtex.png");
-
-  scene->test_model.vec[2] += 3.0;
-  scene->test_model.vec[0] += 3.0;
 }
 
 void scene_draw(Scene *scene) { model_draw(&scene->test_model); }
 
 void scene_skybox_init(Scene *scene) {}
+
+void scene_free(Scene *scene) {
+  shader_program_destroy(&scene->shader);
+  model_free(&scene->test_model);
+}
