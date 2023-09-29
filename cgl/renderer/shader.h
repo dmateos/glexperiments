@@ -14,7 +14,6 @@ typedef struct {
 } ShaderProgram;
 
 int shader_program_init(ShaderProgram *);
-int shader_program_destroy(ShaderProgram *);
 void shader_use(const ShaderProgram *);
 void shader_program_add(ShaderProgram *, ShaderType, const char *);
 void shader_program_compile(const ShaderProgram *);

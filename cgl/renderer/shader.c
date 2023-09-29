@@ -20,8 +20,6 @@ void shader_use(const ShaderProgram *program) {
   printf("using shader program %d\n", program->program_id);
 }
 
-int shader_program_destroy(ShaderProgram *program) { return 0; }
-
 void shader_program_add(ShaderProgram *program, ShaderType type,
                         const char *filepath) {
   unsigned int shader_id;

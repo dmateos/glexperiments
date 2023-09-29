@@ -22,7 +22,4 @@ void scene_draw(Scene *scene) { model_draw(&scene->test_model); }
 
 void scene_skybox_init(Scene *scene) {}
 
-void scene_free(Scene *scene) {
-  shader_program_destroy(&scene->shader);
-  model_free(&scene->test_model);
-}
+void scene_free(Scene *scene) { model_free(&scene->test_model); }
