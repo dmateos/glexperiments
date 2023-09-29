@@ -43,7 +43,7 @@ void vertex_bind_buffer(const VertexBuffer *buffer) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->vbo);
     break;
   }
-  // printf("bound vertex buffer %u\n", buffer->vbo);
+  printf("bound vertex buffer %u\n", buffer->vbo);
 }
 
 void vertex_unbind_buffer(const VertexBuffer *buffer) {
