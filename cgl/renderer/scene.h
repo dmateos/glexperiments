@@ -5,15 +5,24 @@
 #include "model.h"
 #include "shader.h"
 
+typedef struct _sn {
+  struct _sn *next;
+  Model models[1024];
+} SceneNode;
+
+typedef struct {
+  ShaderProgram shader;
+} SceneSkybox;
+
 typedef struct {
   Camera camera;
-  ShaderProgram shader;
+  ShaderProgram *shader;
+  SceneSkybox skybox;
   SceneNode *head;
 } Scene;
 
-typedef struct {
-  SceneNode *next;
-  Model models[1024];
-} SceneNode;
+void scene_init(Scene *scene);
+void scene_draw(Scene *scene);
+void scene_skybox_init(Scene *scene);
 
 #endif

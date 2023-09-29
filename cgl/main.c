@@ -7,6 +7,7 @@
 #include "base/list.h"
 #include "renderer/camera.h"
 #include "renderer/model.h"
+#include "renderer/scene.h"
 #include "renderer/shader.h"
 #include "renderer/texture.h"
 #include "renderer/window.h"
@@ -92,11 +93,16 @@ static int handle_camera(Camera *camera, Window *window) {
 
 static int handle_scene(Window *window) {
   Camera camera;
+  Scene scene;
   bool quit = false;
+
+  scene_init(&scene);
 
   while (!quit) {
     quit = handle_camera(&camera, window);
     window_clear();
+
+    scene_draw(&scene);
     window_swap(window);
   }
   return 0;
