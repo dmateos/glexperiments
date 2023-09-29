@@ -22,7 +22,6 @@ typedef struct {
   SceneNode *head;
 
   Model test_model;
-  Texture texture;
 } Scene;
 
 /*

@@ -13,9 +13,8 @@ void scene_init(Scene *scene) {
 
   scene_skybox_init(scene);
 
-  model_init(&scene->test_model, &scene->shader, "assets/models/cube.obj", 0,
-             NULL);
-  texture_init(&scene->texture, "assets/textures/gridtex.png");
+  model_init(&scene->test_model, &scene->shader, "assets/models/cube.obj",
+             "assets/textures/gridtex.png", 0, NULL);
   printf("scene initialized\n");
 }
 

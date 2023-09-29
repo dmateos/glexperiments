@@ -4,6 +4,7 @@
 #include <cglm/cglm.h>
 
 #include "shader.h"
+#include "texture.h"
 #include "vertex.h"
 
 #define OBJ_VERTEX_LIMIT 102400
@@ -22,13 +23,15 @@ typedef struct {
   VertexState state;
   VertexBuffer vertex, index;
   ObjFile vdata;
+  Texture texture;
 
   // Only used for instances
   unsigned int instance_count;
   VertexBuffer instance_buffer;
 } Model;
 
-int model_init(Model *, const ShaderProgram *, const char *, int, void *);
+int model_init(Model *, const ShaderProgram *, const char *, const char *, int,
+               void *);
 int model_draw(const Model *model);
 int model_proximity(Model *, float *, float);
 void model_free(Model *model);

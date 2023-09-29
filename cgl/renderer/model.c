@@ -64,7 +64,7 @@ static int parse_obj_file(ObjFile *model, const char *path) {
 }
 
 int model_init(Model *model, const ShaderProgram *shader, const char *path,
-               int instances, void *instancedata) {
+               const char *tpath, int instances, void *instancedata) {
   memset(model, 0, sizeof(Model));
   model->program = shader;
   model->instance_count = instances;
@@ -99,11 +99,14 @@ int model_init(Model *model, const ShaderProgram *shader, const char *path,
     shader_set_attribute(shader_get_attribute(shader, "os"), 3, 0, 0);
   }
 
+  texture_init(&model->texture, tpath);
   vertex_unbind_state(&model->state);
   return 0;
 }
 
 int model_draw(const Model *model) {
+  texture_bind(&model->texture);
+
   if (model->instance_count > 0) {
     vertex_draw_instanced(&model->state, model->vdata.vicount,
                           model->instance_count);

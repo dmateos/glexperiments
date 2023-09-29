@@ -81,7 +81,6 @@ int test_instanced(Window *window, int mc, int argc, char **argv) {
   ShaderProgram shader_program;
   Model model;
   Camera camera;
-  Texture texture;
   bool quit = false;
   float model_offsets[mc * 3];
 
@@ -116,8 +115,7 @@ int test_instanced(Window *window, int mc, int argc, char **argv) {
   shader_use(&shader_program);
 
   camera_init(&camera, &shader_program, window->width / window->height);
-  model_init(&model, &shader_program, argv[1], mc, model_offsets);
-  texture_init(&texture, argv[2]);
+  model_init(&model, &shader_program, argv[1], argv[2], mc, model_offsets);
 
   while (!quit) {
     quit = handle_camera(&camera, window);
@@ -140,7 +138,6 @@ int test_normal(Window *window, int mc, int argc, char **argv) {
   ShaderProgram shader_program;
   Model *model;
   Camera camera;
-  Texture texture;
   bool quit = false;
 
   if (argc < 3) {
@@ -156,14 +153,13 @@ int test_normal(Window *window, int mc, int argc, char **argv) {
   shader_use(&shader_program);
 
   camera_init(&camera, &shader_program, window->width / window->height);
-  texture_init(&texture, argv[2]);
   model = (Model *)malloc(sizeof(Model) * mc);
 
   int col = 0;
   int row = 0;
   int rcount = 0;
   for (int i = 0; i < mc; i++) {
-    model_init(&model[i], &shader_program, argv[1], 0, NULL);
+    model_init(&model[i], &shader_program, argv[1], argv[2], 0, NULL);
     model[i].vec[2] += row;
     model[i].vec[0] += col;
 
