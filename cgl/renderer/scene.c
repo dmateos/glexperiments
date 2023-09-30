@@ -11,7 +11,7 @@ void scene_init(Scene *scene) {
 
   camera_init(&scene->camera, &scene->shader, 1280 / 1024);
 
-  scene_skybox_init(scene);
+  model_skybox_init(&scene->skybox, "assets/textures/skybox/");
 
   model_init(&scene->test_model, &scene->shader, "assets/models/cube.obj",
              "assets/textures/gridtex.png", 0, NULL);

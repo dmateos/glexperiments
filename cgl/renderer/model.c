@@ -158,3 +158,8 @@ void model_free(Model *model) {
   free(model->vdata.verticie_index);
   printf("freed model\n");
 }
+
+void model_skybox_init(ModelSkybox *skybox, const char *path) {
+  memset(skybox, 0, sizeof(ModelSkybox));
+  texture_init_cubemap(&skybox->texture, path);
+}

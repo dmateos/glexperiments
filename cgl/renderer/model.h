@@ -43,4 +43,6 @@ int model_draw(const Model *model);
 int model_proximity(Model *, float *, float);
 void model_free(Model *model);
 
+void model_skybox_init(ModelSkybox *skybox, const char *path);
+
 #endif
