@@ -182,8 +182,8 @@ void model_skybox_init(ModelSkybox *skybox, const char *path) {
 }
 
 int model_skybox_draw(const ModelSkybox *skybox) {
-  return 0;
   shader_use(&skybox->program);
-  texture_bind(&skybox->texture);
+  texture_bind_cubemap(&skybox->texture);
+  vertex_draw(&skybox->state, 36);
   return 0;
 }
