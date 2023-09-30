@@ -17,7 +17,7 @@ int shader_program_init(ShaderProgram *program) {
 
 void shader_use(const ShaderProgram *program) {
   glUseProgram(program->program_id);
-  printf("using shader program %d\n", program->program_id);
+  // printf("using shader program %d\n", program->program_id);
 }
 
 void shader_program_add(ShaderProgram *program, ShaderType type,
