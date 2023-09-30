@@ -30,7 +30,7 @@ int texture_init(Texture *t, const char *path) {
 
   glGenTextures(1, &t->tbo);
   texture_bind(t);
-  printf("inited new texture %u with %d and %d dimentions\n", t->tbo, img->w,
+  printf("inited new texture %u with %dx%d dimentions\n", t->tbo, img->w,
          img->h);
 
   if (img->format->BytesPerPixel == 4) {
@@ -53,14 +53,12 @@ int texture_init(Texture *t, const char *path) {
 
 int texture_init_cubemap(Texture *t, const char *path) {
   memset(t, 0, sizeof(Texture));
-  SDL_Surface *img = load_image(path);
   int mode = GL_RGB;
+  const char *paths[] = {"right.jpg",  "left.jpg",  "top.jpg",
+                         "bottom.jpg", "front.jpg", "back.jpg"};
 
   glGenTextures(1, &t->tbo);
   texture_bind_cubemap(t);
-  if (img->format->BytesPerPixel == 4) {
-    mode = GL_RGBA;
-  }
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -68,11 +66,19 @@ int texture_init_cubemap(Texture *t, const char *path) {
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
   for (int i = 0; i < 6; i++) {
+    char path_combined[256];
+    strncat(path_combined, path, 256);
+    strncat(path_combined, paths[i], 256);
+    SDL_Surface *img = load_image(path);
+    if (img->format->BytesPerPixel == 4) {
+      mode = GL_RGBA;
+    }
+
     glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, mode, img->w, img->h, 0,
                  mode, GL_UNSIGNED_BYTE, img->pixels);
+    SDL_FreeSurface(img);
   }
   glGenerateMipmap(GL_TEXTURE_2D);
-  SDL_FreeSurface(img);
   return 0;
 }
 
