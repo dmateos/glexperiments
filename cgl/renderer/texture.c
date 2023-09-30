@@ -81,6 +81,7 @@ int texture_init_cubemap(Texture *t, const char *path) {
            i, img->w, img->h);
     SDL_FreeSurface(img);
   }
+  printf("loaded new skymap texture %u\n", t->tbo);
   glGenerateMipmap(GL_TEXTURE_2D);
   return 0;
 }
