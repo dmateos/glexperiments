@@ -164,9 +164,9 @@ void model_skybox_init(ModelSkybox *skybox, const char *path) {
   memset(skybox, 0, sizeof(ModelSkybox));
   shader_program_init(&skybox->program);
   shader_program_add(&skybox->program, VERTEXSHADER,
-                     "renderer/shaders/skybox_frag.gsl");
-  shader_program_add(&skybox->program, FRAGSHADER,
                      "renderer/shaders/skybox_vert.gsl");
+  shader_program_add(&skybox->program, FRAGSHADER,
+                     "renderer/shaders/skybox_frag.gsl");
   shader_program_compile(&skybox->program);
   shader_use(&skybox->program);
 
