@@ -18,7 +18,10 @@ void scene_init(Scene *scene) {
   printf("scene initialized\n");
 }
 
-void scene_draw(Scene *scene) { model_draw(&scene->test_model); }
+void scene_draw(Scene *scene) {
+  model_skybox_draw(&scene->skybox);
+  model_draw(&scene->test_model);
+}
 
 void scene_free(Scene *scene) {
   model_free(&scene->test_model);

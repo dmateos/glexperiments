@@ -180,3 +180,10 @@ void model_skybox_init(ModelSkybox *skybox, const char *path) {
 
   texture_init_cubemap(&skybox->texture, path);
 }
+
+int model_skybox_draw(const ModelSkybox *skybox) {
+  return 0;
+  shader_use(&skybox->program);
+  texture_bind(&skybox->texture);
+  return 0;
+}
