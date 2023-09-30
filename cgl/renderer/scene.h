@@ -12,14 +12,10 @@ typedef struct _sn {
 } SceneNode;
 
 typedef struct {
-  ShaderProgram shader;
-} SceneSkybox;
-
-typedef struct {
   Camera camera;
   ShaderProgram shader;
-  SceneSkybox skybox;
   SceneNode *head;
+  ModelSkybox skybox;
 
   Model test_model;
 } Scene;

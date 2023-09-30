@@ -30,6 +30,13 @@ typedef struct {
   VertexBuffer instance_buffer;
 } Model;
 
+typedef struct {
+  ShaderProgram program;
+  VertexState state;
+  VertexBuffer vertex;
+  Texture texture;
+} ModelSkybox;
+
 int model_init(Model *, const ShaderProgram *, const char *, const char *, int,
                void *);
 int model_draw(const Model *model);
