@@ -114,8 +114,11 @@ static int handle_scene(Window *window) {
 int main(int argc, char **argv) {
   Window window;
   int ret = 0;
+  Texture cubemap;
 
   window_init(&window, WINDOW_HORIZ, WINDOW_VERT);
+
+  texture_init_cubemap(&cubemap, "assets/textures/skybox/");
 
   if (TEST) {
     list_test();

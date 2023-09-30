@@ -30,8 +30,6 @@ int texture_init(Texture *t, const char *path) {
 
   glGenTextures(1, &t->tbo);
   texture_bind(t);
-  printf("inited new texture %u with %dx%d dimentions\n", t->tbo, img->w,
-         img->h);
 
   if (img->format->BytesPerPixel == 4) {
     mode = GL_RGBA;
@@ -47,6 +45,8 @@ int texture_init(Texture *t, const char *path) {
                GL_UNSIGNED_BYTE, img->pixels);
 
   glGenerateMipmap(GL_TEXTURE_2D);
+  printf("inited new texture %u with %dx%d dimentions\n", t->tbo, img->w,
+         img->h);
   SDL_FreeSurface(img);
   return 0;
 }
@@ -67,15 +67,18 @@ int texture_init_cubemap(Texture *t, const char *path) {
 
   for (int i = 0; i < 6; i++) {
     char path_combined[256];
+    memset(path_combined, 0, 256);
     strncat(path_combined, path, 256);
     strncat(path_combined, paths[i], 256);
-    SDL_Surface *img = load_image(path);
+    SDL_Surface *img = load_image(path_combined);
     if (img->format->BytesPerPixel == 4) {
       mode = GL_RGBA;
     }
 
     glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, mode, img->w, img->h, 0,
                  mode, GL_UNSIGNED_BYTE, img->pixels);
+    printf("inited new skymap texture %u (%d) with %dx%d dimentions\n", t->tbo,
+           i, img->w, img->h);
     SDL_FreeSurface(img);
   }
   glGenerateMipmap(GL_TEXTURE_2D);
