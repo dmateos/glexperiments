@@ -60,6 +60,20 @@ void camera_update(Camera *camera) {
                      (float *)camera->view);
 }
 
+void camerea_update_uniforms(Camera *camera, ShaderProgram *shader) {
+  shader_set_uniform(shader_get_uniform(shader, "perspective"),
+                     (float *)camera->perspective);
+  // remove translations from camera view matrix
+
+  mat4 view;
+  glm_mat4_copy(camera->view, view);
+  view[3][0] = 0;
+  view[3][1] = 0;
+  view[3][2] = 0;
+
+  shader_set_uniform(shader_get_uniform(shader, "view"), (float *)view);
+}
+
 void camera_move(Camera *camera, CameraDirection direction) {
   const float velocity = 0.5;
   float tmp[3];

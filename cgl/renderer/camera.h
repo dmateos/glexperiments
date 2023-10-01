@@ -23,5 +23,6 @@ int camera_init(Camera *, const ShaderProgram *, float aspect);
 void camera_update(Camera *);
 void camera_move(Camera *, CameraDirection);
 void camera_pivot(Camera *, int, int);
+void camerea_update_uniforms(Camera *camera, ShaderProgram *shader);
 
 #endif

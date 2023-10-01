@@ -177,6 +177,7 @@ void model_skybox_init(ModelSkybox *skybox, const char *path) {
   vertex_bind_buffer(&skybox->vertex);
   vertex_write_buffer(&skybox->vertex, (void *)skyboxVertices,
                       sizeof(skyboxVertices));
+  shader_set_attribute(shader_get_attribute(&skybox->program, "aPos"), 3, 0, 0);
 
   texture_init_cubemap(&skybox->texture, path);
 }

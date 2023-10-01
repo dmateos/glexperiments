@@ -103,6 +103,7 @@ static int handle_scene(Window *window) {
     window_clear();
     camera_update(&scene.camera);
 
+    scene_update(&scene);
     scene_draw(&scene);
     window_swap(window);
   }

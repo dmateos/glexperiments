@@ -12,10 +12,16 @@ void scene_init(Scene *scene) {
   camera_init(&scene->camera, &scene->shader, 1280 / 1024);
 
   model_skybox_init(&scene->skybox, "assets/textures/skybox/");
+  camerea_update_uniforms(&scene->camera, &scene->skybox.program);
 
   model_init(&scene->test_model, &scene->shader, "assets/models/cube.obj",
              "assets/textures/gridtex.png", 0, NULL);
   printf("scene initialized\n");
+}
+
+void scene_update(Scene *scene) {
+  shader_use(&scene->skybox.program);
+  camerea_update_uniforms(&scene->camera, &scene->skybox.program);
 }
 
 void scene_draw(Scene *scene) {

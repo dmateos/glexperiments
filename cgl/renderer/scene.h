@@ -21,6 +21,7 @@ typedef struct {
 } Scene;
 
 void scene_init(Scene *scene);
+void scene_update(Scene *scene);
 void scene_draw(Scene *scene);
 void scene_skybox_init(Scene *scene);
 void scene_free(Scene *scene);
