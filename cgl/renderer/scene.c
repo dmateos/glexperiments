@@ -9,7 +9,7 @@ void scene_init(Scene *scene) {
   shader_program_compile(&scene->shader);
   shader_use(&scene->shader);
 
-  camera_init(&scene->camera, &scene->shader, 1280 / 1024);
+  camera_init(&scene->camera, 1280 / 1024);
 
   model_skybox_init(&scene->skybox, "assets/textures/skybox/");
 

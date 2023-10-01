@@ -117,7 +117,7 @@ int test_instanced(Window *window, int mc, int argc, char **argv) {
   model_skybox_init(&skybox, "assets/textures/skybox/");
 
   shader_use(&shader_program);
-  camera_init(&camera, &shader_program, window->width / window->height);
+  camera_init(&camera, window->width / window->height);
   model_init(&model, &shader_program, argv[1], argv[2], mc, model_offsets);
 
   while (!quit) {
@@ -162,7 +162,7 @@ int test_normal(Window *window, int mc, int argc, char **argv) {
   model_skybox_init(&skybox, "assets/textures/skybox/");
 
   shader_use(&shader_program);
-  camera_init(&camera, &shader_program, window->width / window->height);
+  camera_init(&camera, window->width / window->height);
   model = (Model *)malloc(sizeof(Model) * mc);
 
   int col = 0;

@@ -18,8 +18,7 @@ static void build_perspective(Camera *camera, float aspect) {
   glm_perspective(75, aspect, 0.1, 10000.0, camera->perspective);
 }
 
-int camera_init(Camera *camera, const ShaderProgram *shader_program,
-                float aspect) {
+int camera_init(Camera *camera, float aspect) {
   memset(camera, 0, sizeof(Camera));
 
   camera->position[0] = 0.0;
@@ -34,7 +33,6 @@ int camera_init(Camera *camera, const ShaderProgram *shader_program,
   camera->pitch = 0;
 
   build_perspective(camera, aspect);
-  camera_update(camera, (ShaderProgram *)shader_program, 0);
   return 0;
 }
 
