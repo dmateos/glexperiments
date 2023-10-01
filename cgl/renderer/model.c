@@ -183,7 +183,9 @@ void model_skybox_init(ModelSkybox *skybox, const char *path) {
 
 int model_skybox_draw(const ModelSkybox *skybox) {
   shader_use(&skybox->program);
+  glDepthMask(GL_FALSE);
   texture_bind_cubemap(&skybox->texture);
   vertex_draw(&skybox->state, 36);
+  glDepthMask(GL_TRUE);
   return 0;
 }
