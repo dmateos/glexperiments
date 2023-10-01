@@ -57,6 +57,7 @@ void camera_update(Camera *camera, ShaderProgram *shader,
   shader_set_uniform(shader_get_uniform(shader, "perspective"),
                      (float *)camera->perspective);
 
+  // For stuff like skyboxes we want to skip translation
   if (!strip_translation) {
     shader_set_uniform(shader_get_uniform(shader, "view"),
                        (float *)camera->view);
