@@ -54,6 +54,7 @@ void camera_update(Camera *camera, ShaderProgram *shader,
 
   build_lookat(camera);
 
+  shader_use(shader);
   shader_set_uniform(shader_get_uniform(shader, "perspective"),
                      (float *)camera->perspective);
 

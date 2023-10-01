@@ -17,7 +17,7 @@
 #define WINDOW_VERT 1024
 
 #define TEST 0
-#define INSTANCED 1
+#define INSTANCED 0
 #define MODEL_COUNT 1000000
 
 // handle mouse, do it like a blender 3d app where you click to drag

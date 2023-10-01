@@ -19,10 +19,7 @@ void scene_init(Scene *scene) {
 }
 
 void scene_update(Scene *scene) {
-  shader_use(&scene->skybox.program);
   camera_update(&scene->camera, &scene->skybox.program, 1);
-
-  shader_use(&scene->shader);
   camera_update(&scene->camera, &scene->shader, 0);
 }
 

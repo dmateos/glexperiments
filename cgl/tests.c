@@ -80,6 +80,7 @@ static int handle_camera(Camera *camera, Window *window) {
 int test_instanced(Window *window, int mc, int argc, char **argv) {
   ShaderProgram shader_program;
   Model model;
+  ModelSkybox skybox;
   Camera camera;
   bool quit = false;
   float model_offsets[mc * 3];
@@ -112,8 +113,10 @@ int test_instanced(Window *window, int mc, int argc, char **argv) {
                      "renderer/shaders/instanced_camera_vert.gsl");
   shader_program_add(&shader_program, FRAGSHADER, "renderer/shaders/frag.gsl");
   shader_program_compile(&shader_program);
-  shader_use(&shader_program);
 
+  model_skybox_init(&skybox, "assets/textures/skybox/");
+
+  shader_use(&shader_program);
   camera_init(&camera, &shader_program, window->width / window->height);
   model_init(&model, &shader_program, argv[1], argv[2], mc, model_offsets);
 
@@ -124,7 +127,11 @@ int test_instanced(Window *window, int mc, int argc, char **argv) {
     window_clear();
 
     camera_update(&camera, &shader_program, 0);
+    camera_update(&camera, &skybox.program, 1);
+
+    model_skybox_draw(&skybox);
     model_draw(&model);
+
     window_swap(window);
   }
 
@@ -137,6 +144,7 @@ int test_instanced(Window *window, int mc, int argc, char **argv) {
 int test_normal(Window *window, int mc, int argc, char **argv) {
   ShaderProgram shader_program;
   Model *model;
+  ModelSkybox skybox;
   Camera camera;
   bool quit = false;
 
@@ -150,8 +158,10 @@ int test_normal(Window *window, int mc, int argc, char **argv) {
                      "renderer/shaders/vert.gsl");
   shader_program_add(&shader_program, FRAGSHADER, "renderer/shaders/frag.gsl");
   shader_program_compile(&shader_program);
-  shader_use(&shader_program);
 
+  model_skybox_init(&skybox, "assets/textures/skybox/");
+
+  shader_use(&shader_program);
   camera_init(&camera, &shader_program, window->width / window->height);
   model = (Model *)malloc(sizeof(Model) * mc);
 
@@ -179,6 +189,8 @@ int test_normal(Window *window, int mc, int argc, char **argv) {
     window_clear();
 
     camera_update(&camera, &shader_program, 0);
+    camera_update(&camera, &skybox.program, 1);
+    model_skybox_draw(&skybox);
     for (int i = 0; i < mc; i++) {
       model_draw(&model[i]);
     }
