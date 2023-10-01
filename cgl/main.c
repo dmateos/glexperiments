@@ -101,7 +101,6 @@ static int handle_scene(Window *window) {
   while (!quit) {
     quit = handle_camera(&scene.camera, window);
     window_clear();
-    camera_update(&scene.camera);
 
     scene_update(&scene);
     scene_draw(&scene);

@@ -21,7 +21,6 @@ static void build_perspective(Camera *camera, float aspect) {
 int camera_init(Camera *camera, const ShaderProgram *shader_program,
                 float aspect) {
   memset(camera, 0, sizeof(Camera));
-  camera->shader_program = shader_program;
 
   camera->position[0] = 0.0;
   camera->position[1] = 0.0;
@@ -35,11 +34,12 @@ int camera_init(Camera *camera, const ShaderProgram *shader_program,
   camera->pitch = 0;
 
   build_perspective(camera, aspect);
-  camera_update(camera);
+  camera_update(camera, (ShaderProgram *)shader_program, 0);
   return 0;
 }
 
-void camera_update(Camera *camera) {
+void camera_update(Camera *camera, ShaderProgram *shader,
+                   int strip_translation) {
   camera->front[0] =
       cos(camera->yaw * M_PI / 180) * cos(camera->pitch * M_PI / 180);
   camera->front[1] = sin(camera->pitch * M_PI / 180);
@@ -54,24 +54,26 @@ void camera_update(Camera *camera) {
 
   build_lookat(camera);
 
-  shader_set_uniform(shader_get_uniform(camera->shader_program, "perspective"),
+  shader_set_uniform(shader_get_uniform(shader, "perspective"),
                      (float *)camera->perspective);
-  shader_set_uniform(shader_get_uniform(camera->shader_program, "view"),
-                     (float *)camera->view);
+
+  if (!strip_translation) {
+    shader_set_uniform(shader_get_uniform(shader, "view"),
+                       (float *)camera->view);
+  } else {
+    mat4 view;
+    glm_mat4_copy(camera->view, view);
+    view[3][0] = 0;
+    view[3][1] = 0;
+    view[3][2] = 0;
+
+    shader_set_uniform(shader_get_uniform(shader, "view"), (float *)view);
+  }
 }
 
 void camerea_update_uniforms(Camera *camera, ShaderProgram *shader) {
   shader_set_uniform(shader_get_uniform(shader, "perspective"),
                      (float *)camera->perspective);
-  // remove translations from camera view matrix
-
-  mat4 view;
-  glm_mat4_copy(camera->view, view);
-  view[3][0] = 0;
-  view[3][1] = 0;
-  view[3][2] = 0;
-
-  shader_set_uniform(shader_get_uniform(shader, "view"), (float *)view);
 }
 
 void camera_move(Camera *camera, CameraDirection direction) {

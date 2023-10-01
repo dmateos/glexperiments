@@ -123,7 +123,7 @@ int test_instanced(Window *window, int mc, int argc, char **argv) {
 
     window_clear();
 
-    camera_update(&camera);
+    camera_update(&camera, &shader_program, 0);
     model_draw(&model);
     window_swap(window);
   }
@@ -178,7 +178,7 @@ int test_normal(Window *window, int mc, int argc, char **argv) {
 
     window_clear();
 
-    camera_update(&camera);
+    camera_update(&camera, &shader_program, 0);
     for (int i = 0; i < mc; i++) {
       model_draw(&model[i]);
     }
