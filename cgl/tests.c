@@ -183,6 +183,7 @@ int test_normal(Window *window, int mc, int argc, char **argv) {
 
   while (!quit) {
     quit = handle_camera(&camera, window);
+    window_get_fps(window);
 
     window_clear();
 
