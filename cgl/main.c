@@ -13,11 +13,11 @@
 #include "renderer/window.h"
 #include "tests.h"
 
-#define WINDOW_HORIZ 1280
-#define WINDOW_VERT 1024
+#define WINDOW_HORIZ 2560
+#define WINDOW_VERT 1536
 
-#define TEST 0
-#define INSTANCED 0
+#define TEST 1
+#define INSTANCED 1
 #define MODEL_COUNT 1000000
 
 // handle mouse, do it like a blender 3d app where you click to drag
@@ -96,7 +96,7 @@ static int handle_scene(Window *window) {
   Scene scene;
   bool quit = false;
 
-  scene_init(&scene);
+  scene_init(&scene, WINDOW_HORIZ / WINDOW_VERT);
 
   while (!quit) {
     quit = handle_camera(&scene.camera, window);

@@ -2,14 +2,14 @@
 #include "camera.h"
 #include "shader.h"
 
-void scene_init(Scene *scene) {
+void scene_init(Scene *scene, int ratio) {
   shader_program_init(&scene->shader);
   shader_program_add(&scene->shader, VERTEXSHADER, "renderer/shaders/vert.gsl");
   shader_program_add(&scene->shader, FRAGSHADER, "renderer/shaders/frag.gsl");
   shader_program_compile(&scene->shader);
   shader_use(&scene->shader);
 
-  camera_init(&scene->camera, 1280 / 1024);
+  camera_init(&scene->camera, ratio);
 
   model_skybox_init(&scene->skybox, "assets/textures/skybox/");
 

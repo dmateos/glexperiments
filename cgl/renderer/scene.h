@@ -20,7 +20,7 @@ typedef struct {
   Model test_model;
 } Scene;
 
-void scene_init(Scene *scene);
+void scene_init(Scene *scene, int ratio);
 void scene_update(Scene *scene);
 void scene_draw(Scene *scene);
 void scene_skybox_init(Scene *scene);

@@ -136,8 +136,6 @@ int test_instanced(Window *window, int mc, int argc, char **argv) {
   }
 
   model_free(&model);
-  window_destroy(window);
-
   return 0;
 }
 
@@ -196,8 +194,6 @@ int test_normal(Window *window, int mc, int argc, char **argv) {
     }
     window_swap(window);
   }
-
-  window_destroy(window);
 
   for (int i = 0; i < mc; i++) {
     model_free(&model[i]);
