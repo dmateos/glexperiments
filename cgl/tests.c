@@ -84,26 +84,29 @@ int test_instanced(Window *window, int mc, int argc, char **argv) {
   Camera camera;
   bool quit = false;
   float model_offsets[mc * 3];
+  memset(model_offsets, 0, sizeof(float) * mc * 3);
 
   if (argc < 3) {
     printf("specify models to load\n");
     exit(1);
   }
 
-  int col = 0;
-  int row = 0;
+  float col = 0.0;
+  float row = 0.0;
   int rcount = 0;
+
   for (int i = 0; i < mc * 3; i += 3) {
     model_offsets[i] += row;
     model_offsets[i + 1] += ((float)rand() / (float)(RAND_MAX)) * 1000.0;
+    // model_offsets[i + 1] += 0.0;
     model_offsets[i + 2] += col;
 
-    row += 10;
-    rcount += 1;
+    row += 3.0;
+    rcount += 1.0;
 
     if ((rcount % (int)sqrt(mc) == 0) && (rcount != 0)) {
-      row = 0;
-      col += 10;
+      row = 0.0;
+      col += 3.0;
       rcount = 0;
     }
   }
