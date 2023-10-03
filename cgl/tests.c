@@ -97,8 +97,8 @@ int test_instanced(Window *window, int mc, int argc, char **argv) {
 
   for (int i = 0; i < mc * 3; i += 3) {
     model_offsets[i] += row;
-    model_offsets[i + 1] += ((float)rand() / (float)(RAND_MAX)) * 1000.0;
-    // model_offsets[i + 1] += 0.0;
+    // model_offsets[i + 1] += ((float)rand() / (float)(RAND_MAX)) * 1000.0;
+    model_offsets[i + 1] = 0.0;
     model_offsets[i + 2] += col;
 
     row += 3.0;
