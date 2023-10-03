@@ -83,7 +83,7 @@ int test_instanced(Window *window, int mc, int argc, char **argv) {
   ModelSkybox skybox;
   Camera camera;
   bool quit = false;
-  float model_offsets[mc * 3];
+  float *model_offsets = malloc(sizeof(float) * mc * 3);
   memset(model_offsets, 0, sizeof(float) * mc * 3);
 
   if (argc < 3) {
@@ -139,6 +139,7 @@ int test_instanced(Window *window, int mc, int argc, char **argv) {
   }
 
   model_free(&model);
+  free(model_offsets);
   return 0;
 }
 
