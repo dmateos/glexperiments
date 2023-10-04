@@ -37,6 +37,7 @@ typedef struct {
   Texture texture;
 } ModelSkybox;
 
+void model_shader_init(ShaderProgram *shader, int instanced);
 int model_init(Model *, const ShaderProgram *, const char *, const char *, int,
                void *);
 int model_draw(const Model *model);

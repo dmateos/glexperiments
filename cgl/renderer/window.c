@@ -35,6 +35,9 @@ int window_init(Window *window, int width, int height) {
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LESS);
 
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
+
   printf("created SDL window with openGL %s\n", glGetString(GL_VERSION));
   return 0;
 }

@@ -111,13 +111,8 @@ int test_instanced(Window *window, int mc, int argc, char **argv) {
     }
   }
 
-  shader_program_init(&shader_program);
-  shader_program_add(&shader_program, VERTEXSHADER,
-                     "renderer/shaders/instanced_camera_vert.gsl");
-  shader_program_add(&shader_program, FRAGSHADER, "renderer/shaders/frag.gsl");
-  shader_program_compile(&shader_program);
-
   model_skybox_init(&skybox, "assets/textures/skybox/");
+  model_shader_init(&shader_program, 1);
 
   shader_use(&shader_program);
   camera_init(&camera, window->width / window->height);
@@ -155,13 +150,8 @@ int test_normal(Window *window, int mc, int argc, char **argv) {
     exit(1);
   }
 
-  shader_program_init(&shader_program);
-  shader_program_add(&shader_program, VERTEXSHADER,
-                     "renderer/shaders/vert.gsl");
-  shader_program_add(&shader_program, FRAGSHADER, "renderer/shaders/frag.gsl");
-  shader_program_compile(&shader_program);
-
   model_skybox_init(&skybox, "assets/textures/skybox/");
+  model_shader_init(&shader_program, 0);
 
   shader_use(&shader_program);
   camera_init(&camera, window->width / window->height);

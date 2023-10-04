@@ -85,6 +85,19 @@ static int parse_obj_file(ObjFile *model, const char *path) {
   return 0;
 }
 
+void model_shader_init(ShaderProgram *shader, int instanced) {
+  shader_program_init(shader);
+  if (!instanced) {
+    shader_program_add(shader, VERTEXSHADER, "renderer/shaders/vert.gsl");
+  } else {
+    shader_program_add(shader, VERTEXSHADER,
+                       "renderer/shaders/instanced_camera_vert.gsl");
+  }
+  shader_program_add(shader, FRAGSHADER, "renderer/shaders/frag.gsl");
+  shader_program_compile(shader);
+  shader_use(shader);
+}
+
 int model_init(Model *model, const ShaderProgram *shader, const char *path,
                const char *tpath, int instances, void *instancedata) {
   memset(model, 0, sizeof(Model));
