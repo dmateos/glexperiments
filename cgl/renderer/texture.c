@@ -28,6 +28,8 @@ int texture_init(Texture *t, const char *path) {
   SDL_Surface *img = load_image(path);
   int mode = GL_RGB;
 
+  t->type = TEXTURE_2D;
+
   glGenTextures(1, &t->tbo);
   texture_bind(t);
 
@@ -57,8 +59,10 @@ int texture_init_cubemap(Texture *t, const char *path) {
   const char *paths[] = {"right.jpg",  "left.jpg",  "top.jpg",
                          "bottom.jpg", "front.jpg", "back.jpg"};
 
+  t->type = TEXTURE_CUBEMAP;
+
   glGenTextures(1, &t->tbo);
-  texture_bind_cubemap(t);
+  texture_bind(t);
 
   for (int i = 0; i < 6; i++) {
     char path_combined[256];
@@ -88,14 +92,24 @@ int texture_init_cubemap(Texture *t, const char *path) {
   return 0;
 }
 
-void texture_bind(const Texture *t) { glBindTexture(GL_TEXTURE_2D, t->tbo); }
-
-void texture_bind_cubemap(const Texture *t) {
-  glBindTexture(GL_TEXTURE_CUBE_MAP, t->tbo);
+void texture_bind(const Texture *t) {
+  switch (t->type) {
+  case TEXTURE_2D:
+    glBindTexture(GL_TEXTURE_2D, t->tbo);
+    break;
+  case TEXTURE_CUBEMAP:
+    glBindTexture(GL_TEXTURE_CUBE_MAP, t->tbo);
+    break;
+  }
 }
 
-void texture_unbind(const Texture *t) { glBindTexture(GL_TEXTURE_2D, 0); }
-
-void texture_unbind_cubemap(const Texture *t) {
-  glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+void texture_unbind(const Texture *t) {
+  switch (t->type) {
+  case TEXTURE_2D:
+    glBindTexture(GL_TEXTURE_2D, 0);
+    break;
+  case TEXTURE_CUBEMAP:
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+    break;
+  }
 }
