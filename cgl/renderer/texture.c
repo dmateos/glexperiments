@@ -24,10 +24,10 @@ static SDL_Surface *load_image(const char *path) {
 }
 
 int texture_init(Texture *t, const char *path) {
-  memset(t, 0, sizeof(Texture));
   SDL_Surface *img = load_image(path);
   int mode = GL_RGB;
 
+  memset(t, 0, sizeof(Texture));
   t->type = TEXTURE_2D;
 
   glGenTextures(1, &t->tbo);
@@ -54,11 +54,11 @@ int texture_init(Texture *t, const char *path) {
 }
 
 int texture_init_cubemap(Texture *t, const char *path) {
-  memset(t, 0, sizeof(Texture));
   int mode = GL_RGB;
   const char *paths[] = {"right.jpg",  "left.jpg",  "top.jpg",
                          "bottom.jpg", "front.jpg", "back.jpg"};
 
+  memset(t, 0, sizeof(Texture));
   t->type = TEXTURE_CUBEMAP;
 
   glGenTextures(1, &t->tbo);
