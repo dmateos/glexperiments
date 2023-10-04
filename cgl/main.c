@@ -6,10 +6,7 @@
 
 #include "base/list.h"
 #include "renderer/camera.h"
-#include "renderer/model.h"
 #include "renderer/scene.h"
-#include "renderer/shader.h"
-#include "renderer/texture.h"
 #include "renderer/window.h"
 #include "tests.h"
 
