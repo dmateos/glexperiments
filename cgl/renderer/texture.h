@@ -7,7 +7,7 @@ typedef enum {
 } TextureType;
 
 typedef struct {
-  unsigned int tbo, width, height;
+  unsigned int tbo;
   TextureType type;
 } Texture;
 
