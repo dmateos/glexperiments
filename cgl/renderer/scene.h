@@ -14,10 +14,10 @@ typedef struct _sn {
 typedef struct {
   Camera camera;
   ShaderProgram shader;
-  SceneNode *head;
   ModelSkybox skybox;
-
   Model test_model;
+
+  SceneNode *head;
 } Scene;
 
 void scene_init(Scene *scene, int ratio);
