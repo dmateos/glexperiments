@@ -18,6 +18,7 @@ int window_init(Window *window, int width, int height) {
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 4);
 
   SDL_SetRelativeMouseMode(SDL_TRUE);
   SDL_WarpMouseInWindow(window->window, width / 2, height / 2);
@@ -37,6 +38,8 @@ int window_init(Window *window, int width, int height) {
 
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
+
+  glEnable(GL_MULTISAMPLE);
 
   printf("created SDL window with openGL %s\n", glGetString(GL_VERSION));
   return 0;
