@@ -68,7 +68,8 @@ int texture_init_cubemap(Texture *t, const char *path) {
     char path_combined[256];
     memset(path_combined, 0, 256);
     strncat(path_combined, path, 256);
-    strncat(path_combined, paths[i], 256);
+    strncat(path_combined, paths[i], 256 - strlen(path_combined) - 1);
+
     SDL_Surface *img = load_image(path_combined);
     if (img->format->BytesPerPixel == 4) {
       mode = GL_RGBA;
