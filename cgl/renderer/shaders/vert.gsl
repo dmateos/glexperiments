@@ -10,9 +10,12 @@ uniform mat4 perspective;
 
 out vec3 nm_out;
 out vec2 tx_out;
+out vec3 frag_pos;
 
 void main(){
   nm_out = nm;
   tx_out = tx;
+  frag_pos = vec3(model * vec4(vp, 1.0));
+  
   gl_Position = perspective * view * model * vec4(vp, 1.0);
 }
