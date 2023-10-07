@@ -7,8 +7,6 @@
 #include "texture.h"
 #include "vertex.h"
 
-#define OBJ_VERTEX_LIMIT 102400
-
 typedef struct {
   float *verticies;
   unsigned int *verticie_index;
