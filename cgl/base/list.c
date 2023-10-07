@@ -20,7 +20,7 @@ void list_destroy(List *list) {
 }
 
 void list_push(List *list, void *data) {
-  ListNode *node = malloc(sizeof(ListNode));
+  ListNode *node = (ListNode *)malloc(sizeof(ListNode));
   node->data = data;
   node->next = list->head;
   list->head = node;

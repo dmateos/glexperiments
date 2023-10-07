@@ -42,7 +42,7 @@ static int parse_obj_file(ObjFile *model, const char *path) {
   for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
     printf("mesh %d has %d verticies\n", i, scene->mMeshes[i]->mNumVertices);
     model->verticies =
-        malloc(sizeof(float) * scene->mMeshes[i]->mNumVertices * 8);
+        (float *)malloc(sizeof(float) * scene->mMeshes[i]->mNumVertices * 8);
 
     const struct aiMesh *mesh = scene->mMeshes[i];
     for (unsigned int j = 0; j < mesh->mNumVertices; j++) {
@@ -70,7 +70,8 @@ static int parse_obj_file(ObjFile *model, const char *path) {
     }
 
     // todo maybe fix
-    model->verticie_index = malloc(sizeof(unsigned int) * mesh->mNumFaces * 3);
+    model->verticie_index =
+        (unsigned int *)malloc(sizeof(unsigned int) * mesh->mNumFaces * 3);
     for (unsigned int j = 0; j < mesh->mNumFaces; j++) {
       const struct aiFace *face = &mesh->mFaces[j];
       for (unsigned int k = 0; k < face->mNumIndices; k++) {
