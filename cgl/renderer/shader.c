@@ -7,6 +7,10 @@
 
 #include "util.h"
 
+// cache for uniforms
+static int uniform_cache[1024];
+static int uniform_cache_count = 0;
+
 int shader_program_init(ShaderProgram *program) {
   memset(program, 0, sizeof(ShaderProgram));
 

@@ -101,12 +101,12 @@ int test_instanced(Window *window, int mc, int argc, char **argv) {
     model_offsets[i + 1] = 0.0;
     model_offsets[i + 2] += col;
 
-    row += 2.0;
+    row += 3.0;
     rcount += 1.0;
 
     if ((rcount % (int)sqrt(mc) == 0) && (rcount != 0)) {
       row = 0.0;
-      col += 2.0;
+      col += 3.0;
       rcount = 0;
     }
   }
