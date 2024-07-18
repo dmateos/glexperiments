@@ -11,19 +11,21 @@
 #define HORIZ 1280
 #define MAPX 8
 #define MAPY 8
+#define SCREEN_OFFSETX 150
+
 #define TSPEED 0.1
 
 typedef struct {
   float x, y;
 } Vec2;
 
-Vec2 player_loc = {20, 20};
+Vec2 player_loc = {1, 1};
 Vec2 pd = {1.0, 0.0};
 
 int map[MAPX][MAPY] = {
     {1, 1, 1, 1, 1, 1, 1, 1}, //
     {1, 0, 0, 0, 0, 0, 0, 1}, //
-    {1, 0, 1, 0, 0, 0, 0, 1}, //
+    {1, 0, 1, 0, 1, 1, 0, 1}, //
     {1, 1, 1, 0, 0, 0, 0, 1}, //
     {1, 0, 0, 0, 0, 0, 0, 1}, //
     {1, 0, 0, 0, 0, 0, 0, 1}, //
@@ -32,11 +34,26 @@ int map[MAPX][MAPY] = {
 };
 
 void draw_map(SDL_Renderer *renderer) {
+  // draw map
+
   for (int i = 0; i < MAPX; i++) {
     for (int j = 0; j < MAPY; j++) {
-      if (map[i][j] == 1) {
-        SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-        SDL_Rect rect = {i * 16, j * 16, 16, 16};
+      if (map[i][j] > 0) {
+        switch (map[i][j]) {
+        case 3:
+          SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+          break;
+        case 2:
+          SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+          break;
+        case 1:
+          SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+          break;
+        case 4:
+          SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+          break;
+        }
+        SDL_Rect rect = {j * 16, i * 16, 16, 16};
         SDL_RenderFillRect(renderer, &rect);
       }
     }
@@ -44,19 +61,30 @@ void draw_map(SDL_Renderer *renderer) {
 
   // draw player
   SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-  SDL_Rect rect = {player_loc.x * 4, player_loc.y * 4, 4, 4};
+  SDL_Rect rect = {player_loc.x * 16, player_loc.y * 16, 4, 4};
   SDL_RenderFillRect(renderer, &rect);
 
+  // draw camera direction
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-  SDL_RenderDrawLine(renderer, player_loc.x * 4, player_loc.y * 4,
-                     player_loc.x * 4 + pd.x * 100,
-                     player_loc.y * 4 + pd.y * 100);
+  SDL_RenderDrawLine(renderer, player_loc.x * 16, player_loc.y * 16,
+                     player_loc.x * 16 + pd.x * 100,
+                     player_loc.y * 16 + pd.y * 100);
 }
 
-void draw_vert_line(SDL_Renderer *renderer, int x, int y1, int y2) {
-  for (int i = y1; i < y2; i++) {
-    SDL_RenderDrawPoint(renderer, x, i);
+void draw_vert_line(SDL_Renderer *renderer, int x, int start, int end, int c) {
+  switch (c) {
+  case 1:
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    break;
+  case 2:
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+    break;
+  case 3:
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+    break;
   }
+  SDL_Rect rect = {x * 10, start + SCREEN_OFFSETX, 10, end - start};
+  SDL_RenderFillRect(renderer, &rect);
 }
 
 int main(int argc, char **argv) {
@@ -109,6 +137,23 @@ int main(int argc, char **argv) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     draw_map(renderer);
+
+    // convert player pos to map pos
+    int mapPosX = (int)(player_loc.y);
+    int mapPosY = (int)(player_loc.x);
+    printf("mapPosX: %d, mapPosY: %d\n", mapPosX, mapPosY);
+    printf("player_loc.x: %f, player_loc.y: %f\n", player_loc.x, player_loc.y);
+
+    if (map[mapPosX][mapPosY] > 0) {
+      map[mapPosX][mapPosY] = 4;
+      printf("mapPosX: %d, mapPosY: %d\n", mapPosX, mapPosY);
+      printf("hit\n");
+    }
+
+    for (int i = 0; i < 100; i++) {
+      draw_vert_line(renderer, i, 0, 100, 1);
+    }
+
     SDL_RenderPresent(renderer);
     SDL_Delay(1);
   }
