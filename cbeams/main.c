@@ -87,6 +87,17 @@ void draw_vert_line(SDL_Renderer *renderer, int x, int start, int end, int c) {
   SDL_RenderFillRect(renderer, &rect);
 }
 
+void walk_squares_to_find_hit(void) {
+  // convert player pos to map pos
+  int mapPosX = (int)(player_loc.y);
+  int mapPosY = (int)(player_loc.x);
+  int hit = 0;
+  int distx, disty = 0;
+
+  while (!hit) {
+  }
+}
+
 int main(int argc, char **argv) {
   SDL_Window *window;
   SDL_Renderer *renderer;
@@ -114,8 +125,8 @@ int main(int argc, char **argv) {
           player_loc.y = player_loc.y + pd.y * 0.1;
           break;
         case SDLK_s:
-          player_loc.x = -player_loc.x + pd.x * 0.1;
-          player_loc.y = -player_loc.y + pd.y * 0.1;
+          player_loc.x = (-player_loc.x) + pd.x * 0.1;
+          player_loc.y = (-player_loc.y) + pd.y * 0.1;
           break;
         case SDLK_a:
           old_x = pd.x;
