@@ -12,6 +12,7 @@
 #define MAPX 8
 #define MAPY 8
 #define SCREEN_OFFSETX 150
+#define RECTSIZE 16
 
 #define TSPEED 0.1
 
@@ -27,8 +28,8 @@ int map[MAPX][MAPY] = {
     {1, 0, 0, 0, 0, 0, 0, 1}, //
     {1, 0, 1, 0, 1, 1, 0, 1}, //
     {1, 1, 1, 0, 0, 0, 0, 1}, //
-    {1, 0, 0, 0, 0, 0, 0, 1}, //
-    {1, 0, 0, 0, 0, 0, 0, 1}, //
+    {1, 0, 1, 1, 1, 1, 0, 1}, //
+    {1, 0, 1, 0, 0, 0, 0, 1}, //
     {1, 0, 0, 0, 0, 0, 0, 1}, //
     {1, 1, 1, 1, 1, 1, 1, 1}, //
 };
@@ -53,7 +54,7 @@ void draw_map(SDL_Renderer *renderer) {
           SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
           break;
         }
-        SDL_Rect rect = {j * 16, i * 16, 16, 16};
+        SDL_Rect rect = {j * RECTSIZE, i * RECTSIZE, RECTSIZE, RECTSIZE};
         SDL_RenderFillRect(renderer, &rect);
       }
     }
@@ -61,14 +62,14 @@ void draw_map(SDL_Renderer *renderer) {
 
   // draw player
   SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-  SDL_Rect rect = {player_loc.x * 16, player_loc.y * 16, 4, 4};
+  SDL_Rect rect = {player_loc.x * RECTSIZE, player_loc.y * RECTSIZE, 4, 4};
   SDL_RenderFillRect(renderer, &rect);
 
   // draw camera direction
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-  SDL_RenderDrawLine(renderer, player_loc.x * 16, player_loc.y * 16,
-                     player_loc.x * 16 + pd.x * 100,
-                     player_loc.y * 16 + pd.y * 100);
+  SDL_RenderDrawLine(renderer, player_loc.x * RECTSIZE, player_loc.y * RECTSIZE,
+                     player_loc.x * RECTSIZE + pd.x * 100,
+                     player_loc.y * RECTSIZE + pd.y * 100);
 }
 
 void draw_vert_line(SDL_Renderer *renderer, int x, int start, int end, int c) {
