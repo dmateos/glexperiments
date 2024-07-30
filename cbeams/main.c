@@ -13,8 +13,8 @@
 #define MAPY 8
 #define SCREEN_OFFSETX 150
 #define RECTSIZE 16
-
 #define TSPEED 0.1
+#define w 100
 
 typedef struct {
   float x, y;
@@ -22,6 +22,7 @@ typedef struct {
 
 Vec2 player_loc = {1, 1};
 Vec2 pd = {1.0, 0.0};
+Vec2 cp = {0.0, 0.66};
 
 int map[MAPX][MAPY] = {
     {1, 1, 1, 1, 1, 1, 1, 1}, //
@@ -35,8 +36,6 @@ int map[MAPX][MAPY] = {
 };
 
 void draw_map(SDL_Renderer *renderer) {
-  // draw map
-
   for (int i = 0; i < MAPX; i++) {
     for (int j = 0; j < MAPY; j++) {
       if (map[i][j] > 0) {
@@ -88,7 +87,7 @@ void draw_vert_line(SDL_Renderer *renderer, int x, int start, int end, int c) {
   SDL_RenderFillRect(renderer, &rect);
 }
 
-void walk_squares_to_find_hit(void) {
+void walk_squares_to_find_hit(double cameraX, double rayDirX, double rayDirY) {
   // convert player pos to map pos
   int mapPosX = (int)(player_loc.y);
   int mapPosY = (int)(player_loc.x);
@@ -133,14 +132,16 @@ int main(int argc, char **argv) {
           old_x = pd.x;
           pd.x = old_x * cos(TSPEED) + pd.y * sin(TSPEED);
           pd.y = -old_x * sin(TSPEED) + pd.y * cos(TSPEED);
-          printf("x: %f, y: %f\n", pd.x, pd.y);
+          cp.x = cp.x * cos(TSPEED) + cp.y * sin(TSPEED);
+          cp.y = -cp.x * sin(TSPEED) + cp.y * cos(TSPEED);
           break;
         case SDLK_d:
           // turn right
           old_x = pd.x;
           pd.x = old_x * cos(-TSPEED) + pd.y * sin(-TSPEED);
           pd.y = -old_x * sin(-TSPEED) + pd.y * cos(-TSPEED);
-          printf("x: %f, y: %f\n", pd.x, pd.y);
+          cp.x = cp.x * cos(-TSPEED) + cp.y * sin(-TSPEED);
+          cp.y = -cp.x * sin(-TSPEED) + cp.y * cos(-TSPEED);
           break;
         }
       }
@@ -162,8 +163,11 @@ int main(int argc, char **argv) {
       printf("hit\n");
     }
 
-    for (int i = 0; i < 100; i++) {
-      draw_vert_line(renderer, i, 0, 100, 1);
+    for (int x = 0; x < w; x++) {
+      double cameraX = 2 * x / (double)w - 1;
+      double rayDirX = pd.x + cp.x * cameraX;
+      double rayDirY = pd.y + cp.y * cameraX;
+      draw_vert_line(renderer, x, 0, 100, 1);
     }
 
     SDL_RenderPresent(renderer);
