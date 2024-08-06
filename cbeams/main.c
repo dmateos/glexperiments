@@ -7,14 +7,15 @@
 
 #include "main.h"
 
-#define VERT 1280
-#define HORIZ 1280
+#define VERT 800
+#define HORIZ 600
 #define MAPX 8
 #define MAPY 8
 #define SCREEN_OFFSETX 150
 #define RECTSIZE 16
 #define TSPEED 0.1
 #define w 100
+#define h 100
 
 typedef struct {
   float x, y;
@@ -87,15 +88,56 @@ void draw_vert_line(SDL_Renderer *renderer, int x, int start, int end, int c) {
   SDL_RenderFillRect(renderer, &rect);
 }
 
-void walk_squares_to_find_hit(double cameraX, double rayDirX, double rayDirY) {
+double walk_squares_to_find_hit(double cameraX, double rayDirX,
+                                double rayDirY) {
   // convert player pos to map pos
   int mapPosX = (int)(player_loc.y);
   int mapPosY = (int)(player_loc.x);
   int hit = 0;
-  int distx, disty = 0;
+  int stepX, stepY, side;
+  double distX, distY = 0;
+  double deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
+  double deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
+  double perpWallDist;
+
+  if (rayDirX < 0) {
+    stepX = -1;
+    distX = (player_loc.y - mapPosX) * deltaDistX;
+  } else {
+    stepX = 1;
+    distX = (mapPosX + 1.0 - player_loc.x) * deltaDistX;
+  }
+
+  if (rayDirY < 0) {
+    stepY = -1;
+    distY = (player_loc.y - mapPosY) * deltaDistY;
+    side = 0;
+  } else {
+    stepY = 1;
+    distY = (mapPosY + 1.0 - player_loc.y) * deltaDistY;
+    side = 1;
+  }
 
   while (!hit) {
+    if (distX < distY) {
+      distX += deltaDistX;
+      mapPosX += stepX;
+      hit = map[mapPosX][mapPosY];
+    } else {
+      distY += deltaDistY;
+      mapPosY += stepY;
+      hit = map[mapPosX][mapPosY];
+    }
   }
+
+  if (side == 0) {
+    perpWallDist = (distX - deltaDistX);
+    printf("perpWallDist: %f\n", perpWallDist);
+  } else {
+    perpWallDist = (distY - deltaDistY);
+    printf("perpWallDist: %f\n", perpWallDist);
+  }
+  return perpWallDist;
 }
 
 int main(int argc, char **argv) {
@@ -167,7 +209,20 @@ int main(int argc, char **argv) {
       double cameraX = 2 * x / (double)w - 1;
       double rayDirX = pd.x + cp.x * cameraX;
       double rayDirY = pd.y + cp.y * cameraX;
-      draw_vert_line(renderer, x, 0, 100, 1);
+
+      double dist = walk_squares_to_find_hit(cameraX, rayDirX, rayDirY);
+
+      // Calculate height of line to draw on screen
+      int lineHeight = (int)(h / dist);
+
+      // calculate lowest and highest pixel to fill in current stripe
+      int drawStart = -lineHeight / 2 + h / 2;
+      if (drawStart < 0)
+        drawStart = 0;
+      int drawEnd = lineHeight / 2 + h / 2;
+      if (drawEnd >= h)
+        drawEnd = h - 1;
+      draw_vert_line(renderer, x, drawStart, lineHeight, 1);
     }
 
     SDL_RenderPresent(renderer);
