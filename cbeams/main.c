@@ -122,20 +122,25 @@ double walk_squares_to_find_hit(double cameraX, double rayDirX,
     if (distX < distY) {
       distX += deltaDistX;
       mapPosX += stepX;
-      hit = map[mapPosX][mapPosY];
+      hit = map[mapPosX][mapPosY] == 1;
+      if (mapPosX < MAPX && mapPosY < MAPY && mapPosX >= 0 && mapPosY >= 0) {
+        map[mapPosX][mapPosY] = 3;
+      }
     } else {
       distY += deltaDistY;
       mapPosY += stepY;
-      hit = map[mapPosX][mapPosY];
+      hit = map[mapPosX][mapPosY] == 1;
+      if (mapPosX < MAPX && mapPosY < MAPY && mapPosX >= 0 && mapPosY >= 0) {
+        printf("mapPosX: %d, mapPosY: %d\n", mapPosX, mapPosY);
+        map[mapPosX][mapPosY] = 3;
+      }
     }
   }
 
   if (side == 0) {
     perpWallDist = (distX - deltaDistX);
-    printf("perpWallDist: %f\n", perpWallDist);
   } else {
     perpWallDist = (distY - deltaDistY);
-    printf("perpWallDist: %f\n", perpWallDist);
   }
   return perpWallDist;
 }
