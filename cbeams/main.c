@@ -13,9 +13,9 @@
 #define MAPY 8
 #define SCREEN_OFFSETX 150
 #define RECTSIZE 16
-#define TSPEED 0.1
-#define w 100
-#define h 100
+#define TSPEED 0.01
+#define w 640
+#define h 480
 
 typedef struct {
   double x, y;
@@ -24,6 +24,7 @@ typedef struct {
 typedef struct hit {
   int colour;
   double dist;
+  int side;
 } Hit;
 
 Vec2 player_loc = {1, 1};
@@ -77,26 +78,39 @@ void draw_map(SDL_Renderer *renderer) {
                      player_loc.y * RECTSIZE + pd.y * 100);
 }
 
-void draw_vert_line(SDL_Renderer *renderer, int x, int start, int end, int c) {
+void draw_vert_line(SDL_Renderer *renderer, int x, int start, int end, int c,
+                    int side) {
   switch (c) {
   case 1:
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    if (side == 0) {
+      SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    } else {
+      SDL_SetRenderDrawColor(renderer, 255 / 2, 0, 0, 255);
+    }
     break;
   case 2:
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+    if (side == 0) {
+      SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+    } else {
+      SDL_SetRenderDrawColor(renderer, 0, 255 / 2, 0, 255);
+    }
     break;
   case 3:
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+    if (side == 0) {
+      SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+    } else {
+      SDL_SetRenderDrawColor(renderer, 0, 0, 255 / 2, 255);
+    }
     break;
   }
   SDL_Rect rect = {x * 10, start + SCREEN_OFFSETX, 10, end - start};
   SDL_RenderFillRect(renderer, &rect);
 }
 
-Hit walk_squares_to_find_hit(double cameraX, double rayDirX, double rayDirY) {
+Hit walk_squares_to_find_hit(double rayDirX, double rayDirY) {
   // convert player pos to map pos
-  int mapPosX = (int)(player_loc.y);
-  int mapPosY = (int)(player_loc.x);
+  int mapPosX = (int)(player_loc.x);
+  int mapPosY = (int)(player_loc.y);
   int hit = 0;
   int stepX, stepY, side;
   double distX, distY = 0;
@@ -106,7 +120,7 @@ Hit walk_squares_to_find_hit(double cameraX, double rayDirX, double rayDirY) {
 
   if (rayDirX < 0) {
     stepX = -1;
-    distX = (player_loc.y - mapPosX) * deltaDistX;
+    distX = (player_loc.x - mapPosX) * deltaDistX;
   } else {
     stepX = 1;
     distX = (mapPosX + 1.0 - player_loc.x) * deltaDistX;
@@ -115,11 +129,9 @@ Hit walk_squares_to_find_hit(double cameraX, double rayDirX, double rayDirY) {
   if (rayDirY < 0) {
     stepY = -1;
     distY = (player_loc.y - mapPosY) * deltaDistY;
-    side = 0;
   } else {
     stepY = 1;
     distY = (mapPosY + 1.0 - player_loc.y) * deltaDistY;
-    side = 1;
   }
 
   while (!hit) {
@@ -127,17 +139,12 @@ Hit walk_squares_to_find_hit(double cameraX, double rayDirX, double rayDirY) {
       distX += deltaDistX;
       mapPosX += stepX;
       hit = map[mapPosX][mapPosY];
-      if (mapPosX < MAPX && mapPosY < MAPY && mapPosX >= 0 && mapPosY >= 0) {
-        map[mapPosX][mapPosY] = 3;
-      }
+      side = 0;
     } else {
       distY += deltaDistY;
       mapPosY += stepY;
       hit = map[mapPosX][mapPosY];
-      if (mapPosX < MAPX && mapPosY < MAPY && mapPosX >= 0 && mapPosY >= 0) {
-        printf("mapPosX: %d, mapPosY: %d\n", mapPosX, mapPosY);
-        map[mapPosX][mapPosY] = 3;
-      }
+      side = 1;
     }
   }
 
@@ -146,7 +153,7 @@ Hit walk_squares_to_find_hit(double cameraX, double rayDirX, double rayDirY) {
   } else {
     perpWallDist = (distY - deltaDistY);
   }
-  Hit x = {map[mapPosX][mapPosY], perpWallDist};
+  Hit x = {map[mapPosX][mapPosY], perpWallDist, side};
   return x;
 }
 
@@ -155,7 +162,7 @@ int main(int argc, char **argv) {
   SDL_Renderer *renderer;
   SDL_Event e;
   int cont = 1;
-  float old_x;
+  double old_x;
 
   if (SDL_Init(SDL_INIT_VIDEO) > 0) {
     printf("could not init window subsystem\n");
@@ -177,23 +184,25 @@ int main(int argc, char **argv) {
           player_loc.y = player_loc.y + pd.y * 0.1;
           break;
         case SDLK_s:
-          player_loc.x = (-player_loc.x) + pd.x * 0.1;
-          player_loc.y = (-player_loc.y) + pd.y * 0.1;
+          player_loc.x = player_loc.x + pd.x * -0.1;
+          player_loc.y = player_loc.y + pd.y * -0.1;
           break;
         case SDLK_a:
           old_x = pd.x;
           pd.x = old_x * cos(TSPEED) + pd.y * sin(TSPEED);
           pd.y = -old_x * sin(TSPEED) + pd.y * cos(TSPEED);
-          cp.x = cp.x * cos(TSPEED) + cp.y * sin(TSPEED);
-          cp.y = -cp.x * sin(TSPEED) + cp.y * cos(TSPEED);
+          old_x = cp.x;
+          cp.x = old_x * cos(TSPEED) + cp.y * sin(TSPEED);
+          cp.y = -old_x * sin(TSPEED) + cp.y * cos(TSPEED);
           break;
         case SDLK_d:
           // turn right
           old_x = pd.x;
           pd.x = old_x * cos(-TSPEED) + pd.y * sin(-TSPEED);
           pd.y = -old_x * sin(-TSPEED) + pd.y * cos(-TSPEED);
-          cp.x = cp.x * cos(-TSPEED) + cp.y * sin(-TSPEED);
-          cp.y = -cp.x * sin(-TSPEED) + cp.y * cos(-TSPEED);
+          old_x = cp.x;
+          cp.x = old_x * cos(-TSPEED) + cp.y * sin(-TSPEED);
+          cp.y = -old_x * sin(-TSPEED) + cp.y * cos(-TSPEED);
           break;
         }
       }
@@ -204,13 +213,13 @@ int main(int argc, char **argv) {
     draw_map(renderer);
 
     // convert player pos to map pos
-    int mapPosX = (int)(player_loc.y);
-    int mapPosY = (int)(player_loc.x);
+    int mapPosX = (int)(player_loc.x);
+    int mapPosY = (int)(player_loc.y);
     printf("mapPosX: %d, mapPosY: %d\n", mapPosX, mapPosY);
     printf("player_loc.x: %f, player_loc.y: %f\n", player_loc.x, player_loc.y);
 
     if (map[mapPosX][mapPosY] > 0) {
-      map[mapPosX][mapPosY] = 4;
+      // map[mapPosX][mapPosY] = 4;
       printf("mapPosX: %d, mapPosY: %d\n", mapPosX, mapPosY);
       printf("hit\n");
     }
@@ -220,7 +229,7 @@ int main(int argc, char **argv) {
       double rayDirX = pd.x + cp.x * cameraX;
       double rayDirY = pd.y + cp.y * cameraX;
 
-      Hit hit = walk_squares_to_find_hit(cameraX, rayDirX, rayDirY);
+      Hit hit = walk_squares_to_find_hit(rayDirX, rayDirY);
 
       // Calculate height of line to draw on screen
       int lineHeight = (int)(h / hit.dist);
@@ -232,7 +241,8 @@ int main(int argc, char **argv) {
       int drawEnd = lineHeight / 2 + h / 2;
       if (drawEnd >= h)
         drawEnd = h - 1;
-      draw_vert_line(renderer, x, drawStart, lineHeight, hit.colour);
+
+      draw_vert_line(renderer, x, drawStart, drawEnd, hit.colour, hit.side);
     }
 
     SDL_RenderPresent(renderer);
