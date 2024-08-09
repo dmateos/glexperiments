@@ -78,25 +78,24 @@ void draw_map(SDL_Renderer *renderer) {
                      player.loc.y * RECTSIZE + player.dir.y * 100);
 }
 
-void draw_vert_line(SDL_Renderer *r, int x, int start, int end, int c,
-                    int side) {
+void draw_vert_line(SDL_Renderer *r, int x, int start, int end, int c, int s) {
   switch (c) {
   case 1:
-    if (side == 0) {
+    if (s == 0) {
       SDL_SetRenderDrawColor(r, 255, 0, 0, 255);
     } else {
       SDL_SetRenderDrawColor(r, 255 / 2, 0, 0, 255);
     }
     break;
   case 2:
-    if (side == 0) {
+    if (s == 0) {
       SDL_SetRenderDrawColor(r, 0, 255, 0, 255);
     } else {
       SDL_SetRenderDrawColor(r, 0, 255 / 2, 0, 255);
     }
     break;
   case 3:
-    if (side == 0) {
+    if (s == 0) {
       SDL_SetRenderDrawColor(r, 0, 0, 255, 255);
     } else {
       SDL_SetRenderDrawColor(r, 0, 0, 255 / 2, 255);
