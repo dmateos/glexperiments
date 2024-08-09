@@ -34,9 +34,9 @@ Player player = {.loc = {2, 2}, .dir = {1.0, 0.0}, .cam = {0.0, 0.66}};
 int map[MAPX][MAPY] = {
     {1, 2, 1, 2, 1, 2, 1, 1}, //
     {2, 0, 0, 0, 0, 0, 0, 1}, //
-    {1, 0, 1, 0, 1, 1, 0, 1}, //
-    {2, 1, 2, 0, 0, 0, 0, 1}, //
-    {2, 0, 1, 1, 2, 1, 0, 2}, //
+    {1, 0, 3, 0, 1, 1, 0, 1}, //
+    {2, 3, 3, 0, 0, 0, 0, 1}, //
+    {2, 0, 3, 3, 3, 3, 0, 2}, //
     {1, 0, 1, 0, 0, 0, 0, 1}, //
     {1, 0, 0, 0, 0, 0, 0, 1}, //
     {1, 1, 1, 2, 1, 1, 1, 1}, //
@@ -47,17 +47,14 @@ void draw_map(SDL_Renderer *renderer) {
     for (int j = 0; j < MAPY; j++) {
       if (map[i][j] > 0) {
         switch (map[i][j]) {
-        case 3:
+        case 1:
           SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
           break;
         case 2:
           SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
           break;
-        case 1:
+        case 3:
           SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-          break;
-        case 4:
-          SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
           break;
         }
         SDL_Rect rect = {i * RECTSIZE, j * RECTSIZE, RECTSIZE, RECTSIZE};
