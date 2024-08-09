@@ -6,14 +6,14 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define VERT 800
-#define HORIZ 600
+#define VERT 600
+#define HORIZ 800
 #define MAPX 8
 #define MAPY 8
 #define SCREEN_OFFSETX 150
 #define RECTSIZE 16
 #define TSPEED 0.10
-#define w 640
+#define w 800
 #define h 480
 
 typedef struct {
@@ -26,9 +26,11 @@ typedef struct hit {
   int side;
 } Hit;
 
-Vec2 player_loc = {2, 2};
-Vec2 pd = {1.0, 0.0};
-Vec2 cp = {0.0, 0.66};
+typedef struct player {
+  Vec2 loc, dir, cam;
+} Player;
+
+Player player = {.loc = {2, 2}, .dir = {1.0, 0.0}, .cam = {0.0, 0.66}};
 
 int map[MAPX][MAPY] = {
     {1, 2, 1, 2, 1, 2, 1, 1}, //
@@ -67,14 +69,14 @@ void draw_map(SDL_Renderer *renderer) {
 
   // draw player
   SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-  SDL_Rect rect = {player_loc.x * RECTSIZE, player_loc.y * RECTSIZE, 4, 4};
+  SDL_Rect rect = {player.loc.x * RECTSIZE, player.loc.y * RECTSIZE, 4, 4};
   SDL_RenderFillRect(renderer, &rect);
 
   // draw camera direction
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-  SDL_RenderDrawLine(renderer, player_loc.x * RECTSIZE, player_loc.y * RECTSIZE,
-                     player_loc.x * RECTSIZE + pd.x * 100,
-                     player_loc.y * RECTSIZE + pd.y * 100);
+  SDL_RenderDrawLine(renderer, player.loc.x * RECTSIZE, player.loc.y * RECTSIZE,
+                     player.loc.x * RECTSIZE + player.dir.x * 100,
+                     player.loc.y * RECTSIZE + player.dir.y * 100);
 }
 
 void draw_vert_line(SDL_Renderer *renderer, int x, int start, int end, int c,
@@ -108,8 +110,8 @@ void draw_vert_line(SDL_Renderer *renderer, int x, int start, int end, int c,
 }
 
 Hit walk_squares_to_find_hit(double rayDirX, double rayDirY) {
-  int mapPosX = (int)(player_loc.x);
-  int mapPosY = (int)(player_loc.y);
+  int mapPosX = (int)(player.loc.x);
+  int mapPosY = (int)(player.loc.y);
   int hit = 0;
   int stepX, stepY, side;
   double distX, distY = 0;
@@ -119,18 +121,18 @@ Hit walk_squares_to_find_hit(double rayDirX, double rayDirY) {
 
   if (rayDirX < 0) {
     stepX = -1;
-    distX = (player_loc.x - mapPosX) * deltaDistX;
+    distX = (player.loc.x - mapPosX) * deltaDistX;
   } else {
     stepX = 1;
-    distX = (mapPosX + 1.0 - player_loc.x) * deltaDistX;
+    distX = (mapPosX + 1.0 - player.loc.x) * deltaDistX;
   }
 
   if (rayDirY < 0) {
     stepY = -1;
-    distY = (player_loc.y - mapPosY) * deltaDistY;
+    distY = (player.loc.y - mapPosY) * deltaDistY;
   } else {
     stepY = 1;
-    distY = (mapPosY + 1.0 - player_loc.y) * deltaDistY;
+    distY = (mapPosY + 1.0 - player.loc.y) * deltaDistY;
   }
 
   while (!hit) {
@@ -168,7 +170,7 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
-  window = SDL_CreateWindow("Test", 0, 0, VERT, HORIZ, SDL_WINDOW_RESIZABLE);
+  window = SDL_CreateWindow("Test", 0, 0, HORIZ, VERT, SDL_WINDOW_RESIZABLE);
   renderer = SDL_CreateRenderer(window, -1, 0);
 
   while (cont) {
@@ -180,43 +182,43 @@ int main(int argc, char **argv) {
       case SDL_KEYDOWN:
         switch (e.key.keysym.sym) {
         case SDLK_w:
-          new_x = player_loc.x + pd.x * 0.1;
-          new_y = player_loc.y + pd.y * 0.1;
+          new_x = player.loc.x + player.dir.x * 0.1;
+          new_y = player.loc.y + player.dir.y * 0.1;
 
-          // if (map[(int)new_x][(int)player_loc.y] == 0) {
-          player_loc.x = player_loc.x + pd.x * 0.1;
+          // if (map[(int)new_x][(int)player.loc.y] == 0) {
+          player.loc.x = player.loc.x + player.dir.x * 0.1;
           //}
-          // if (map[(int)player_loc.x][(int)new_y] == 0) {
-          player_loc.y = player_loc.y + pd.y * 0.1;
+          // if (map[(int)player.loc.x][(int)new_y] == 0) {
+          player.loc.y = player.loc.y + player.dir.y * 0.1;
           //}
           break;
         case SDLK_s:
-          new_x = player_loc.x + pd.x * 0.1;
-          new_y = player_loc.y + pd.y * 0.1;
+          new_x = player.loc.x + player.dir.x * 0.1;
+          new_y = player.loc.y + player.dir.y * 0.1;
 
-          // if (map[(int)new_x][(int)player_loc.y] == 0) {
-          player_loc.x = player_loc.x + pd.x * -0.1;
+          // if (map[(int)new_x][(int)player.loc.y] == 0) {
+          player.loc.x = player.loc.x + player.dir.x * -0.1;
           //}
-          // if (map[(int)player_loc.x][(int)new_y] == 0) {
-          player_loc.y = player_loc.y + pd.y * -0.1;
+          // if (map[(int)player.loc.x][(int)new_y] == 0) {
+          player.loc.y = player.loc.y + player.dir.y * -0.1;
           //}
           break;
         case SDLK_a:
-          old_x = pd.x;
-          pd.x = old_x * cos(TSPEED) + pd.y * sin(TSPEED);
-          pd.y = -old_x * sin(TSPEED) + pd.y * cos(TSPEED);
-          old_x = cp.x;
-          cp.x = old_x * cos(TSPEED) + cp.y * sin(TSPEED);
-          cp.y = -old_x * sin(TSPEED) + cp.y * cos(TSPEED);
+          old_x = player.dir.x;
+          player.dir.x = old_x * cos(TSPEED) + player.dir.y * sin(TSPEED);
+          player.dir.y = -old_x * sin(TSPEED) + player.dir.y * cos(TSPEED);
+          old_x = player.cam.x;
+          player.cam.x = old_x * cos(TSPEED) + player.cam.y * sin(TSPEED);
+          player.cam.y = -old_x * sin(TSPEED) + player.cam.y * cos(TSPEED);
           break;
         case SDLK_d:
           // turn right
-          old_x = pd.x;
-          pd.x = old_x * cos(-TSPEED) + pd.y * sin(-TSPEED);
-          pd.y = -old_x * sin(-TSPEED) + pd.y * cos(-TSPEED);
-          old_x = cp.x;
-          cp.x = old_x * cos(-TSPEED) + cp.y * sin(-TSPEED);
-          cp.y = -old_x * sin(-TSPEED) + cp.y * cos(-TSPEED);
+          old_x = player.dir.x;
+          player.dir.x = old_x * cos(-TSPEED) + player.dir.y * sin(-TSPEED);
+          player.dir.y = -old_x * sin(-TSPEED) + player.dir.y * cos(-TSPEED);
+          old_x = player.cam.x;
+          player.cam.x = old_x * cos(-TSPEED) + player.cam.y * sin(-TSPEED);
+          player.cam.y = -old_x * sin(-TSPEED) + player.cam.y * cos(-TSPEED);
           break;
         }
       }
@@ -227,10 +229,10 @@ int main(int argc, char **argv) {
     draw_map(renderer);
 
     // convert player pos to map pos
-    int mapPosX = (int)(player_loc.x);
-    int mapPosY = (int)(player_loc.y);
+    int mapPosX = (int)(player.loc.x);
+    int mapPosY = (int)(player.loc.y);
     printf("mapPosX: %d, mapPosY: %d\n", mapPosX, mapPosY);
-    printf("player_loc.x: %f, player_loc.y: %f\n", player_loc.x, player_loc.y);
+    printf("player.loc.x: %f, player.loc.y: %f\n", player.loc.x, player.loc.y);
 
     if (map[mapPosX][mapPosY] > 0) {
       // map[mapPosX][mapPosY] = 4;
@@ -242,8 +244,8 @@ int main(int argc, char **argv) {
       // adjust coordinates of camera
       // so that it goes from -1 to 1 with 0 in the middle
       double cameraX = 2 * x / (double)w - 1;
-      double rayDirX = pd.x + cp.x * cameraX;
-      double rayDirY = pd.y + cp.y * cameraX;
+      double rayDirX = player.dir.x + player.cam.x * cameraX;
+      double rayDirY = player.dir.y + player.cam.y * cameraX;
 
       Hit hit = walk_squares_to_find_hit(rayDirX, rayDirY);
 
