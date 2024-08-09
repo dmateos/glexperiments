@@ -21,9 +21,8 @@ typedef struct {
 } Vec2;
 
 typedef struct hit {
-  int colour;
+  int colour, side;
   double dist;
-  int side;
 } Hit;
 
 typedef struct player {
