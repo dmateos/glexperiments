@@ -13,7 +13,7 @@
 #define MAPY 8
 #define SCREEN_OFFSETX 150
 #define RECTSIZE 16
-#define TSPEED 0.01
+#define TSPEED 0.10
 #define w 640
 #define h 480
 
@@ -27,7 +27,7 @@ typedef struct hit {
   int side;
 } Hit;
 
-Vec2 player_loc = {1, 1};
+Vec2 player_loc = {2, 2};
 Vec2 pd = {1.0, 0.0};
 Vec2 cp = {0.0, 0.66};
 
@@ -103,8 +103,9 @@ void draw_vert_line(SDL_Renderer *renderer, int x, int start, int end, int c,
     }
     break;
   }
-  SDL_Rect rect = {x * 10, start + SCREEN_OFFSETX, 10, end - start};
-  SDL_RenderFillRect(renderer, &rect);
+
+  SDL_RenderDrawLine(renderer, x, start + SCREEN_OFFSETX, x,
+                     end + SCREEN_OFFSETX);
 }
 
 Hit walk_squares_to_find_hit(double rayDirX, double rayDirY) {
@@ -153,7 +154,7 @@ Hit walk_squares_to_find_hit(double rayDirX, double rayDirY) {
   } else {
     perpWallDist = (distY - deltaDistY);
   }
-  Hit x = {map[mapPosX][mapPosY], perpWallDist, side};
+  Hit x = {.colour = map[mapPosX][mapPosY], .dist = perpWallDist, .side = side};
   return x;
 }
 
@@ -162,7 +163,7 @@ int main(int argc, char **argv) {
   SDL_Renderer *renderer;
   SDL_Event e;
   int cont = 1;
-  double old_x;
+  double old_x, new_x, new_y;
 
   if (SDL_Init(SDL_INIT_VIDEO) > 0) {
     printf("could not init window subsystem\n");
@@ -177,15 +178,30 @@ int main(int argc, char **argv) {
       switch (e.type) {
       case SDL_QUIT:
         cont = 0;
+        break;
       case SDL_KEYDOWN:
         switch (e.key.keysym.sym) {
         case SDLK_w:
+          new_x = player_loc.x + pd.x * 0.1;
+          new_y = player_loc.y + pd.y * 0.1;
+
+          // if (map[(int)new_x][(int)player_loc.y] == 0) {
           player_loc.x = player_loc.x + pd.x * 0.1;
+          //}
+          // if (map[(int)player_loc.x][(int)new_y] == 0) {
           player_loc.y = player_loc.y + pd.y * 0.1;
+          //}
           break;
         case SDLK_s:
+          new_x = player_loc.x + pd.x * 0.1;
+          new_y = player_loc.y + pd.y * 0.1;
+
+          // if (map[(int)new_x][(int)player_loc.y] == 0) {
           player_loc.x = player_loc.x + pd.x * -0.1;
+          //}
+          // if (map[(int)player_loc.x][(int)new_y] == 0) {
           player_loc.y = player_loc.y + pd.y * -0.1;
+          //}
           break;
         case SDLK_a:
           old_x = pd.x;
