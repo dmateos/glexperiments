@@ -29,7 +29,11 @@ typedef struct {
   Vec2 loc, dir, cam;
 } Player;
 
-Player player = {.loc = {2, 2}, .dir = {1.0, 0.0}, .cam = {0.0, 0.66}};
+Player player = {
+    .loc = {2, 2},     //
+    .dir = {1.0, 0.0}, //
+    .cam = {0.0, 0.66} //
+};
 
 int map[MAPX][MAPY] = {
     {1, 2, 1, 2, 1, 2, 1, 1}, //
