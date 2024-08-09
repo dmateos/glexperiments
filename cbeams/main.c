@@ -60,7 +60,7 @@ void draw_map(SDL_Renderer *renderer) {
           SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
           break;
         }
-        SDL_Rect rect = {j * RECTSIZE, i * RECTSIZE, RECTSIZE, RECTSIZE};
+        SDL_Rect rect = {i * RECTSIZE, j * RECTSIZE, RECTSIZE, RECTSIZE};
         SDL_RenderFillRect(renderer, &rect);
       }
     }
