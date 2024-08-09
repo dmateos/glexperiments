@@ -1,11 +1,10 @@
+#include "main.h"
 #include <SDL2/SDL.h>
 #include <cglm/cglm.h>
 #include <png.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-#include "main.h"
 
 #define VERT 800
 #define HORIZ 600
@@ -109,7 +108,6 @@ void draw_vert_line(SDL_Renderer *renderer, int x, int start, int end, int c,
 }
 
 Hit walk_squares_to_find_hit(double rayDirX, double rayDirY) {
-  // convert player pos to map pos
   int mapPosX = (int)(player_loc.x);
   int mapPosY = (int)(player_loc.y);
   int hit = 0;
@@ -241,6 +239,8 @@ int main(int argc, char **argv) {
     }
 
     for (int x = 0; x < w; x++) {
+      // adjust coordinates of camera
+      // so that it goes from -1 to 1 with 0 in the middle
       double cameraX = 2 * x / (double)w - 1;
       double rayDirX = pd.x + cp.x * cameraX;
       double rayDirY = pd.y + cp.y * cameraX;
