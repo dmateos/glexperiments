@@ -20,12 +20,12 @@ typedef struct {
   double x, y;
 } Vec2;
 
-typedef struct hit {
+typedef struct {
   int colour, side;
   double dist;
 } Hit;
 
-typedef struct player {
+typedef struct {
   Vec2 loc, dir, cam;
 } Player;
 
