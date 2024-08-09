@@ -183,23 +183,23 @@ int main(int argc, char **argv) {
           new_x = player.loc.x + player.dir.x * 0.1;
           new_y = player.loc.y + player.dir.y * 0.1;
 
-          // if (map[(int)new_x][(int)player.loc.y] == 0) {
-          player.loc.x = player.loc.x + player.dir.x * 0.1;
-          //}
-          // if (map[(int)player.loc.x][(int)new_y] == 0) {
-          player.loc.y = player.loc.y + player.dir.y * 0.1;
-          //}
+          if (map[(int)new_x][(int)player.loc.y] == 0) {
+            player.loc.x = player.loc.x + player.dir.x * 0.1;
+          }
+          if (map[(int)player.loc.x][(int)new_y] == 0) {
+            player.loc.y = player.loc.y + player.dir.y * 0.1;
+          }
           break;
         case SDLK_s:
           new_x = player.loc.x + player.dir.x * 0.1;
           new_y = player.loc.y + player.dir.y * 0.1;
 
-          // if (map[(int)new_x][(int)player.loc.y] == 0) {
-          player.loc.x = player.loc.x + player.dir.x * -0.1;
-          //}
-          // if (map[(int)player.loc.x][(int)new_y] == 0) {
-          player.loc.y = player.loc.y + player.dir.y * -0.1;
-          //}
+          if (map[(int)new_x][(int)player.loc.y] == 0) {
+            player.loc.x = player.loc.x + player.dir.x * -0.1;
+          }
+          if (map[(int)player.loc.x][(int)new_y] == 0) {
+            player.loc.y = player.loc.y + player.dir.y * -0.1;
+          }
           break;
         case SDLK_a:
           old_x = player.dir.x;
