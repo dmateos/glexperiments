@@ -78,34 +78,33 @@ void draw_map(SDL_Renderer *renderer) {
                      player.loc.y * RECTSIZE + player.dir.y * 100);
 }
 
-void draw_vert_line(SDL_Renderer *renderer, int x, int start, int end, int c,
+void draw_vert_line(SDL_Renderer *r, int x, int start, int end, int c,
                     int side) {
   switch (c) {
   case 1:
     if (side == 0) {
-      SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+      SDL_SetRenderDrawColor(r, 255, 0, 0, 255);
     } else {
-      SDL_SetRenderDrawColor(renderer, 255 / 2, 0, 0, 255);
+      SDL_SetRenderDrawColor(r, 255 / 2, 0, 0, 255);
     }
     break;
   case 2:
     if (side == 0) {
-      SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+      SDL_SetRenderDrawColor(r, 0, 255, 0, 255);
     } else {
-      SDL_SetRenderDrawColor(renderer, 0, 255 / 2, 0, 255);
+      SDL_SetRenderDrawColor(r, 0, 255 / 2, 0, 255);
     }
     break;
   case 3:
     if (side == 0) {
-      SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+      SDL_SetRenderDrawColor(r, 0, 0, 255, 255);
     } else {
-      SDL_SetRenderDrawColor(renderer, 0, 0, 255 / 2, 255);
+      SDL_SetRenderDrawColor(r, 0, 0, 255 / 2, 255);
     }
     break;
   }
 
-  SDL_RenderDrawLine(renderer, x, start + SCREEN_OFFSETX, x,
-                     end + SCREEN_OFFSETX);
+  SDL_RenderDrawLine(r, x, start + SCREEN_OFFSETX, x, end + SCREEN_OFFSETX);
 }
 
 Hit walk_squares_to_find_hit(double rayDirX, double rayDirY) {
