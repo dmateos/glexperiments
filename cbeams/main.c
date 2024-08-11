@@ -1,7 +1,5 @@
 #include "main.h"
 #include <SDL2/SDL.h>
-#include <cglm/cglm.h>
-#include <png.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -30,7 +28,7 @@ typedef struct {
 } Player;
 
 Player player = {
-    .loc = {2, 2},     //
+    .loc = {1, 2},     //
     .dir = {1.0, 0.0}, //
     .cam = {0.0, 0.66} //
 };
