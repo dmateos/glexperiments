@@ -8,7 +8,7 @@ COMPILER_FLAGS = -std=c99 -Wall -O2 -D GL_SILENCE_DEPRECATION -Wextra  \
           -Wredundant-decls -Wnested-externs -Wmissing-include-dirs \
 					-mmacosx-version-min=12.0
 
-LINKER_FLAGS = -lSDL2 -lSDL2_image -l SDL2_gfx -l cglm -framework Cocoa -framework IOKit -framework CoreVideo -lPNG
+LINKER_FLAGS = -lSDL2 -lSDL2_image -l SDL2_gfx -framework Cocoa -framework IOKit -framework CoreVideo -lPNG
 OBJ_NAME = a.out
 
 all:
