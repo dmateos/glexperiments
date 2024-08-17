@@ -44,6 +44,16 @@ int map[MAPX][MAPY] = {
     {1, 1, 1, 1, 1, 1, 1, 1}, //
 };
 
+int screenbuffer[w][h];
+
+void draw_screenbuffer(SDL_Renderer *renderer) {
+  for (int i = 0; i < w; i++) {
+    for (int y = 0; y < h; i++) {
+      SDL_RenderDrawPoint(renderer, i, y);
+    }
+  }
+}
+
 void draw_map(SDL_Renderer *renderer) {
   for (int i = 0; i < MAPX; i++) {
     for (int j = 0; j < MAPY; j++) {
