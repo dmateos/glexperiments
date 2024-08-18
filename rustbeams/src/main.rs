@@ -6,14 +6,14 @@ use sdl2::pixels::Color;
 use std::time::Duration;
 
 struct Vec2 {
-    x: f32,
-    y: f32,
+    x: f64,
+    y: f64,
 }
 
 struct Hit {
     color: i32,
     side: i32,
-    dist: f32,
+    dist: f64,
 }
 struct Person {
     loc: Vec2,
@@ -25,8 +25,9 @@ const VERT: u32 = 600;
 const HORIZ: u32 = 800;
 const MAPX: usize = 8;
 const MAPY: usize = 8;
+const SCREEN_OFFSETX: i32 = 150;
 const RECTSIZE: usize = 16;
-const TSPEED: f32 = 0.10;
+const TSPEED: f64 = 0.10;
 const W: u32 = 800;
 const H: u32 = 480;
 
@@ -35,9 +36,9 @@ fn draw_map(
     map: [[i32; MAPX]; MAPY],
     player: &Person,
 ) {
-    for y in 0..MAPY {
-        for x in 0..MAPX {
-            let color = match map[y as usize][x as usize] {
+    for x in 0..MAPY {
+        for y in 0..MAPX {
+            let color = match map[x as usize][y as usize] {
                 1 => Color::RGB(255, 0, 0),
                 2 => Color::RGB(0, 255, 0),
                 3 => Color::RGB(0, 0, 255),
@@ -58,8 +59,8 @@ fn draw_map(
     canvas.set_draw_color(Color::RGB(255, 255, 255));
     canvas
         .fill_rect(sdl2::rect::Rect::new(
-            (player.loc.x * (RECTSIZE as f32)) as i32,
-            (player.loc.y * (RECTSIZE as f32)) as i32,
+            (player.loc.x * (RECTSIZE as f64)) as i32,
+            (player.loc.y * (RECTSIZE as f64)) as i32,
             4,
             4,
         ))
@@ -69,12 +70,12 @@ fn draw_map(
     canvas
         .draw_line(
             sdl2::rect::Point::new(
-                (player.loc.x * (RECTSIZE as f32)) as i32,
-                (player.loc.y * (RECTSIZE as f32)) as i32,
+                (player.loc.x * (RECTSIZE as f64)) as i32,
+                (player.loc.y * (RECTSIZE as f64)) as i32,
             ),
             sdl2::rect::Point::new(
-                ((player.loc.x + player.dir.x) * (RECTSIZE as f32)) as i32,
-                ((player.loc.y + player.dir.y) * (RECTSIZE as f32)) as i32,
+                ((player.loc.x + player.dir.x) * (RECTSIZE as f64)) as i32,
+                ((player.loc.y + player.dir.y) * (RECTSIZE as f64)) as i32,
             ),
         )
         .unwrap();
@@ -88,36 +89,23 @@ fn draw_vert_line(
     c: i32,
     s: i32,
 ) {
+    let side = match s {
+        0 => 1,
+        _ => 2,
+    };
+
     let color = match c {
-        1 => {
-            if s == 0 {
-                Color::RGB(255, 0, 0)
-            } else {
-                Color::RGB(128, 0, 0)
-            }
-        }
-        2 => {
-            if s == 0 {
-                Color::RGB(0, 255, 0)
-            } else {
-                Color::RGB(0, 128, 0)
-            }
-        }
-        3 => {
-            if s == 0 {
-                Color::RGB(0, 0, 255)
-            } else {
-                Color::RGB(0, 0, 128)
-            }
-        }
+        1 => Color::RGB(255 / side, 0, 0),
+        2 => Color::RGB(0, 255 / side, 0),
+        3 => Color::RGB(0, 0, 255 / side),
         _ => Color::RGB(0, 0, 0),
     };
     canvas.set_draw_color(color);
 
     canvas
         .draw_line(
-            sdl2::rect::Point::new(x, start),
-            sdl2::rect::Point::new(x, end),
+            sdl2::rect::Point::new(x, start + SCREEN_OFFSETX),
+            sdl2::rect::Point::new(x, end + SCREEN_OFFSETX),
         )
         .unwrap();
 }
@@ -125,44 +113,44 @@ fn draw_vert_line(
 fn walk_squares_to_find_hit(
     player: &Person,
     map: [[i32; MAPX]; MAPY],
-    raydir_x: f32,
-    raydir_y: f32,
+    raydir_x: f64,
+    raydir_y: f64,
 ) -> Hit {
     let mut mappos_x = player.loc.x as i32;
     let mut mappos_y = player.loc.y as i32;
     let mut hit = false;
+    let mut side: i32 = 0;
+    let mut dist_x: f64;
+    let mut dist_y: f64;
+    let wall_dist: f64;
     let step_x: i32;
     let step_y: i32;
-    let mut side: i32 = 0;
-    let mut dist_x: f32;
-    let mut dist_y: f32;
-    let wall_dist: f32;
 
     let delta_dist_x = if raydir_x == 0.0 {
         1e30
     } else {
-        f32::abs(1.0 / raydir_x)
+        f64::abs(1.0 / raydir_x)
     };
     let delta_dist_y = if raydir_y == 0.0 {
         1e30
     } else {
-        f32::abs(1.0 / raydir_y)
+        f64::abs(1.0 / raydir_y)
     };
 
     if raydir_x < 0.0 {
         step_x = -1;
-        dist_x = (player.loc.x as i32 - mappos_x) as f32 * delta_dist_x;
+        dist_x = (player.loc.x as i32 - mappos_x) as f64 * delta_dist_x;
     } else {
         step_x = 1;
-        dist_x = (mappos_x as f32 + 1.0 - player.loc.x) * delta_dist_x;
+        dist_x = (mappos_x as f64 + 1.0 - player.loc.x) * delta_dist_x;
     }
 
     if raydir_y < 0.0 {
         step_y = -1;
-        dist_y = (player.loc.y as i32 - mappos_y) as f32 * delta_dist_y;
+        dist_y = (player.loc.y as i32 - mappos_y) as f64 * delta_dist_y;
     } else {
         step_y = 1;
-        dist_y = (mappos_y as f32 + 1.0 - player.loc.y) * delta_dist_y;
+        dist_y = (mappos_y as f64 + 1.0 - player.loc.y) * delta_dist_y;
     }
 
     while !hit {
@@ -206,7 +194,7 @@ pub fn main() {
     canvas.present();
 
     let mut player = Person {
-        loc: Vec2 { x: 2.0, y: 2.0 },
+        loc: Vec2 { x: 1.0, y: 2.0 },
         dir: Vec2 { x: 1.0, y: 0.0 },
         cam: Vec2 { x: 0.0, y: 0.66 },
     };
@@ -214,11 +202,11 @@ pub fn main() {
     let map = [
         [1, 1, 1, 1, 1, 1, 1, 1],
         [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 2, 2, 0, 0, 0, 1],
-        [1, 0, 2, 2, 0, 0, 0, 1],
+        [1, 3, 3, 0, 0, 0, 0, 1],
+        [1, 3, 3, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 2, 2, 0, 1],
+        [1, 0, 0, 0, 2, 2, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 3, 3, 0, 1],
-        [1, 0, 0, 0, 3, 3, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
 
@@ -237,7 +225,6 @@ pub fn main() {
                 } => {
                     player.loc.x = player.loc.x + player.dir.x * 0.1;
                     player.loc.y = player.loc.y + player.dir.y * 0.1;
-                    println!("w pressed");
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::S),
@@ -245,25 +232,28 @@ pub fn main() {
                 } => {
                     player.loc.x = player.loc.x + player.dir.x * -0.1;
                     player.loc.y = player.loc.y + player.dir.y * -0.1;
-                    println!("s pressed");
                 } // Move backward
                 Event::KeyDown {
                     keycode: Some(Keycode::A),
                     ..
                 } => {
                     let old_x = player.dir.x;
-                    player.dir.x = old_x * f32::cos(TSPEED) + player.dir.y * f32::sin(TSPEED);
-                    player.dir.y = -old_x * f32::sin(TSPEED) + player.dir.y * f32::cos(TSPEED);
-                    println!("a pressed");
+                    player.dir.x = old_x * f64::cos(TSPEED) + player.dir.y * f64::sin(TSPEED);
+                    player.dir.y = -old_x * f64::sin(TSPEED) + player.dir.y * f64::cos(TSPEED);
+                    let old_x = player.cam.x;
+                    player.cam.x = old_x * f64::cos(TSPEED) + player.cam.y * f64::sin(TSPEED);
+                    player.cam.y = -old_x * f64::sin(TSPEED) + player.cam.y * f64::cos(TSPEED);
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::D),
                     ..
                 } => {
                     let old_x = player.dir.x;
-                    player.dir.x = old_x * f32::cos(-TSPEED) + player.dir.y * f32::sin(-TSPEED);
-                    player.dir.y = -old_x * f32::sin(-TSPEED) + player.dir.y * f32::cos(-TSPEED);
-                    println!("d pressed");
+                    player.dir.x = old_x * f64::cos(-TSPEED) + player.dir.y * f64::sin(-TSPEED);
+                    player.dir.y = -old_x * f64::sin(-TSPEED) + player.dir.y * f64::cos(-TSPEED);
+                    let old_x = player.cam.x;
+                    player.cam.x = old_x * f64::cos(-TSPEED) + player.cam.y * f64::sin(-TSPEED);
+                    player.cam.y = -old_x * f64::sin(-TSPEED) + player.cam.y * f64::cos(-TSPEED);
                 }
                 _ => {}
             }
@@ -274,13 +264,13 @@ pub fn main() {
         draw_map(&mut canvas, map, &player);
 
         for x in 0..W {
-            let camera_x = 2.0 * x as f32 / W as f32 - 1.0;
+            let camera_x = 2.0 * x as f64 / W as f64 - 1.0;
             let raydir_x = player.dir.x + player.cam.x * camera_x;
             let raydir_y = player.dir.y + player.cam.y * camera_x;
 
             let hit = walk_squares_to_find_hit(&player, map, raydir_x, raydir_y);
 
-            let line_height = (H as f32 / hit.dist) as i32;
+            let line_height = (H as f64 / hit.dist) as i32;
             let mut draw_start = -line_height / 2 + H as i32 / 2;
             if draw_start < 0 {
                 draw_start = 0;
